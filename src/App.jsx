@@ -541,7 +541,7 @@ const App = () => {
                 I turn creative ideas into robust, high-performance web applications. Let's build something amazing together.
               </p>
 
-              <div className="flex flex-wrap gap-4 justify-center lg:justify-start pt-4">
+              <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start pt-4">
                 {/* 3. Resume Download Button - Animation 4 */}
                 <a
                   href={getGoogleDocsDownloadUrl(PORTFOLIO_DATA.resumeLink)}
@@ -552,20 +552,22 @@ const App = () => {
                   Download Resume
                 </a>
 
-                {/* 4. Social Links - Animation 5+ (staggered via delay) */}
-                {PORTFOLIO_DATA.socials.map((social, index) => (
-                  <a
-                    key={social.name}
-                    href={social.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`p-3 border-2 border-purple-600 text-purple-600 hover:bg-purple-100 dark:hover:bg-gray-700 rounded-full transition duration-300 dark:text-purple-400 dark:border-purple-400 opacity-0 animate-on-mount`}
-                    style={{ animationDelay: `${450 + index * 100}ms` }} // Use animation-delay
-                    aria-label={social.name}
-                  >
-                    <social.icon className="w-6 h-6" />
-                  </a>
-                ))}
+                {/* 4. Social Links - Grouped for mobile alignment */}
+                <div className="flex items-center gap-4">
+                  {PORTFOLIO_DATA.socials.map((social, index) => (
+                    <a
+                      key={social.name}
+                      href={social.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`p-3 border-2 border-purple-600 text-purple-600 hover:bg-purple-100 dark:hover:bg-gray-700 rounded-full transition duration-300 dark:text-purple-400 dark:border-purple-400 opacity-0 animate-on-mount`}
+                      style={{ animationDelay: `${450 + index * 100}ms` }} // Use animation-delay
+                      aria-label={social.name}
+                    >
+                      <social.icon className="w-6 h-6" />
+                    </a>
+                  ))}
+                </div>
               </div>
             </div>
 
@@ -691,7 +693,7 @@ const App = () => {
   const EducationSection = () => (
     <Section id="education" title="Educational Qualification">
       {(isInView) => (
-        <div className="relative space-y-12">
+        <div className="relative space-y-8 md:space-y-12">
           {PORTFOLIO_DATA.education.map((edu, index) => (
             <div key={index} className="flex flex-col md:flex-row relative">
               {/* Timeline Connector (Visible on desktop) */}
@@ -708,14 +710,14 @@ const App = () => {
               </div>
 
               <div
-                className={`md:w-11/12 pl-6 md:pl-12 pt-4 md:pt-0 
+                className={`md:w-11/12 pl-0 md:pl-12 pt-4 md:pt-0 
                   ${getAOSClass(isInView, index, 'slide-up')}`}
                 style={{ transitionDelay: isInView ? `${300 + index * 200}ms` : '0ms' }}
               >
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-purple-100 dark:border-purple-900">
-                  <p className="text-sm font-semibold text-pink-500 dark:text-pink-300 mb-1">{edu.period}</p>
                   <h3 className="text-2xl font-bold text-purple-600 dark:text-purple-400">{edu.degree}</h3>
                   <p className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3">{edu.institution}</p>
+                  <p className="text-sm font-semibold text-pink-500 dark:text-pink-300 mb-1">{edu.period}</p>
                   <p className="text-gray-600 dark:text-gray-400">{edu.details}</p>
                 </div>
               </div>
@@ -729,7 +731,7 @@ const App = () => {
   const ExperienceSection = () => (
     <Section id="experience" title="Professional Experience">
       {(isInView) => (
-        <div className="relative space-y-12">
+        <div className="relative space-y-8 md:space-y-12">
           {PORTFOLIO_DATA.experience.map((exp, index) => (
             <div key={index} className="flex flex-col md:flex-row relative">
               {/* Timeline Connector (Visible on desktop) */}
@@ -746,7 +748,7 @@ const App = () => {
               </div>
 
               <div
-                className={`md:w-11/12 pl-6 md:pl-12 pt-4 md:pt-0 
+                className={`md:w-11/12 pl-0 md:pl-12 pt-4 md:pt-0 
                   ${getAOSClass(isInView, index, 'slide-right')}`}
                 style={{ transitionDelay: isInView ? `${300 + index * 200}ms` : '0ms' }}
               >
