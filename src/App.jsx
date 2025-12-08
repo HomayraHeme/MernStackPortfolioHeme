@@ -9,7 +9,7 @@ const PORTFOLIO_DATA = {
   designation: "MERN Stack Developer",
   name: "Homayra Binte Harun Heme",
   photoUrl: "https://i.ibb.co.com/8nmz2nBq/rounded-formal.png",
-  resumeLink: "https://docs.google.com/document/d/1wuIPjLeUx3KBRwhKcT6UQA2bW4CzPVj-K0q9JXM9rXU/edit?usp=drive_link",
+  resumeLink: "https://drive.google.com/file/d/1JXbiQUA-kgpBF0RWa6Sv0S0Dd79egGXb/view?usp=sharing",
   socials: [
     { name: "GitHub", icon: Github, link: "https://github.com/HomayraHeme" },
     { name: "LinkedIn", icon: Linkedin, link: "https://www.linkedin.com/in/homayra-heme/" },
