@@ -425,26 +425,31 @@ const App = () => {
   const CursorTrail = useTrailingCursor(isDarkMode);
 
 
-  // Scroll Spy Logic (Kept for Navbar highlighting)
+  // Scroll Spy Logic (Replaced IntersectionObserver with manual calculation for better accuracy)
   useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.5,
-    };
+    const handleScroll = () => {
+      const sections = document.querySelectorAll('section');
+      // Add offset to ensure the active state triggers just before the section hits the top
+      // 100px accounts for the navbar height (64px) + some buffer
+      const scrollPosition = window.scrollY + 100;
 
-    const sections = document.querySelectorAll('section');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          setActiveSection(entry.target.id);
+      sections.forEach(section => {
+        const top = section.offsetTop;
+        const height = section.offsetHeight;
+        const id = section.getAttribute('id');
+
+        if (scrollPosition >= top && scrollPosition < top + height) {
+          setActiveSection(id);
         }
       });
-    }, observerOptions);
+    };
 
-    sections.forEach(section => observer.observe(section));
+    window.addEventListener('scroll', handleScroll);
 
-    return () => sections.forEach(section => observer.unobserve(section));
+    // Trigger once on mount to set initial state
+    handleScroll();
+
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   // Set dark class on body
