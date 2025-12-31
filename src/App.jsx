@@ -9,7 +9,7 @@ const PORTFOLIO_DATA = {
   designation: "MERN Stack Developer",
   name: "Homayra Binte Harun Heme",
   photoUrl: "https://i.ibb.co.com/8nmz2nBq/rounded-formal.png",
-  resumeLink: "https://drive.google.com/file/d/1JXbiQUA-kgpBF0RWa6Sv0S0Dd79egGXb/view?usp=sharing",
+  resumeLink: "https://drive.google.com/file/d/1g-a55sF8gCmuI8shHD3ABWBqcaWtKgJM/view?usp=sharing",
   socials: [
     { name: "GitHub", icon: Github, link: "https://github.com/HomayraHeme" },
     { name: "LinkedIn", icon: Linkedin, link: "https://www.linkedin.com/in/homayra-heme/" },
@@ -162,16 +162,20 @@ const getAOSClass = (isInView, index, type = 'slide-up') => {
   return `${baseClasses} ${animationClasses}`;
 };
 
-// Utility function to get Google Docs direct download URL
+// Utility function to get Google Docs/Drive direct download URL
 const getGoogleDocsDownloadUrl = (url) => {
-  // Extract document ID from Google Docs URL
+  // Extract ID from Google Drive/Docs URL
   const match = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
   if (match && match[1]) {
-    const docId = match[1];
-    // Return direct download URL in PDF format
-    return `https://docs.google.com/document/d/${docId}/export?format=pdf`;
+    const fileId = match[1];
+    // Check if it's a file link (likely an uploaded PDF) vs a Doc link
+    if (url.includes('/file/d/')) {
+      return `https://drive.google.com/uc?export=download&id=${fileId}`;
+    }
+    // Default fallback for Google Docs (export as PDF)
+    return `https://docs.google.com/document/d/${fileId}/export?format=pdf`;
   }
-  // If not a Google Docs URL, return original URL
+  // If not a recognized Google URL, return original
   return url;
 };
 
