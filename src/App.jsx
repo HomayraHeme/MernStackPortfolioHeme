@@ -54,7 +54,7 @@ const PORTFOLIO_DATA = {
   projects: [
     {
       id: 1,
-      name: "Book Haven",
+      name: "Book Haven - An Online Book Library",
       image: "https://i.ibb.co.com/qFJsTKW1/Book-Haven.png",
       techStack: ["React", "Node.js", "MongoDB", "Tailwind CSS", "Firebase", "Express.js",],
       description: "A full-stack bookstore web app where users can browse and manage books easily.",
@@ -65,7 +65,7 @@ const PORTFOLIO_DATA = {
     },
     {
       id: 2,
-      name: "SkillSwap",
+      name: "SkillSwap - A Skills Sharing Platform",
       image: "https://i.ibb.co.com/35Dz38nP/Skill-Swap.png",
       techStack: ["React", "React-router", "Firebase", "Taiwind CSS", "HTML"],
       description: "A platform where users can share and explore skills, connect with others, and learn collaboratively.",
@@ -76,7 +76,7 @@ const PORTFOLIO_DATA = {
     },
     {
       id: 3,
-      name: "FitTrack",
+      name: "FitTrack - A Fitness Tracking App",
       image: "https://i.ibb.co.com/4RcPDYqm/FitTrach.png",
       techStack: ["React", "Tailwind CSS", "Next.js", "Next-auth", "JavaScript", "Context API"],
       description: "A fitness tracking app that helps users manage workouts and monitor progress.",
@@ -84,6 +84,18 @@ const PORTFOLIO_DATA = {
       githubLink: "https://github.com/HomayraHeme/fit-track",
       challenges: "Faced challenges while exploring Next.js and implementing its features effectively.",
       futurePlans: "Plan to add photo uploads, GPS tracking, push notifications, and advanced workout filtering/search.",
+    },
+    {
+      id: 4,
+      name: "LoanLink - Microloan Tracker System",
+      image: "https://i.ibb.co.com/zWmBCgcQ/loanlink-banner.png", // Using a placeholder as no specific image was provided
+      techStack: ["React", "Tailwind CSS", "Framer Motion", "Firebase Auth", "Axios", "Node.js", "Express.js", "MongoDB", "Stripe"],
+      description: "A web-based microloan request, review & approval tracker system designed for small financial organizations. Streamlines applications, approvals, and EMI tracking.",
+      liveLink: "https://loanlink-49d90.web.app/",
+      githubLink: "https://github.com/HomayraHeme/LoanLink-Client",
+      serverLink: "https://github.com/HomayraHeme/LoanLink-Server",
+      challenges: "Implemented a robust Role-Based Access Control (RBAC) system for Admin, Manager, and Borrower roles to ensure secure data access and authorized operations.",
+      futurePlans: "Integrating a secure payment gateway for real-time transactions. Future plans also include AI-driven credit scoring, multi-language support for broader accessibility, and an automated notification system for EMI reminders.",
     },
   ],
 };
@@ -374,8 +386,18 @@ const ProjectDetailModal = ({ project, onClose }) => {
               rel="noopener noreferrer"
               className="flex-1 text-center border-2 border-purple-600 text-purple-600 hover:bg-purple-50 dark:hover:bg-gray-700 font-bold py-3 px-6 rounded-lg transition duration-300"
             >
-              GitHub Repository
+              Client Repo
             </a>
+            {project.serverLink && (
+              <a
+                href={project.serverLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 text-center border-2 border-purple-600 text-purple-600 hover:bg-purple-50 dark:hover:bg-gray-700 font-bold py-3 px-6 rounded-lg transition duration-300"
+              >
+                Server Repo
+              </a>
+            )}
           </div>
         </div>
       </div>
@@ -463,8 +485,8 @@ const App = () => {
     );
 
     return (
-      <header className="sticky top-0 z-40 w-full bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-purple-200 dark:border-purple-800 shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <header className="fixed top-0 left-0 z-50 w-full bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-purple-200 dark:border-purple-800 shadow-lg">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-2">
           <div className="flex justify-between items-center h-16">
             <h1 className="text-2xl font-extrabold text-purple-600 dark:text-purple-400">
               HEME.DEV
@@ -529,8 +551,8 @@ const App = () => {
 
             <div className="lg:w-1/2 space-y-6 order-2 lg:order-1">
               {/* Animation 1: Name */}
-              <h1 className="text-6xl sm:text-7xl font-extrabold text-gray-900 dark:text-gray-50 leading-tight transition-all duration-700 ease-out transform delay-100 opacity-0 translate-y-4 animate-on-mount">
-                Hi, I'm <span className="text-purple-600 dark:text-purple-400">{PORTFOLIO_DATA.name}</span>
+              <h1 className="text-2xl sm:text-5xl lg:text-5xl font-extrabold text-gray-900 dark:text-gray-50 leading-tight transition-all duration-700 ease-out transform delay-100 opacity-0 translate-y-4 animate-on-mount">
+                Hi, I'm <span className="text-purple-600 dark:text-purple-400 whitespace-nowrap">{PORTFOLIO_DATA.name}</span>
               </h1>
               {/* Animation 2: Designation */}
               <p className="text-2xl sm:text-3xl font-medium text-pink-500 dark:text-pink-300 tracking-wide transition-all duration-700 ease-out transform delay-200 opacity-0 translate-y-4 animate-on-mount">
@@ -541,7 +563,7 @@ const App = () => {
                 I turn creative ideas into robust, high-performance web applications. Let's build something amazing together.
               </p>
 
-              <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start pt-4">
+              <div className="flex flex-col sm:flex-row items-center gap-6 lg:gap-8 justify-center lg:justify-start pt-4">
                 {/* 3. Resume Download Button - Animation 4 */}
                 <a
                   href={getGoogleDocsDownloadUrl(PORTFOLIO_DATA.resumeLink)}
@@ -769,7 +791,7 @@ const App = () => {
   const ProjectsSection = () => (
     <Section id="projects" title="Featured Projects">
       {(isInView) => (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {PORTFOLIO_DATA.projects.map((project, index) => (
             <div
               key={project.id}
@@ -789,6 +811,16 @@ const App = () => {
                 <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
                   {project.description}
                 </p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {project.techStack.slice(0, 3).map((tech) => (
+                    <span key={tech} className="bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300 text-xs font-semibold px-2 py-1 rounded">
+                      {tech}
+                    </span>
+                  ))}
+                  {project.techStack.length > 3 && (
+                    <span className="text-xs text-gray-500 flex items-center">+{project.techStack.length - 3} more</span>
+                  )}
+                </div>
                 <button
                   onClick={() => setSelectedProject(project)}
                   className="w-full text-center bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 rounded-lg transition duration-300 shadow-md shadow-pink-500/50"
@@ -1029,7 +1061,7 @@ const App = () => {
 
       <Navbar />
 
-      <main>
+      <main className="pt-16">
         <HeroSection />
         <AboutMeSection />
         <SkillsSection />
