@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import emailjs from '@emailjs/browser';
 import {
-  Menu, X, Sun, Moon, Github, Linkedin, Twitter, Facebook, Download, Mail, Phone, Code, GraduationCap, Briefcase, Zap, Star, LayoutList, ArrowRight
+  Menu, X, Sun, Moon, Github, Linkedin, Twitter, Facebook, Download, Mail, Phone, MessageCircle, Code, GraduationCap, Briefcase, Zap, Star, LayoutList, ArrowRight
 } from 'lucide-react';
 
 // --- MOCK DATA ---
@@ -133,28 +133,32 @@ const useInViewAnimation = (threshold = 0.1) => {
 };
 
 // Utility function to generate AOS classes (Reworked for more variety)
+// Utility function to generate AOS classes (Reworked for Slower, Smoother Animation)
 const getAOSClass = (isInView, index, type = 'slide-up') => {
-  const baseClasses = "transition-all duration-1000 ease-out transform";
-  const delay = isInView ? `${300 + index * 150}ms` : '0ms'; // Staggered delay for child items
+  // Increased duration to 1500ms and using a very smooth cubic-bezier
+  const baseClasses = "transition-all duration-[1500ms] ease-[cubic-bezier(0.25,0.1,0.25,1.0)] transform";
+  const delay = isInView ? `${100 + index * 150}ms` : '0ms'; // Slightly reduced stagger start
   let animationClasses = '';
 
   if (isInView) {
-    animationClasses = 'opacity-100 translate-y-0 scale-100 rotate-0';
+    animationClasses = 'opacity-100 translate-y-0 translate-x-0 scale-100 blur-0';
   } else {
     switch (type) {
       case 'slide-left':
-        animationClasses = 'opacity-0 -translate-x-full';
+        animationClasses = 'opacity-0 -translate-x-12 blur-sm'; // Reduced distance, added blur
         break;
       case 'slide-right':
-        animationClasses = 'opacity-0 translate-x-full';
+        animationClasses = 'opacity-0 translate-x-12 blur-sm'; // Reduced distance, added blur
         break;
       case 'scale-in':
-        animationClasses = 'opacity-0 scale-50';
+        animationClasses = 'opacity-0 scale-90 blur-sm'; // Subtle scale from 90%
         break;
-      case 'rotate-in':
+      case 'rotate-in': // Changed to a subtle fade-up scale, removed rotation
+        animationClasses = 'opacity-0 translate-y-8 scale-95 blur-sm';
+        break;
       case 'slide-up': // Default
       default:
-        animationClasses = 'opacity-0 translate-y-12';
+        animationClasses = 'opacity-0 translate-y-12 blur-sm';
         break;
     }
   }
@@ -620,46 +624,50 @@ const App = () => {
           @keyframes slideInUp {
             from {
               opacity: 0;
-              transform: translateY(16px);
+              transform: translateY(30px);
+              filter: blur(4px);
             }
             to {
               opacity: 1;
               transform: translateY(0);
+              filter: blur(0);
             }
           }
           @keyframes scaleIn {
             from {
               opacity: 0;
-              transform: scale(0.75);
+              transform: scale(0.9);
+              filter: blur(4px);
             }
             to {
               opacity: 1;
               transform: scale(1);
+              filter: blur(0);
             }
           }
 
           .animate-on-mount {
             animation-name: slideInUp;
             animation-fill-mode: forwards;
-            animation-duration: 0.7s;
-            animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94); /* ease-out-quad */
-            opacity: 0; /* Ensure initial state is hidden */
+            animation-duration: 1.5s;
+            animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+            opacity: 0;
           }
 
           .animate-on-mount-scale {
             animation-name: scaleIn;
             animation-fill-mode: forwards;
-            animation-duration: 0.9s;
-            animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            animation-delay: 0.7s;
-            opacity: 0; /* Ensure initial state is hidden */
+            animation-duration: 1.8s;
+            animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+            animation-delay: 0.5s;
+            opacity: 0;
           }
 
           /* Assigning delay via style prop */
-          .delay-100 { animation-delay: 0.1s; }
-          .delay-200 { animation-delay: 0.2s; }
-          .delay-300 { animation-delay: 0.3s; }
-          .delay-400 { animation-delay: 0.4s; }
+          .delay-100 { animation-delay: 0.2s; }
+          .delay-200 { animation-delay: 0.4s; }
+          .delay-300 { animation-delay: 0.6s; }
+          .delay-400 { animation-delay: 0.8s; }
         `}</style>
       </section>
     );
@@ -928,6 +936,17 @@ const App = () => {
                   <Phone className="w-6 h-6 text-purple-600 dark:text-purple-400" />
                   <a href="tel:+8801878654211" className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
                     +8801878654211
+                  </a>
+                </div>
+                <div className="flex items-center space-x-3 text-gray-700 dark:text-gray-300">
+                  <MessageCircle className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                  <a
+                    href="https://wa.me/8801878654211"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                  >
+                    WhatsApp Message
                   </a>
                 </div>
               </div>
