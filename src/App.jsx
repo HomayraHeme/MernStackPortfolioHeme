@@ -302,11 +302,11 @@ const Section = ({ id, title, children }) => {
   const { ref, isInView } = useInViewAnimation(0.2);
 
   return (
-    <section id={id} ref={ref} className="py-24 px-4 sm:px-8 lg:px-16 flex items-center justify-center">
+    <section id={id} ref={ref} className="py-16 md:py-24 px-4 sm:px-8 lg:px-16 flex items-center justify-center">
       <div className="w-full max-w-6xl">
         {/* Animated Section Title (Slide-Right effect on title) */}
         <h2
-          className={`text-4xl sm:text-5xl font-extrabold mb-12 text-center text-purple-600 dark:text-purple-400 border-b-4 border-purple-200 dark:border-purple-700 pb-3 inline-block mx-auto 
+          className={`text-3xl md:text-4xl lg:text-5xl font-extrabold mb-8 md:mb-12 text-center text-purple-600 dark:text-purple-400 border-b-4 border-purple-200 dark:border-purple-700 pb-3 inline-block mx-auto 
             ${getAOSClass(isInView, 0, 'slide-right')}`}
         >
           {title}
@@ -406,6 +406,12 @@ const ProjectDetailModal = ({ project, onClose }) => {
                 Server Repo
               </a>
             )}
+            <button
+              onClick={onClose}
+              className="flex-1 text-center bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300 shadow-md"
+            >
+              Close
+            </button>
           </div>
         </div>
       </div>
@@ -558,14 +564,14 @@ const App = () => {
   const HeroSection = () => {
     // Uses CSS keyframes for initial mount animation (similar to previous version)
     return (
-      <section id="home" className="py-24 px-4 sm:px-8 lg:px-16 flex items-center justify-center min-h-screen">
+      <section id="home" className="py-12 md:py-24 px-4 sm:px-8 lg:px-16 flex items-center justify-center min-h-screen">
         <div className="w-full max-w-6xl">
           <div className="flex flex-col lg:flex-row items-center justify-between text-center lg:text-left">
 
             <div className="lg:w-1/2 space-y-6 order-2 lg:order-1">
               {/* Animation 1: Name */}
               <h1 className="text-2xl sm:text-5xl lg:text-5xl font-extrabold text-gray-900 dark:text-gray-50 leading-tight transition-all duration-700 ease-out transform delay-100 opacity-0 translate-y-4 animate-on-mount">
-                Hi, I'm <span className="text-purple-600 dark:text-purple-400 whitespace-nowrap">{PORTFOLIO_DATA.name}</span>
+                Hi, I'm <br className="block sm:hidden" /> <span className="text-purple-600 dark:text-purple-400 whitespace-nowrap">{PORTFOLIO_DATA.name}</span>
               </h1>
               {/* Animation 2: Designation */}
               <p className="text-2xl sm:text-3xl font-medium text-pink-500 dark:text-pink-300 tracking-wide transition-all duration-700 ease-out transform delay-200 opacity-0 translate-y-4 animate-on-mount">
@@ -607,7 +613,7 @@ const App = () => {
             </div>
 
             {/* 2. Professional Photo - Animation 6 (Scale-in effect) */}
-            <div className="lg:w-1/3 mt-12 lg:mt-0 order-1 lg:order-2 transition-all duration-700 ease-out transform delay-700 opacity-0 scale-75 animate-on-mount-scale">
+            <div className="lg:w-1/3 mt-6 lg:mt-0 order-1 lg:order-2 transition-all duration-700 ease-out transform delay-700 opacity-0 scale-75 animate-on-mount-scale">
               <div className="relative p-4 bg-purple-200 dark:bg-purple-900 rounded-full shadow-2xl shadow-purple-500/50">
                 <img
                   src={PORTFOLIO_DATA.photoUrl}
