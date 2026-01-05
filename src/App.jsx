@@ -876,38 +876,44 @@ const App = () => {
       });
     };
 
+    // --- EMAILJS CONFIGURATION ---
+    // Please replace these with your actual values from emailjs.com
+    const SERVICE_ID = 'YOUR_SERVICE_ID';
+    const TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
+    const PUBLIC_KEY = 'YOUR_PUBLIC_KEY';
+
     const handleSubmit = async (e) => {
       e.preventDefault();
       setIsSubmitting(true);
       setSubmitStatus(null);
 
+      // Validation check for placeholders
+      if (SERVICE_ID === 'YOUR_SERVICE_ID' || TEMPLATE_ID === 'YOUR_TEMPLATE_ID' || PUBLIC_KEY === 'YOUR_PUBLIC_KEY') {
+        alert('EmailJS is not configured yet! Please update the SERVICE_ID, TEMPLATE_ID, and PUBLIC_KEY in the code.');
+        setIsSubmitting(false);
+        setSubmitStatus('error');
+        return;
+      }
+
       try {
-        // EmailJS configuration
-        // আপনাকে emailjs.com এ একটি account তৈরি করতে হবে এবং নিচের values গুলো replace করতে হবে
         const result = await emailjs.send(
-          'YOUR_SERVICE_ID',      // EmailJS service ID
-          'YOUR_TEMPLATE_ID',     // EmailJS template ID
+          SERVICE_ID,
+          TEMPLATE_ID,
           {
             from_name: formData.name,
             from_email: formData.email,
             subject: formData.subject,
             message: formData.message,
-            to_email: 'your-email@example.com' // আপনার ইমেইল যেখানে মেসেজ আসবে
+            to_email: 'your-email@example.com' // Optional: You can remove this if your template doesn't use it
           },
-          'YOUR_PUBLIC_KEY'       // EmailJS public key
+          PUBLIC_KEY
         );
 
         console.log('Email sent successfully:', result);
         setSubmitStatus('success');
-        // Clear form
-        setFormData({
-          name: '',
-          email: '',
-          subject: '',
-          message: ''
-        });
+        setFormData({ name: '', email: '', subject: '', message: '' });
       } catch (error) {
-        console.error('Failed to send email:', error);
+        console.error('Email send failed:', error);
         setSubmitStatus('error');
       } finally {
         setIsSubmitting(false);
