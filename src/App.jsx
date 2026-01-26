@@ -836,7 +836,7 @@ const App = () => {
                 </div>
                 <button
                   onClick={() => setSelectedProject(project)}
-                  className="w-full text-center bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 rounded-lg transition duration-300 shadow-md shadow-pink-500/50"
+                  className="w-full text-center bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-lg transition duration-300 shadow-md shadow-purple-500/50"
                 >
                   View More / Details
                 </button>
