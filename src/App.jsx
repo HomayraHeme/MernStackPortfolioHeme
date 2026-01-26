@@ -39,7 +39,7 @@ const PORTFOLIO_DATA = {
     {
       institution: "Milestone College",
       degree: "Higher Secondary Certificate (HSC)",
-      period: "2019-2020",
+      period: "2020-2021",
       details: "Concentrated on Science subjects."
     },
   ],
@@ -134,31 +134,31 @@ const useInViewAnimation = (threshold = 0.1) => {
 
 // Utility function to generate AOS classes (Reworked for more variety)
 // Utility function to generate AOS classes (Reworked for Slower, Smoother Animation)
+// Utility function to generate AOS classes (Reworked for Smoother, Faster Animation)
 const getAOSClass = (isInView, index, type = 'slide-up') => {
-  // Increased duration to 1500ms and using a very smooth cubic-bezier
-  const baseClasses = "transition-all duration-[1500ms] ease-[cubic-bezier(0.25,0.1,0.25,1.0)] transform";
-  const delay = isInView ? `${100 + index * 150}ms` : '0ms'; // Slightly reduced stagger start
+  // Faster duration (700ms) and standard ease-out for responsiveness. removed complex cubic-bezier for a more natural feel
+  const baseClasses = "transition-all duration-700 ease-out transform";
   let animationClasses = '';
 
   if (isInView) {
-    animationClasses = 'opacity-100 translate-y-0 translate-x-0 scale-100 blur-0';
+    animationClasses = 'translate-y-0 translate-x-0 scale-100';
   } else {
     switch (type) {
       case 'slide-left':
-        animationClasses = 'opacity-0 -translate-x-12 blur-sm'; // Reduced distance, added blur
+        animationClasses = '-translate-x-8'; // Reduced distance to 2rem (32px), removed blur
         break;
       case 'slide-right':
-        animationClasses = 'opacity-0 translate-x-12 blur-sm'; // Reduced distance, added blur
+        animationClasses = 'translate-x-8'; // Reduced distance to 2rem, removed blur
         break;
       case 'scale-in':
-        animationClasses = 'opacity-0 scale-90 blur-sm'; // Subtle scale from 90%
+        animationClasses = 'scale-95'; // Subtle scale from 95%
         break;
-      case 'rotate-in': // Changed to a subtle fade-up scale, removed rotation
-        animationClasses = 'opacity-0 translate-y-8 scale-95 blur-sm';
+      case 'rotate-in':
+        animationClasses = 'translate-y-4 scale-95'; // Very subtle fade-up scale
         break;
       case 'slide-up': // Default
       default:
-        animationClasses = 'opacity-0 translate-y-12 blur-sm';
+        animationClasses = 'translate-y-8'; // Reduced distance to 2rem
         break;
     }
   }
@@ -570,15 +570,15 @@ const App = () => {
 
             <div className="lg:w-1/2 space-y-6 order-2 lg:order-1">
               {/* Animation 1: Name */}
-              <h1 className="text-2xl sm:text-5xl lg:text-5xl font-extrabold text-gray-900 dark:text-gray-50 leading-tight transition-all duration-700 ease-out transform delay-100 opacity-0 translate-y-4 animate-on-mount">
+              <h1 className="text-2xl sm:text-5xl lg:text-5xl font-extrabold text-gray-900 dark:text-gray-50 leading-tight transition-all duration-700 ease-out transform delay-100 translate-y-4 animate-on-mount">
                 Hi, I'm <br className="block sm:hidden" /> <span className="text-purple-600 dark:text-purple-400 whitespace-nowrap">{PORTFOLIO_DATA.name}</span>
               </h1>
               {/* Animation 2: Designation */}
-              <p className="text-2xl sm:text-3xl font-medium text-pink-500 dark:text-pink-300 tracking-wide transition-all duration-700 ease-out transform delay-200 opacity-0 translate-y-4 animate-on-mount">
+              <p className="text-2xl sm:text-3xl font-medium text-pink-500 dark:text-pink-300 tracking-wide transition-all duration-700 ease-out transform delay-200 translate-y-4 animate-on-mount">
                 {PORTFOLIO_DATA.designation}
               </p>
               {/* Animation 3: Description */}
-              <p className="text-xl text-gray-600 dark:text-gray-400 max-w-lg lg:max-w-none mx-auto lg:mx-0 transition-all duration-700 ease-out transform delay-300 opacity-0 translate-y-4 animate-on-mount">
+              <p className="text-xl text-gray-600 dark:text-gray-400 max-w-lg lg:max-w-none mx-auto lg:mx-0 transition-all duration-700 ease-out transform delay-300 translate-y-4 animate-on-mount">
                 I turn creative ideas into robust, high-performance web applications. Let's build something amazing together.
               </p>
 
@@ -587,7 +587,7 @@ const App = () => {
                 <a
                   href={getGoogleDocsDownloadUrl(PORTFOLIO_DATA.resumeLink)}
                   download="Homayra_Binte_Harun_Heme_Resume.pdf"
-                  className="flex items-center bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 shadow-xl shadow-purple-500/50 transform hover:scale-105 delay-400 opacity-0 animate-on-mount"
+                  className="flex items-center bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 shadow-xl shadow-purple-500/50 transform hover:scale-105 delay-400 animate-on-mount"
                 >
                   <Download className="w-5 h-5 mr-2" />
                   Download Resume
@@ -601,7 +601,7 @@ const App = () => {
                       href={social.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`p-3 border-2 border-purple-600 text-purple-600 hover:bg-purple-100 dark:hover:bg-gray-700 rounded-full transition duration-300 dark:text-purple-400 dark:border-purple-400 opacity-0 animate-on-mount`}
+                      className={`p-3 border-2 border-purple-600 text-purple-600 hover:bg-purple-100 dark:hover:bg-gray-700 rounded-full transition duration-300 dark:text-purple-400 dark:border-purple-400 animate-on-mount`}
                       style={{ animationDelay: `${450 + index * 100}ms` }} // Use animation-delay
                       aria-label={social.name}
                     >
@@ -613,7 +613,7 @@ const App = () => {
             </div>
 
             {/* 2. Professional Photo - Animation 6 (Scale-in effect) */}
-            <div className="lg:w-1/3 mt-6 lg:mt-0 order-1 lg:order-2 transition-all duration-700 ease-out transform delay-700 opacity-0 scale-75 animate-on-mount-scale">
+            <div className="lg:w-1/3 mt-6 lg:mt-0 order-1 lg:order-2 transition-all duration-700 ease-out transform delay-700 scale-75 animate-on-mount-scale">
               <div className="relative p-4 bg-purple-200 dark:bg-purple-900 rounded-full shadow-2xl shadow-purple-500/50">
                 <img
                   src={PORTFOLIO_DATA.photoUrl}
@@ -629,51 +629,41 @@ const App = () => {
           /* Custom CSS for Hero Mount Animation */
           @keyframes slideInUp {
             from {
-              opacity: 0;
-              transform: translateY(30px);
-              filter: blur(4px);
+              transform: translateY(20px);
             }
             to {
-              opacity: 1;
               transform: translateY(0);
-              filter: blur(0);
             }
           }
           @keyframes scaleIn {
             from {
-              opacity: 0;
-              transform: scale(0.9);
-              filter: blur(4px);
+              transform: scale(0.95);
             }
             to {
-              opacity: 1;
               transform: scale(1);
-              filter: blur(0);
             }
           }
 
           .animate-on-mount {
             animation-name: slideInUp;
             animation-fill-mode: forwards;
-            animation-duration: 1.5s;
-            animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
-            opacity: 0;
+            animation-duration: 0.8s;
+            animation-timing-function: ease-out;
           }
 
           .animate-on-mount-scale {
             animation-name: scaleIn;
             animation-fill-mode: forwards;
-            animation-duration: 1.8s;
-            animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
-            animation-delay: 0.5s;
-            opacity: 0;
+            animation-duration: 1s;
+            animation-timing-function: ease-out;
+            animation-delay: 0.3s;
           }
 
           /* Assigning delay via style prop */
-          .delay-100 { animation-delay: 0.2s; }
-          .delay-200 { animation-delay: 0.4s; }
-          .delay-300 { animation-delay: 0.6s; }
-          .delay-400 { animation-delay: 0.8s; }
+          .delay-100 { animation-delay: 0.1s; }
+          .delay-200 { animation-delay: 0.2s; }
+          .delay-300 { animation-delay: 0.3s; }
+          .delay-400 { animation-delay: 0.4s; }
         `}</style>
       </section>
     );
@@ -712,7 +702,7 @@ const App = () => {
               key={skillGroup.category}
               className={`bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border-t-4 border-purple-600 dark:border-purple-400 transform hover:scale-[1.02] transition-all duration-700 ease-out 
                 ${getAOSClass(isInView, index, 'rotate-in')}`}
-              style={{ transitionDelay: isInView ? `${300 + index * 200}ms` : '0ms' }}
+              style={{ transitionDelay: isInView ? `${50 + index * 100}ms` : '0ms' }}
             >
               <div className="flex items-center mb-4">
                 <skillGroup.icon className="w-8 h-8 text-purple-600 dark:text-purple-400 mr-3" />
@@ -747,7 +737,7 @@ const App = () => {
               <div
                 className={`md:w-1/12 flex justify-center relative z-10 
                   ${getAOSClass(isInView, index, 'scale-in')}`}
-                style={{ transitionDelay: isInView ? `${300 + index * 200}ms` : '0ms' }}
+                style={{ transitionDelay: isInView ? `${50 + index * 100}ms` : '0ms' }}
               >
                 <div className="w-8 h-8 bg-purple-600 dark:bg-purple-400 rounded-full flex items-center justify-center shadow-md">
                   <GraduationCap className="w-4 h-4 text-white" />
@@ -757,7 +747,7 @@ const App = () => {
               <div
                 className={`md:w-11/12 pl-0 md:pl-12 pt-4 md:pt-0 
                   ${getAOSClass(isInView, index, 'slide-up')}`}
-                style={{ transitionDelay: isInView ? `${300 + index * 200}ms` : '0ms' }}
+                style={{ transitionDelay: isInView ? `${50 + index * 100}ms` : '0ms' }}
               >
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-purple-100 dark:border-purple-900">
                   <h3 className="text-2xl font-bold text-purple-600 dark:text-purple-400">{edu.degree}</h3>
@@ -785,7 +775,7 @@ const App = () => {
               <div
                 className={`md:w-1/12 flex justify-center relative z-10 
                   ${getAOSClass(isInView, index, 'slide-left')}`}
-                style={{ transitionDelay: isInView ? `${300 + index * 200}ms` : '0ms' }}
+                style={{ transitionDelay: isInView ? `${50 + index * 100}ms` : '0ms' }}
               >
                 <div className="w-8 h-8 bg-purple-600 dark:bg-purple-400 rounded-full flex items-center justify-center shadow-md">
                   <Briefcase className="w-4 h-4 text-white" />
@@ -795,7 +785,7 @@ const App = () => {
               <div
                 className={`md:w-11/12 pl-0 md:pl-12 pt-4 md:pt-0 
                   ${getAOSClass(isInView, index, 'slide-right')}`}
-                style={{ transitionDelay: isInView ? `${300 + index * 200}ms` : '0ms' }}
+                style={{ transitionDelay: isInView ? `${50 + index * 100}ms` : '0ms' }}
               >
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-purple-100 dark:border-purple-900">
                   <p className="text-sm font-semibold text-pink-500 dark:text-pink-300 mb-1">{exp.period}</p>
@@ -820,7 +810,7 @@ const App = () => {
               key={project.id}
               className={`bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden group border border-purple-100 dark:border-purple-900 transform hover:scale-[1.03] transition-all duration-700 ease-out 
                 ${getAOSClass(isInView, index, 'slide-up')}`}
-              style={{ transitionDelay: isInView ? `${300 + index * 200}ms` : '0ms' }}
+              style={{ transitionDelay: isInView ? `${50 + index * 100}ms` : '0ms' }}
             >
               <img
                 src={project.image}
@@ -930,7 +920,7 @@ const App = () => {
             <div
               className={`bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl border border-purple-100 dark:border-purple-900 
               ${getAOSClass(isInView, 0, 'slide-left')}`}
-              style={{ transitionDelay: '300ms' }}
+              style={{ transitionDelay: '100ms' }}
             >
               <h3 className="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-6">Contact Information</h3>
               <p className="text-gray-700 dark:text-gray-300 mb-6">
@@ -986,7 +976,7 @@ const App = () => {
             <div
               className={`bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl border border-purple-100 dark:border-purple-900 
               ${getAOSClass(isInView, 1, 'slide-right')}`}
-              style={{ transitionDelay: '500ms' }}
+              style={{ transitionDelay: '200ms' }}
             >
               <h3 className="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-6">Send Me a Message</h3>
 
