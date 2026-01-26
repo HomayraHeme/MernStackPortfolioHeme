@@ -296,9 +296,76 @@ const useTrailingCursor = (isDarkMode) => {
 };
 
 
+// Custom Hook for Scroll Direction (Detects Up/Down)
+const useScrollDirection = () => {
+  const [scrollDirection, setScrollDirection] = useState("up");
+
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+
+    const updateScrollDirection = () => {
+      const scrollY = window.scrollY;
+      const direction = scrollY > lastScrollY ? "down" : "up";
+      if (direction !== scrollDirection && (scrollY - lastScrollY > 10 || scrollY - lastScrollY < -10)) {
+        setScrollDirection(direction);
+      }
+      lastScrollY = scrollY > 0 ? scrollY : 0;
+    };
+    window.addEventListener("scroll", updateScrollDirection); // add event listener
+    return () => {
+      window.removeEventListener("scroll", updateScrollDirection); // clean up
+    }
+  }, [scrollDirection]);
+
+  return scrollDirection;
+};
+
 // --- MAIN COMPONENTS ---
 
+// Animated Neon Button Component
+const AnimatedButton = ({ children, onClick, className = "", href, download, target, rel }) => {
+  const baseClass = `
+    relative group overflow-hidden px-6 sm:px-8 py-3 rounded-xl font-bold text-white transition-all duration-300
+    bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500
+    shadow-[0_0_20px_rgba(168,85,247,0.5)] hover:shadow-[0_0_35px_rgba(236,72,153,0.7)]
+    scale-100 hover:scale-105 active:scale-95
+  `;
+
+  const content = (
+    <span className="relative z-10 flex items-center justify-center">
+      {children}
+    </span>
+  );
+
+  const buttonContent = (
+    <>
+      {/* Animated Gradient Border/Glow Effect */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-purple-600 via-pink-500 to-purple-600 animate-gradient-xy opacity-80 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+      {/* Shine Effect */}
+      <div className="absolute inset-0 -z-10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
+
+      {content}
+    </>
+  );
+
+  if (href) {
+    return (
+      <a href={href} download={download} target={target} rel={rel} onClick={onClick} className={`${baseClass} ${className}`}>
+        {buttonContent}
+      </a>
+    );
+  }
+
+  return (
+    <button onClick={onClick} className={`${baseClass} ${className}`}>
+      {buttonContent}
+    </button>
+  );
+};
+
 const Section = ({ id, title, children }) => {
+
   const { ref, isInView } = useInViewAnimation(0.2);
 
   return (
@@ -380,19 +447,19 @@ const ProjectDetailModal = ({ project, onClose }) => {
           </div>
 
           <div className="mt-8 flex flex-col sm:flex-row gap-4">
-            <a
+            <AnimatedButton
               href={project.liveLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 text-center bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 shadow-md shadow-purple-500/50"
+              className="flex-1 text-center py-3 shadow-md shadow-purple-500/50"
             >
               Live Project Link
-            </a>
+            </AnimatedButton>
             <a
               href={project.githubLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 text-center border-2 border-purple-600 text-purple-600 hover:bg-purple-50 dark:hover:bg-gray-700 font-bold py-3 px-6 rounded-lg transition duration-300"
+              className="flex-1 text-center border-2 border-purple-600 text-purple-600 hover:bg-purple-50 dark:hover:bg-gray-700 font-bold py-3 px-6 rounded-xl transition duration-300"
             >
               Client Repo
             </a>
@@ -401,14 +468,14 @@ const ProjectDetailModal = ({ project, onClose }) => {
                 href={project.serverLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 text-center border-2 border-purple-600 text-purple-600 hover:bg-purple-50 dark:hover:bg-gray-700 font-bold py-3 px-6 rounded-lg transition duration-300"
+                className="flex-1 text-center border-2 border-purple-600 text-purple-600 hover:bg-purple-50 dark:hover:bg-gray-700 font-bold py-3 px-6 rounded-xl transition duration-300"
               >
                 Server Repo
               </a>
             )}
             <button
               onClick={onClose}
-              className="flex-1 text-center bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300 shadow-md"
+              className="flex-1 text-center bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-xl transition duration-300 shadow-md"
             >
               Close
             </button>
@@ -481,6 +548,8 @@ const App = () => {
 
   // Navbar কম্পোনেন্ট: নেভিগেশন লিঙ্ক, ডার্ক মোড টগল এবং মোবাইল মেনু সহ সম্পূর্ণভাবে কার্যকরী
   const Navbar = () => {
+    // Removed scroll logic to make it permanently sticky
+
     const navItems = [
       { id: 'home', label: 'Home' },
       { id: 'about', label: 'About Me' },
@@ -494,9 +563,9 @@ const App = () => {
     const NavLink = ({ id, label }) => (
       <button
         onClick={() => scrollToSection(id)}
-        className={`px-3 py-2 rounded-lg font-medium transition-colors duration-300 ${activeSection === id
-          ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/50'
-          : 'text-gray-700 dark:text-gray-200 hover:bg-purple-100 dark:hover:bg-gray-700 hover:text-purple-600 dark:hover:text-purple-400'
+        className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${activeSection === id
+          ? 'bg-purple-600/90 text-white shadow-[0_0_15px_rgba(147,51,234,0.5)]'
+          : 'text-gray-700 dark:text-gray-200 hover:bg-purple-100/50 dark:hover:bg-gray-700/50 hover:text-purple-600 dark:hover:text-purple-400'
           }`}
       >
         {label}
@@ -504,60 +573,62 @@ const App = () => {
     );
 
     return (
-      <header className="fixed top-0 left-0 z-50 w-full bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-purple-200 dark:border-purple-800 shadow-lg">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-2">
-          <div className="flex justify-between items-center h-16">
-            <h1 className="text-2xl font-extrabold text-purple-600 dark:text-purple-400">
-              HEME.DEV
-            </h1>
+      <div className="fixed top-6 left-0 right-0 z-50 flex justify-center transition-transform duration-500 rounded-lg translate-y-0">
+        <header className="w-[95%] max-w-5xl bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl border border-white/20 dark:border-gray-700/30 rounded-2xl shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] ring-1 ring-purple-500/20">
+          <div className="px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center h-16">
+              <h1 className="text-xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600 cursor-pointer" onClick={() => scrollToSection('home')}>
+                HEME.DEV
+              </h1>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex space-x-2">
-              {navItems.map(item => <NavLink key={item.id} {...item} />)}
-            </nav>
+              {/* Desktop Navigation */}
+              <nav className="hidden lg:flex space-x-1">
+                {navItems.map(item => <NavLink key={item.id} {...item} />)}
+              </nav>
 
-            <div className="flex items-center space-x-4">
-              {/* Dark Mode Toggle */}
-              <button
-                onClick={toggleDarkMode}
-                className="p-2 rounded-full text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-gray-700 transition-colors"
-                aria-label="Toggle dark mode"
-              >
-                {isDarkMode ? <Sun size={24} /> : <Moon size={24} />}
-              </button>
+              <div className="flex items-center space-x-4">
+                {/* Dark Mode Toggle */}
+                <button
+                  onClick={toggleDarkMode}
+                  className="p-2 rounded-full text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-gray-700 transition-colors shadow-sm"
+                  aria-label="Toggle dark mode"
+                >
+                  {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+                </button>
 
-              {/* Mobile Menu Button */}
-              <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="lg:hidden p-2 rounded-lg text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-gray-700 transition-colors"
-                aria-label="Toggle navigation menu"
-              >
-                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-              </button>
+                {/* Mobile Menu Button */}
+                <button
+                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+                  className="lg:hidden p-2 rounded-lg text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-gray-700 transition-colors"
+                  aria-label="Toggle navigation menu"
+                >
+                  {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="lg:hidden absolute w-full bg-white dark:bg-gray-800 border-t border-purple-200 dark:border-purple-800 shadow-xl">
-            <nav className="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col">
-              {navItems.map(item => (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className={`block text-left px-3 py-2 rounded-md text-base font-medium transition-colors ${activeSection === item.id
-                    ? 'bg-purple-600 text-white'
-                    : 'text-gray-700 dark:text-gray-200 hover:bg-purple-100 dark:hover:bg-gray-700'
-                    }`}
-                >
-                  {item.label}
-                </button>
-              ))}
-            </nav>
-          </div>
-        )}
-      </header>
+          {/* Mobile Menu (Attached below the pill) */}
+          {isMenuOpen && (
+            <div className="lg:hidden absolute top-20 left-4 right-4 bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl border border-purple-100 dark:border-purple-800 shadow-2xl overflow-hidden animate-on-mount origin-top">
+              <nav className="p-4 space-y-2 flex flex-col">
+                {navItems.map(item => (
+                  <button
+                    key={item.id}
+                    onClick={() => scrollToSection(item.id)}
+                    className={`block text-left px-4 py-3 rounded-xl text-base font-medium transition-all ${activeSection === item.id
+                      ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg'
+                      : 'text-gray-700 dark:text-gray-200 hover:bg-purple-50 dark:hover:bg-gray-700'
+                      }`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </nav>
+            </div>
+          )}
+        </header>
+      </div>
     );
   };
 
@@ -570,7 +641,7 @@ const App = () => {
 
             <div className="lg:w-1/2 space-y-6 order-2 lg:order-1">
               {/* Animation 1: Name */}
-              <h1 className="text-2xl sm:text-5xl lg:text-5xl font-extrabold text-gray-900 dark:text-gray-50 leading-tight transition-all duration-700 ease-out transform delay-100 translate-y-4 animate-on-mount">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-gray-50 leading-tight transition-all duration-700 ease-out transform delay-100 translate-y-4 animate-on-mount">
                 Hi, I'm <br className="block sm:hidden" /> <span className="text-purple-600 dark:text-purple-400 whitespace-nowrap">{PORTFOLIO_DATA.name}</span>
               </h1>
               {/* Animation 2: Designation */}
@@ -584,14 +655,14 @@ const App = () => {
 
               <div className="flex flex-col sm:flex-row items-center gap-6 lg:gap-8 justify-center lg:justify-start pt-4">
                 {/* 3. Resume Download Button - Animation 4 */}
-                <a
+                <AnimatedButton
                   href={getGoogleDocsDownloadUrl(PORTFOLIO_DATA.resumeLink)}
                   download="Homayra_Binte_Harun_Heme_Resume.pdf"
-                  className="flex items-center bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 shadow-xl shadow-purple-500/50 transform hover:scale-105 delay-400 animate-on-mount"
+                  className="delay-400 animate-on-mount"
                 >
                   <Download className="w-5 h-5 mr-2" />
                   Download Resume
-                </a>
+                </AnimatedButton>
 
                 {/* 4. Social Links - Grouped for mobile alignment */}
                 <div className="flex items-center gap-4">
@@ -657,6 +728,20 @@ const App = () => {
             animation-duration: 1s;
             animation-timing-function: ease-out;
             animation-delay: 0.3s;
+          }
+
+          /* Animated Gradient for Buttons */
+          @keyframes gradient-xy {
+            0%, 100% {
+              background-position: 0% 50%;
+            }
+            50% {
+              background-position: 100% 50%;
+            }
+          }
+          .animate-gradient-xy {
+            background-size: 200% 200%;
+            animation: gradient-xy 3s ease infinite;
           }
 
           /* Assigning delay via style prop */
@@ -834,12 +919,12 @@ const App = () => {
                     <span className="text-xs text-gray-500 flex items-center">+{project.techStack.length - 3} more</span>
                   )}
                 </div>
-                <button
+                <AnimatedButton
                   onClick={() => setSelectedProject(project)}
-                  className="w-full text-center bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-lg transition duration-300 shadow-md shadow-purple-500/50"
+                  className="w-full text-center py-3 shadow-md shadow-purple-500/50"
                 >
-                  View More / Details
-                </button>
+                  View Details
+                </AnimatedButton>
               </div>
             </div>
           ))}
@@ -1057,14 +1142,14 @@ const App = () => {
                   </div>
                 )}
 
-                <button
+                <AnimatedButton
                   type="submit"
+                  className={`w-full py-3 shadow-lg shadow-purple-500/50 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
                   disabled={isSubmitting}
-                  className={`w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 shadow-lg shadow-purple-500/50 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'transform hover:scale-[1.02]'
-                    }`}
+                  onClick={handleSubmit} // AnimatedButton renders a button by default if no href
                 >
                   {isSubmitting ? 'Sending...' : 'Send Message'}
-                </button>
+                </AnimatedButton>
               </form>
             </div>
           </div>
