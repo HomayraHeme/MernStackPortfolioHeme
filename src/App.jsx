@@ -60,6 +60,7 @@ const PORTFOLIO_DATA = {
       description: "A full-stack bookstore web app where users can browse and manage books easily.",
       liveLink: "https://book-haven-48f66.web.app/",
       githubLink: "https://github.com/HomayraHeme/book-haven-client",
+      serverLink: "https://github.com/HomayraHeme/book-haven-server",
       challenges: "Overcame challenges in implementing a light/dark mode toggle, adding a comment feature, and deploying the project successfully.",
       futurePlans: "Planning to add a feature for selling hard copy books directly through the platform.",
     },
@@ -364,6 +365,26 @@ const AnimatedButton = ({ children, onClick, className = "", href, download, tar
   );
 };
 
+// Animated Border Button (for Repos)
+const AnimatedBorderButton = ({ children, href, className = "" }) => {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`relative group flex items-center justify-center overflow-hidden rounded-xl p-[2px] transition-all duration-300 hover:scale-105 active:scale-95 ${className}`}
+    >
+      {/* Rotating Gradient Background */}
+      <div className="absolute inset-[-1000%] bg-[conic-gradient(from_90deg_at_50%_50%,#a855f7_0%,#ec4899_50%,#a855f7_100%)] animate-[spin_2s_linear_infinite]" />
+
+      {/* Inner Content */}
+      <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-[10px] bg-white dark:bg-gray-900 px-6 py-3 text-sm font-bold text-purple-600 dark:text-purple-400 backdrop-blur-3xl transition-colors hover:bg-gray-50 dark:hover:bg-gray-800">
+        {children}
+      </span>
+    </a>
+  );
+};
+
 const Section = ({ id, title, children }) => {
 
   const { ref, isInView } = useInViewAnimation(0.2);
@@ -392,93 +413,85 @@ const ProjectDetailModal = ({ project, onClose }) => {
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-gray-900 bg-opacity-80 flex items-center justify-center p-4 overflow-y-auto"
+      className="fixed inset-0 z-50 bg-gray-900/90 backdrop-blur-sm overflow-y-auto"
       onClick={onClose}
     >
-      <div
-        className="relative w-full max-w-4xl bg-white dark:bg-gray-800 rounded-2xl shadow-2xl transition-all duration-300 transform scale-100"
-        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
-      >
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-800 dark:text-gray-200 hover:text-purple-600 dark:hover:text-purple-400 p-2 rounded-full transition-colors"
-          aria-label="Close Project Details"
+      <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+        <div
+          className="relative w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 text-left shadow-2xl transition-all sm:my-8 border border-purple-100 dark:border-purple-900"
+          onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
         >
-          <X size={24} />
-        </button>
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 text-gray-800 dark:text-gray-200 hover:text-purple-600 dark:hover:text-purple-400 p-2 rounded-full transition-colors"
+            aria-label="Close Project Details"
+          >
+            <X size={24} />
+          </button>
 
-        <img
-          src={project.image}
-          alt={project.name}
-          className="w-full h-64 object-cover rounded-t-2xl"
-        />
+          <img
+            src={project.image}
+            alt={project.name}
+            className="w-full h-64 object-cover rounded-t-2xl"
+          />
 
-        <div className="p-8">
-          <h3 className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-4">{project.name}</h3>
+          <div className="p-8">
+            <h3 className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-4 break-words">{project.name}</h3>
 
-          <div className="space-y-6 text-gray-700 dark:text-gray-300">
-            {/* Tech Stack */}
-            <div>
-              <p className="font-semibold text-lg text-pink-500 dark:text-pink-300 flex items-center mb-2"><Code className="w-5 h-5 mr-2" /> Main Technology Stack</p>
-              <div className="flex flex-wrap gap-2">
-                {project.techStack.map((tech) => (
-                  <span key={tech} className="bg-purple-100 dark:bg-purple-700 text-purple-800 dark:text-purple-100 text-sm font-medium px-3 py-1 rounded-full">{tech}</span>
-                ))}
+            <div className="space-y-6 text-gray-700 dark:text-gray-300">
+              {/* Tech Stack */}
+              <div>
+                <p className="font-semibold text-lg text-pink-500 dark:text-pink-300 flex items-center mb-2"><Code className="w-5 h-5 mr-2" /> Main Technology Stack</p>
+                <div className="flex flex-wrap gap-2">
+                  {project.techStack.map((tech) => (
+                    <span key={tech} className="bg-purple-100 dark:bg-purple-700 text-purple-800 dark:text-purple-100 text-sm font-medium px-3 py-1 rounded-full">{tech}</span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Description */}
+              <div>
+                <p className="font-semibold text-lg text-pink-500 dark:text-pink-300 flex items-center mb-2"><LayoutList className="w-5 h-5 mr-2" /> Brief Description</p>
+                <p>{project.description}</p>
+              </div>
+
+              {/* Challenges */}
+              <div>
+                <p className="font-semibold text-lg text-pink-500 dark:text-pink-300 flex items-center mb-2"><Zap className="w-5 h-5 mr-2" /> Challenges Faced</p>
+                <p>{project.challenges}</p>
+              </div>
+
+              {/* Future Plans */}
+              <div>
+                <p className="font-semibold text-lg text-pink-500 dark:text-pink-300 flex items-center mb-2"><Star className="w-5 h-5 mr-2" /> Potential Improvements & Future Plans</p>
+                <p>{project.futurePlans}</p>
               </div>
             </div>
 
-            {/* Description */}
-            <div>
-              <p className="font-semibold text-lg text-pink-500 dark:text-pink-300 flex items-center mb-2"><LayoutList className="w-5 h-5 mr-2" /> Brief Description</p>
-              <p>{project.description}</p>
-            </div>
-
-            {/* Challenges */}
-            <div>
-              <p className="font-semibold text-lg text-pink-500 dark:text-pink-300 flex items-center mb-2"><Zap className="w-5 h-5 mr-2" /> Challenges Faced</p>
-              <p>{project.challenges}</p>
-            </div>
-
-            {/* Future Plans */}
-            <div>
-              <p className="font-semibold text-lg text-pink-500 dark:text-pink-300 flex items-center mb-2"><Star className="w-5 h-5 mr-2" /> Potential Improvements & Future Plans</p>
-              <p>{project.futurePlans}</p>
-            </div>
-          </div>
-
-          <div className="mt-8 flex flex-col sm:flex-row gap-4">
-            <AnimatedButton
-              href={project.liveLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 text-center py-3 shadow-md shadow-purple-500/50"
-            >
-              Live Project Link
-            </AnimatedButton>
-            <a
-              href={project.githubLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 text-center border-2 border-purple-600 text-purple-600 hover:bg-purple-50 dark:hover:bg-gray-700 font-bold py-3 px-6 rounded-xl transition duration-300"
-            >
-              Client Repo
-            </a>
-            {project.serverLink && (
-              <a
-                href={project.serverLink}
+            <div className="mt-8 flex flex-col sm:flex-row gap-4">
+              <AnimatedButton
+                href={project.liveLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 text-center border-2 border-purple-600 text-purple-600 hover:bg-purple-50 dark:hover:bg-gray-700 font-bold py-3 px-6 rounded-xl transition duration-300"
+                className="flex-1 w-full text-center py-3 shadow-md shadow-purple-500/50"
               >
-                Server Repo
-              </a>
-            )}
-            <button
-              onClick={onClose}
-              className="flex-1 text-center bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-xl transition duration-300 shadow-md"
-            >
-              Close
-            </button>
+                Live Link
+              </AnimatedButton>
+              <AnimatedBorderButton href={project.githubLink} className="flex-1 w-full">
+                Client Repo
+              </AnimatedBorderButton>
+              {project.serverLink && (
+                <AnimatedBorderButton href={project.serverLink} className="flex-1 w-full">
+                  Server Repo
+                </AnimatedBorderButton>
+              )}
+              <button
+                onClick={onClose}
+                className="flex-1 w-full text-center bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-xl transition duration-300 shadow-md"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -487,7 +500,7 @@ const ProjectDetailModal = ({ project, onClose }) => {
 };
 
 
-// --- APP COMPONENT ---
+// --- APP COMPONENT --- (Updated)
 
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -642,7 +655,7 @@ const App = () => {
             <div className="lg:w-1/2 space-y-6 order-2 lg:order-1">
               {/* Animation 1: Name */}
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-gray-50 leading-tight transition-all duration-700 ease-out transform delay-100 translate-y-4 animate-on-mount">
-                Hi, I'm <br className="block sm:hidden" /> <span className="text-purple-600 dark:text-purple-400 whitespace-nowrap">{PORTFOLIO_DATA.name}</span>
+                Hi, I'm <br /> <span className="text-purple-600 dark:text-purple-400">{PORTFOLIO_DATA.name}</span>
               </h1>
               {/* Animation 2: Designation */}
               <p className="text-2xl sm:text-3xl font-medium text-pink-500 dark:text-pink-300 tracking-wide transition-all duration-700 ease-out transform delay-200 translate-y-4 animate-on-mount">
@@ -903,7 +916,7 @@ const App = () => {
                 className="w-full h-48 object-cover transition-opacity duration-300 group-hover:opacity-80"
               />
               <div className="p-6">
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3 break-words">
                   {project.name}
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
