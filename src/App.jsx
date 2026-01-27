@@ -1,8 +1,11 @@
-import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo, createContext, useContext } from 'react';
 import emailjs from '@emailjs/browser';
 import {
   Menu, X, Sun, Moon, Github, Linkedin, Twitter, Facebook, Download, Mail, Phone, MessageCircle, Code, GraduationCap, Briefcase, Zap, Star, LayoutList, ArrowRight
 } from 'lucide-react';
+
+// Create context for animation control
+const AnimationContext = createContext({ animationsEnabled: true });
 
 // --- MOCK DATA ---
 const PORTFOLIO_DATA = {
@@ -10,6 +13,8 @@ const PORTFOLIO_DATA = {
   name: "Homayra Binte Harun Heme",
   photoUrl: "https://i.ibb.co.com/8nmz2nBq/rounded-formal.png",
   resumeLink: "https://drive.google.com/file/d/1g-a55sF8gCmuI8shHD3ABWBqcaWtKgJM/view?usp=sharing",
+  email: "heme5674@gmail.com",
+  phone: "+8801878654211",
   socials: [
     { name: "GitHub", icon: Github, link: "https://github.com/HomayraHeme" },
     { name: "LinkedIn", icon: Linkedin, link: "https://www.linkedin.com/in/homayra-heme/" },
@@ -103,69 +108,10 @@ const PORTFOLIO_DATA = {
 
 // --- UTILITY HOOKS & COMPONENTS ---
 
-// Custom Hook to detect if an element is in view (for AOS simulation)
-const useInViewAnimation = (threshold = 0.1) => {
-  const ref = useRef(null);
-  const [isInView, setIsInView] = useState(false);
+// --- UTILITY COMPONENTS ---
 
-  useEffect(() => {
-    const element = ref.current;
-    if (!element) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true);
-          // Only trigger once after element is visible
-          observer.unobserve(element);
-        }
-      },
-      { threshold }
-    );
 
-    observer.observe(element);
-
-    return () => {
-      if (element) observer.unobserve(element);
-    };
-  }, [threshold]);
-
-  return { ref, isInView };
-};
-
-// Utility function to generate AOS classes (Reworked for more variety)
-// Utility function to generate AOS classes (Reworked for Slower, Smoother Animation)
-// Utility function to generate AOS classes (Reworked for Smoother, Faster Animation)
-const getAOSClass = (isInView, index, type = 'slide-up') => {
-  // Faster duration (700ms) and standard ease-out for responsiveness. removed complex cubic-bezier for a more natural feel
-  const baseClasses = "transition-all duration-700 ease-out transform";
-  let animationClasses = '';
-
-  if (isInView) {
-    animationClasses = 'translate-y-0 translate-x-0 scale-100';
-  } else {
-    switch (type) {
-      case 'slide-left':
-        animationClasses = '-translate-x-8'; // Reduced distance to 2rem (32px), removed blur
-        break;
-      case 'slide-right':
-        animationClasses = 'translate-x-8'; // Reduced distance to 2rem, removed blur
-        break;
-      case 'scale-in':
-        animationClasses = 'scale-95'; // Subtle scale from 95%
-        break;
-      case 'rotate-in':
-        animationClasses = 'translate-y-4 scale-95'; // Very subtle fade-up scale
-        break;
-      case 'slide-up': // Default
-      default:
-        animationClasses = 'translate-y-8'; // Reduced distance to 2rem
-        break;
-    }
-  }
-
-  return `${baseClasses} ${animationClasses}`;
-};
 
 // Utility function to get Google Docs/Drive direct download URL
 const getGoogleDocsDownloadUrl = (url) => {
@@ -186,115 +132,7 @@ const getGoogleDocsDownloadUrl = (url) => {
 
 
 
-// Custom Hook for Trailing LINE Cursor Effect (Multi-dot implementation)
-const useTrailingCursor = (isDarkMode) => {
-  const trailRefs = useRef([]);
-  const TRAIL_LENGTH = 15; // Number of dots in the trail
-  const trailElements = useMemo(() => Array.from({ length: TRAIL_LENGTH }), []);
 
-  useEffect(() => {
-    // Array to store target and current positions for each trail element
-    const positions = Array.from({ length: TRAIL_LENGTH }, () => ({
-      targetX: 0,
-      targetY: 0,
-      currentX: 0,
-      currentY: 0,
-    }));
-
-    // The smoothing factor for the primary element (index 0)
-    const primarySpeed = 0.15;
-    // The smoothing factor for trailing elements (creates the lag effect)
-    const lagFactor = 0.7;
-
-    let mouseX = 0;
-    let mouseY = 0;
-
-    const handleMouseMove = (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY + window.scrollY;
-    };
-
-    let animationFrameId;
-
-    const updateCursor = () => {
-      if (trailRefs.current.length !== TRAIL_LENGTH) {
-        animationFrameId = requestAnimationFrame(updateCursor);
-        return;
-      }
-
-      // 1. Update the position of the first dot (the fastest one)
-      positions[0].targetX = mouseX;
-      positions[0].targetY = mouseY;
-
-      positions[0].currentX += (positions[0].targetX - positions[0].currentX) * primarySpeed;
-      positions[0].currentY += (positions[0].targetY - positions[0].currentY) * primarySpeed;
-
-      trailRefs.current[0].style.transform =
-        `translate3d(${positions[0].currentX - 5}px, ${positions[0].currentY - 5}px, 0)`;
-
-      // 2. Update the position of the trailing dots
-      for (let i = 1; i < TRAIL_LENGTH; i++) {
-        // Target of dot 'i' is the current position of dot 'i-1'
-        positions[i].targetX = positions[i - 1].currentX;
-        positions[i].targetY = positions[i - 1].currentY;
-
-        // Smoothly move dot 'i' towards its target (dot i-1)
-        positions[i].currentX += (positions[i].targetX - positions[i].currentX) * lagFactor;
-        positions[i].currentY += (positions[i].targetY - positions[i].currentY) * lagFactor;
-
-        // Apply transformation to the DOM element
-        trailRefs.current[i].style.transform =
-          `translate3d(${positions[i].currentX - 5}px, ${positions[i].currentY - 5}px, 0)`;
-      }
-
-      animationFrameId = requestAnimationFrame(updateCursor);
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    updateCursor(); // Start the loop
-
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, []);
-
-  const baseColor = isDarkMode ? 'rgba(192, 132, 252, 1)' : 'rgba(139, 92, 246, 1)'; // Purple
-  const trailColor = isDarkMode ? 'rgba(216, 180, 254, 0.7)' : 'rgba(167, 139, 250, 0.8)'; // Lighter Purple/Pink
-
-  // Render the trail elements
-  return (
-    <>
-      {trailElements.map((_, index) => {
-        // Calculate size and opacity gradient for the trail effect
-        const size = 10 - (index * 0.5); // Dots get smaller towards the tail
-        const opacity = 1 - (index / TRAIL_LENGTH); // Dots fade out towards the tail
-        const color = index === 0 ? baseColor : trailColor;
-
-        return (
-          <div
-            key={index}
-            ref={el => trailRefs.current[index] = el}
-            style={{
-              width: `${size}px`,
-              height: `${size}px`,
-              backgroundColor: color,
-              borderRadius: '50%',
-              position: 'absolute',
-              pointerEvents: 'none',
-              zIndex: 9999,
-              opacity: opacity,
-              filter: `blur(${Math.min(index * 0.8, 3)}px)`, // Add subtle blur to tail
-              willChange: 'transform',
-              top: 0,
-              left: 0,
-            }}
-          />
-        );
-      })}
-    </>
-  );
-};
 
 
 // Custom Hook for Scroll Direction (Detects Up/Down)
@@ -321,32 +159,142 @@ const useScrollDirection = () => {
   return scrollDirection;
 };
 
+const useInView = (options = {}) => {
+  const [isInView, setIsInView] = useState(false);
+  const ref = useRef(null);
+  const animationContext = useContext(AnimationContext);
+  const animationsEnabled = animationContext?.animationsEnabled ?? true;
+
+  useEffect(() => {
+    // If animations are disabled, show immediately
+    if (!animationsEnabled) {
+      setIsInView(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setIsInView(true);
+        if (ref.current) observer.unobserve(ref.current);
+      }
+    }, {
+      threshold: options.threshold || 0.1,
+      rootMargin: options.rootMargin || '0px 0px -50px 0px'
+    });
+
+    if (ref.current) observer.observe(ref.current);
+    return () => {
+      if (ref.current) observer.unobserve(ref.current);
+    };
+  }, [animationsEnabled]);
+
+  return [ref, isInView];
+};
+
+const Reveal = ({ children, threshold = 0.1, className = "" }) => {
+  const [ref, isInView] = useInView({ threshold });
+  return (
+    <div ref={ref} className={`${isInView ? 'reveal-visible' : ''} ${className}`}>
+      {children}
+    </div>
+  );
+};
+
+// Custom Hook for Trailing Cursor Logic
+const useTrailingCursor = () => {
+  const [dots, setDots] = useState([]);
+  const mousePos = useRef({ x: 0, y: 0 });
+  const dotsRef = useRef([]);
+
+  useEffect(() => {
+    // Initialize dots
+    const initialDots = Array.from({ length: 8 }, () => ({ x: 0, y: 0 }));
+    dotsRef.current = initialDots;
+    setDots(initialDots);
+
+    const handleMouseMove = (e) => {
+      mousePos.current = { x: e.clientX, y: e.clientY };
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+
+    let animationFrame;
+    const updateDots = () => {
+      const newDots = [...dotsRef.current];
+      // First dot follows mouse
+      newDots[0] = {
+        x: newDots[0].x + (mousePos.current.x - newDots[0].x) * 0.4,
+        y: newDots[0].y + (mousePos.current.y - newDots[0].y) * 0.4,
+      };
+
+      // Rest of dots follow previous dot
+      for (let i = 1; i < newDots.length; i++) {
+        newDots[i] = {
+          x: newDots[i].x + (newDots[i - 1].x - newDots[i].x) * 0.35,
+          y: newDots[i].y + (newDots[i - 1].y - newDots[i].y) * 0.35,
+        };
+      }
+
+      dotsRef.current = newDots;
+      setDots(newDots);
+      animationFrame = requestAnimationFrame(updateDots);
+    };
+
+    animationFrame = requestAnimationFrame(updateDots);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      cancelAnimationFrame(animationFrame);
+    };
+  }, []);
+
+  return dots;
+};
+
+const CursorTrail = () => {
+  const dots = useTrailingCursor();
+
+  return (
+    <div className="fixed inset-0 pointer-events-none z-[9999] hidden sm:block">
+      {dots.map((dot, index) => (
+        <div
+          key={index}
+          className="absolute bg-[#744B93]/60 dark:bg-[#C889B5]/60 rounded-full blur-[1px]"
+          style={{
+            left: dot.x,
+            top: dot.y,
+            width: `${12 - index * 1.2}px`,
+            height: `${12 - index * 1.2}px`,
+            transform: 'translate(-50%, -50%)',
+            opacity: 1 - index * 0.1,
+            transition: 'width 0.2s, height 0.2s',
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
 // --- MAIN COMPONENTS ---
 
 // Animated Neon Button Component
 const AnimatedButton = ({ children, onClick, className = "", href, download, target, rel }) => {
   const baseClass = `
     relative group overflow-hidden px-6 sm:px-8 py-3 rounded-xl font-bold text-white transition-all duration-300
-    bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500
-    shadow-[0_0_20px_rgba(168,85,247,0.5)] hover:shadow-[0_0_35px_rgba(236,72,153,0.7)]
+    shadow-[0_0_20px_rgba(116,75,147,0.5)] hover:shadow-[0_0_35px_rgba(116,75,147,0.7)]
     scale-100 hover:scale-105 active:scale-95
   `;
 
-  const content = (
-    <span className="relative z-10 flex items-center justify-center">
-      {children}
-    </span>
-  );
-
   const buttonContent = (
     <>
-      {/* Animated Gradient Border/Glow Effect */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-purple-600 via-pink-500 to-purple-600 animate-gradient-xy opacity-80 group-hover:opacity-100 transition-opacity duration-300"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-[#744B93] via-[#C889B5] to-[#744B93] animate-gradient-xy opacity-80 group-hover:opacity-100 transition-opacity duration-300"></div>
 
       {/* Shine Effect */}
       <div className="absolute inset-0 -z-10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
 
-      {content}
+      <span className="relative z-10 flex items-center justify-center">
+        {children}
+      </span>
     </>
   );
 
@@ -366,42 +314,54 @@ const AnimatedButton = ({ children, onClick, className = "", href, download, tar
 };
 
 // Animated Border Button (for Repos)
-const AnimatedBorderButton = ({ children, href, className = "" }) => {
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={`relative group flex items-center justify-center overflow-hidden rounded-xl p-[2px] transition-all duration-300 hover:scale-105 active:scale-95 ${className}`}
-    >
-      {/* Rotating Gradient Background */}
-      <div className="absolute inset-[-1000%] bg-[conic-gradient(from_90deg_at_50%_50%,#a855f7_0%,#ec4899_50%,#a855f7_100%)] animate-[spin_2s_linear_infinite]" />
+const AnimatedBorderButton = ({ children, href, onClick, className = "" }) => {
+  const buttonClasses = `relative group flex items-center justify-center overflow-hidden rounded-xl p-[2px] transition-all duration-300 hover:scale-105 active:scale-95 ${className}`;
+
+  const content = (
+    <>
+      {/* Dynamic Gradient Border */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#744B93] via-[#C889B5] to-[#744B93] animate-[spin_3s_linear_infinite] opacity-70 group-hover:opacity-100" />
 
       {/* Inner Content */}
-      <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-[10px] bg-white dark:bg-gray-900 px-6 py-3 text-sm font-bold text-purple-600 dark:text-purple-400 backdrop-blur-3xl transition-colors hover:bg-gray-50 dark:hover:bg-gray-800">
+      <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-[10px] bg-white dark:bg-gray-900 px-6 py-3 text-sm font-bold text-[#744B93] dark:text-[#C889B5] backdrop-blur-3xl transition-colors hover:bg-gray-50 dark:hover:bg-gray-800">
         {children}
       </span>
-    </a>
+    </>
+  );
+
+  if (href) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={buttonClasses}
+      >
+        {content}
+      </a>
+    );
+  }
+
+  return (
+    <button onClick={onClick} className={buttonClasses}>
+      {content}
+    </button>
   );
 };
 
 const Section = ({ id, title, children }) => {
-
-  const { ref, isInView } = useInViewAnimation(0.2);
-
   return (
-    <section id={id} ref={ref} className="py-16 md:py-24 px-4 sm:px-8 lg:px-16 flex items-center justify-center">
+    <section
+      id={id}
+      className="py-16 md:py-24 px-4 sm:px-8 lg:px-16 flex items-center justify-center"
+    >
       <div className="w-full max-w-6xl">
-        {/* Animated Section Title (Slide-Right effect on title) */}
-        <h2
-          className={`text-3xl md:text-4xl lg:text-5xl font-extrabold mb-8 md:mb-12 text-center text-purple-600 dark:text-purple-400 border-b-4 border-purple-200 dark:border-purple-700 pb-3 inline-block mx-auto 
-            ${getAOSClass(isInView, 0, 'slide-right')}`}
-        >
-          {title}
-        </h2>
-
-        {/* Children content will use isInView for individual item animation */}
-        {children(isInView)}
+        <Reveal>
+          <h2 className="reveal-item text-3xl md:text-4xl lg:text-5xl font-extrabold mb-8 md:mb-12 text-center text-[#744B93] border-b-4 border-[#C889B5]/30 pb-3 inline-block mx-auto">
+            {title}
+          </h2>
+        </Reveal>
+        {children}
       </div>
     </section>
   );
@@ -418,12 +378,12 @@ const ProjectDetailModal = ({ project, onClose }) => {
     >
       <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
         <div
-          className="relative w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 text-left shadow-2xl transition-all sm:my-8 border border-purple-100 dark:border-purple-900"
+          className="relative w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 text-left shadow-2xl transition-all sm:my-8 border border-[#744B93]/20 dark:border-[#744B93]/40"
           onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
         >
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-gray-800 dark:text-gray-200 hover:text-purple-600 dark:hover:text-purple-400 p-2 rounded-full transition-colors"
+            className="absolute top-4 right-4 text-gray-800 dark:text-gray-200 hover:text-[#744B93] p-2 rounded-full transition-colors"
             aria-label="Close Project Details"
           >
             <X size={24} />
@@ -436,34 +396,34 @@ const ProjectDetailModal = ({ project, onClose }) => {
           />
 
           <div className="p-8">
-            <h3 className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-4 break-words">{project.name}</h3>
+            <h3 className="text-3xl font-bold text-[#744B93] mb-4 break-words">{project.name}</h3>
 
             <div className="space-y-6 text-gray-700 dark:text-gray-300">
               {/* Tech Stack */}
               <div>
-                <p className="font-semibold text-lg text-pink-500 dark:text-pink-300 flex items-center mb-2"><Code className="w-5 h-5 mr-2" /> Main Technology Stack</p>
+                <p className="font-semibold text-lg text-[#C889B5] flex items-center mb-2"><Code className="w-5 h-5 mr-2" /> Main Technology Stack</p>
                 <div className="flex flex-wrap gap-2">
                   {project.techStack.map((tech) => (
-                    <span key={tech} className="bg-purple-100 dark:bg-purple-700 text-purple-800 dark:text-purple-100 text-sm font-medium px-3 py-1 rounded-full">{tech}</span>
+                    <span key={tech} className="bg-[#744B93]/10 dark:bg-[#744B93]/20 text-[#744B93] text-sm font-medium px-3 py-1 rounded-full">{tech}</span>
                   ))}
                 </div>
               </div>
 
               {/* Description */}
               <div>
-                <p className="font-semibold text-lg text-pink-500 dark:text-pink-300 flex items-center mb-2"><LayoutList className="w-5 h-5 mr-2" /> Brief Description</p>
+                <p className="font-semibold text-lg text-[#C889B5] flex items-center mb-2"><LayoutList className="w-5 h-5 mr-2" /> Brief Description</p>
                 <p>{project.description}</p>
               </div>
 
               {/* Challenges */}
               <div>
-                <p className="font-semibold text-lg text-pink-500 dark:text-pink-300 flex items-center mb-2"><Zap className="w-5 h-5 mr-2" /> Challenges Faced</p>
+                <p className="font-semibold text-lg text-[#C889B5] flex items-center mb-2"><Zap className="w-5 h-5 mr-2" /> Challenges Faced</p>
                 <p>{project.challenges}</p>
               </div>
 
               {/* Future Plans */}
               <div>
-                <p className="font-semibold text-lg text-pink-500 dark:text-pink-300 flex items-center mb-2"><Star className="w-5 h-5 mr-2" /> Potential Improvements & Future Plans</p>
+                <p className="font-semibold text-lg text-[#C889B5] flex items-center mb-2"><Star className="w-5 h-5 mr-2" /> Potential Improvements & Future Plans</p>
                 <p>{project.futurePlans}</p>
               </div>
             </div>
@@ -473,7 +433,7 @@ const ProjectDetailModal = ({ project, onClose }) => {
                 href={project.liveLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 w-full text-center py-3 shadow-md shadow-purple-500/50"
+                className="flex-1 w-full text-center py-3 shadow-md shadow-[#744B93]/40"
               >
                 Live Link
               </AnimatedButton>
@@ -507,20 +467,23 @@ const App = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [selectedProject, setSelectedProject] = useState(null);
   const [activeSection, setActiveSection] = useState('home');
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [animationsEnabled, setAnimationsEnabled] = useState(true);
+  const scrollDirection = useScrollDirection();
 
   // Toggle Dark Mode
   const toggleDarkMode = () => setIsDarkMode(prev => !prev);
 
-  // Trailing Cursor
-  const CursorTrail = useTrailingCursor(isDarkMode);
+
 
 
   // Scroll Spy Logic (Replaced IntersectionObserver with manual calculation for better accuracy)
   useEffect(() => {
     const handleScroll = () => {
+      // Toggle navbar visibility based on scroll threshold
+      setIsScrolled(window.scrollY > 50);
+
       const sections = document.querySelectorAll('section');
-      // Add offset to ensure the active state triggers just before the section hits the top
-      // 100px accounts for the navbar height (64px) + some buffer
       const scrollPosition = window.scrollY + 100;
 
       sections.forEach(section => {
@@ -553,8 +516,17 @@ const App = () => {
 
   // Scroll to section and close menu (for mobile)
   const scrollToSection = (id) => {
-    document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-    setIsMenuOpen(false);
+    const element = document.getElementById(id);
+    if (element) {
+      // Temporarily disable animations
+      setAnimationsEnabled(false);
+
+      element.scrollIntoView({ behavior: 'auto' });
+      setIsMenuOpen(false);
+
+      // Re-enable animations after navigation completes
+      setTimeout(() => setAnimationsEnabled(true), 100);
+    }
   };
 
   // --- RENDER SECTIONS ---
@@ -577,20 +549,23 @@ const App = () => {
       <button
         onClick={() => scrollToSection(id)}
         className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${activeSection === id
-          ? 'bg-purple-600/90 text-white shadow-[0_0_15px_rgba(147,51,234,0.5)]'
-          : 'text-gray-700 dark:text-gray-200 hover:bg-purple-100/50 dark:hover:bg-gray-700/50 hover:text-purple-600 dark:hover:text-purple-400'
+          ? 'bg-[#744B93] text-white shadow-[0_0_15px_rgba(116,75,147,0.5)]'
+          : 'text-gray-700 dark:text-gray-200 hover:bg-[#744B93]/10 dark:hover:bg-gray-700/50 hover:text-[#744B93] dark:hover:text-[#C889B5]'
           }`}
       >
         {label}
       </button>
     );
 
+    // Visible if we are at the very top OR scrolling up OR mobile menu is open
+    const isVisible = !isScrolled || scrollDirection === 'up' || isMenuOpen;
+
     return (
-      <div className="fixed top-6 left-0 right-0 z-50 flex justify-center transition-transform duration-500 rounded-lg translate-y-0">
-        <header className="w-[95%] max-w-5xl bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl border border-white/20 dark:border-gray-700/30 rounded-2xl shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] ring-1 ring-purple-500/20">
+      <div className={`fixed top-6 left-0 right-0 z-50 flex justify-center transition-all duration-500 transform ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-28 opacity-0'}`}>
+        <header className={`w-[95%] max-w-5xl transition-all duration-300 ${isScrolled ? 'bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]' : 'bg-transparent border-transparent shadow-none'} border border-white/20 dark:border-gray-700/30 rounded-2xl ring-1 ring-[#744B93]/20`}>
           <div className="px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
-              <h1 className="text-xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600 cursor-pointer" onClick={() => scrollToSection('home')}>
+              <h1 className="text-xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#744B93] to-[#C889B5] cursor-pointer" onClick={() => scrollToSection('home')}>
                 HEME.DEV
               </h1>
 
@@ -603,7 +578,7 @@ const App = () => {
                 {/* Dark Mode Toggle */}
                 <button
                   onClick={toggleDarkMode}
-                  className="p-2 rounded-full text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-gray-700 transition-colors shadow-sm"
+                  className="p-2 rounded-full text-[#744B93] dark:text-[#C889B5] hover:bg-[#744B93]/10 dark:hover:bg-gray-700 transition-colors shadow-sm"
                   aria-label="Toggle dark mode"
                 >
                   {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
@@ -612,7 +587,7 @@ const App = () => {
                 {/* Mobile Menu Button */}
                 <button
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
-                  className="lg:hidden p-2 rounded-lg text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-gray-700 transition-colors"
+                  className="lg:hidden p-2 rounded-lg text-[#744B93] dark:text-[#C889B5] hover:bg-[#744B93]/10 dark:hover:bg-gray-700 transition-colors"
                   aria-label="Toggle navigation menu"
                 >
                   {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -623,15 +598,15 @@ const App = () => {
 
           {/* Mobile Menu (Attached below the pill) */}
           {isMenuOpen && (
-            <div className="lg:hidden absolute top-20 left-4 right-4 bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl border border-purple-100 dark:border-purple-800 shadow-2xl overflow-hidden animate-on-mount origin-top">
+            <div className="lg:hidden absolute top-20 left-4 right-4 bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl border border-[#744B93]/20 dark:border-[#744B93]/40 shadow-2xl overflow-hidden origin-top">
               <nav className="p-4 space-y-2 flex flex-col">
                 {navItems.map(item => (
                   <button
                     key={item.id}
                     onClick={() => scrollToSection(item.id)}
                     className={`block text-left px-4 py-3 rounded-xl text-base font-medium transition-all ${activeSection === item.id
-                      ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg'
-                      : 'text-gray-700 dark:text-gray-200 hover:bg-purple-50 dark:hover:bg-gray-700'
+                      ? 'bg-gradient-to-r from-[#744B93] to-[#C889B5] text-white shadow-lg'
+                      : 'text-gray-700 dark:text-gray-200 hover:bg-[#744B93]/10 dark:hover:bg-gray-700'
                       }`}
                   >
                     {item.label}
@@ -652,17 +627,17 @@ const App = () => {
         <div className="w-full max-w-6xl">
           <div className="flex flex-col lg:flex-row items-center justify-between text-center lg:text-left">
 
-            <div className="lg:w-1/2 space-y-6 order-2 lg:order-1">
+            <div className="lg:w-1/2 space-y-6 order-2 lg:order-1 animate-combined-hero">
               {/* Animation 1: Name */}
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-gray-50 leading-tight transition-all duration-700 ease-out transform delay-100 translate-y-4 animate-on-mount">
-                Hi, I'm <br /> <span className="text-purple-600 dark:text-purple-400">{PORTFOLIO_DATA.name}</span>
+              <h1 className="animate-combined-hero text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-gray-50 leading-tight" style={{ animationDelay: '0ms' }}>
+                Hi, I'm <br /> <span className="text-[#744B93]">{PORTFOLIO_DATA.name}</span>
               </h1>
               {/* Animation 2: Designation */}
-              <p className="text-2xl sm:text-3xl font-medium text-pink-500 dark:text-pink-300 tracking-wide transition-all duration-700 ease-out transform delay-200 translate-y-4 animate-on-mount">
+              <p className="animate-combined-hero text-2xl sm:text-3xl font-medium text-[#C889B5] tracking-wide" style={{ animationDelay: '100ms' }}>
                 {PORTFOLIO_DATA.designation}
               </p>
               {/* Animation 3: Description */}
-              <p className="text-xl text-gray-600 dark:text-gray-400 max-w-lg lg:max-w-none mx-auto lg:mx-0 transition-all duration-700 ease-out transform delay-300 translate-y-4 animate-on-mount">
+              <p className="animate-combined-hero text-xl text-gray-600 dark:text-gray-400 max-w-lg lg:max-w-none mx-auto lg:mx-0" style={{ animationDelay: '200ms' }}>
                 I turn creative ideas into robust, high-performance web applications. Let's build something amazing together.
               </p>
 
@@ -671,7 +646,8 @@ const App = () => {
                 <AnimatedButton
                   href={getGoogleDocsDownloadUrl(PORTFOLIO_DATA.resumeLink)}
                   download="Homayra_Binte_Harun_Heme_Resume.pdf"
-                  className="delay-400 animate-on-mount"
+                  className="animate-combined-hero"
+                  style={{ animationDelay: '300ms' }}
                 >
                   <Download className="w-5 h-5 mr-2" />
                   Download Resume
@@ -680,88 +656,109 @@ const App = () => {
                 {/* 4. Social Links - Grouped for mobile alignment */}
                 <div className="flex items-center gap-4">
                   {PORTFOLIO_DATA.socials.map((social, index) => (
-                    <a
+                    <div
                       key={social.name}
-                      href={social.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`p-3 border-2 border-purple-600 text-purple-600 hover:bg-purple-100 dark:hover:bg-gray-700 rounded-full transition duration-300 dark:text-purple-400 dark:border-purple-400 animate-on-mount`}
-                      style={{ animationDelay: `${450 + index * 100}ms` }} // Use animation-delay
-                      aria-label={social.name}
+                      className="animate-combined-hero"
+                      style={{ animationDelay: `${(index + 4) * 100}ms` }}
                     >
-                      <social.icon className="w-6 h-6" />
-                    </a>
+                      <a
+                        href={social.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-12 h-12 flex items-center justify-center bg-white dark:bg-gray-800 text-[#744B93] rounded-full shadow-md border-2 border-[#744B93] dark:border-[#C889B5] hover:bg-[#744B93] hover:text-white dark:hover:bg-[#C889B5] dark:hover:text-black hover:-translate-y-4 hover:shadow-2xl transition-all duration-300 group"
+                        aria-label={social.name}
+                      >
+                        <social.icon size={24} className="transition-transform duration-300 group-hover:scale-110" />
+                      </a>
+                    </div>
                   ))}
                 </div>
               </div>
             </div>
 
-            {/* 2. Professional Photo - Animation 6 (Scale-in effect) */}
-            <div className="lg:w-1/3 mt-6 lg:mt-0 order-1 lg:order-2 transition-all duration-700 ease-out transform delay-700 scale-75 animate-on-mount-scale">
-              <div className="relative p-4 bg-purple-200 dark:bg-purple-900 rounded-full shadow-2xl shadow-purple-500/50">
+            {/* 2. Professional Photo - Animation 6 (Scale-in effect) with Animated Border */}
+            <div className="lg:w-1/3 mt-6 lg:mt-0 order-1 lg:order-2" style={{ perspective: '1000px' }}>
+              <div
+                className="animate-combined-hero group relative p-[10px] rounded-full shadow-2xl shadow-[#744B93]/40 overflow-hidden cursor-pointer transition-all duration-700 hover:scale-110 hover:shadow-[0_0_80px_rgba(116,75,147,0.8)] hover:rotate-[2deg]"
+                style={{ animationDelay: '0ms', transformStyle: 'preserve-3d' }}
+              >
+                {/* Dynamic Rotating Border - Soft Purple Fusion */}
+                <div
+                  className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,#744B93_0%,#C889B5_25%,#744B93_50%,#C889B5_75%,#744B93_100%)] animate-rotate-fast opacity-100 blur-[2px] group-hover:animate-rotate-very-fast group-hover:blur-[3px]"
+                />
+
                 <img
                   src={PORTFOLIO_DATA.photoUrl}
                   alt="Professional Profile"
-                  className="w-full h-auto rounded-full object-cover border-8 border-white dark:border-gray-800"
+                  className="relative z-10 w-full h-auto rounded-full object-cover border-4 border-white dark:border-gray-800 transition-all duration-700 group-hover:scale-115 group-hover:brightness-110"
                 />
               </div>
             </div>
           </div>
         </div>
-        {/* Hero Mount অ্যানিমেশনের জন্য কাস্টম CSS */}
+
+        {/* Global Animation Styles */}
         <style>{`
-          /* Custom CSS for Hero Mount Animation */
-          @keyframes slideInUp {
-            from {
-              transform: translateY(20px);
-            }
-            to {
-              transform: translateY(0);
+          @keyframes softFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          @keyframes softFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+          }
+          .animate-combined-hero {
+            opacity: 0;
+            animation: 
+              softFadeIn 0.4s ease-out forwards,
+              softFloat 5s ease-in-out infinite 0.7s;
+          }
+          @media (prefers-reduced-motion: reduce) {
+            .animate-combined-hero {
+              animation: none;
+              opacity: 1;
+              transform: none;
             }
           }
-          @keyframes scaleIn {
-            from {
-              transform: scale(0.95);
-            }
-            to {
-              transform: scale(1);
-            }
-          }
-
-          .animate-on-mount {
-            animation-name: slideInUp;
-            animation-fill-mode: forwards;
-            animation-duration: 0.8s;
-            animation-timing-function: ease-out;
-          }
-
-          .animate-on-mount-scale {
-            animation-name: scaleIn;
-            animation-fill-mode: forwards;
-            animation-duration: 1s;
-            animation-timing-function: ease-out;
-            animation-delay: 0.3s;
-          }
-
-          /* Animated Gradient for Buttons */
           @keyframes gradient-xy {
-            0%, 100% {
-              background-position: 0% 50%;
-            }
-            50% {
-              background-position: 100% 50%;
-            }
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+          }
+          @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+          }
+          @keyframes border-glow {
+            0%, 100% { filter: brightness(1) drop-shadow(0 0 10px rgba(116,75,147,0.5)); }
+            50% { filter: brightness(1.5) drop-shadow(0 0 25px rgba(116,75,147,0.8)); }
           }
           .animate-gradient-xy {
-            background-size: 200% 200%;
+            background-size: 400% 400%;
             animation: gradient-xy 3s ease infinite;
           }
-
-          /* Assigning delay via style prop */
-          .delay-100 { animation-delay: 0.1s; }
-          .delay-200 { animation-delay: 0.2s; }
-          .delay-300 { animation-delay: 0.3s; }
-          .delay-400 { animation-delay: 0.4s; }
+          .animate-rotate-fast {
+            animation: rotate 2.5s linear infinite, border-glow 3s ease-in-out infinite;
+          }
+          .animate-rotate-very-fast {
+            animation: rotate 1s linear infinite, border-glow 1.5s ease-in-out infinite !important;
+          }
+          @keyframes revealUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          .reveal-item {
+            opacity: 0;
+            will-change: transform, opacity;
+          }
+          .reveal-visible .reveal-item {
+            animation: revealUp 0.6s cubic-bezier(0.2, 0.65, 0.3, 0.9) forwards;
+          }
+          .stagger-1 { animation-delay: 100ms !important; }
+          .stagger-2 { animation-delay: 200ms !important; }
+          .stagger-3 { animation-delay: 300ms !important; }
+          .stagger-4 { animation-delay: 400ms !important; }
+          .stagger-5 { animation-delay: 500ms !important; }
+          .stagger-6 { animation-delay: 600ms !important; }
         `}</style>
       </section>
     );
@@ -769,346 +766,302 @@ const App = () => {
 
   const AboutMeSection = () => (
     <Section id="about" title="About My Journey">
-      {(isInView) => (
-        <div
-          className={`bg-white dark:bg-gray-800 p-8 sm:p-12 rounded-2xl shadow-xl border border-purple-100 dark:border-purple-900 
-            ${getAOSClass(isInView, 0, 'slide-left')}`}
-        >
-          <p className="text-gray-700 dark:text-gray-300 text-lg mb-6 leading-relaxed">
+      <div className="bg-white dark:bg-gray-800 p-8 sm:p-12 rounded-2xl shadow-xl border border-[#744B93]/20 dark:border-[#744B93]/40">
+        <Reveal>
+          <p className="reveal-item text-gray-700 dark:text-gray-300 text-lg mb-6 leading-relaxed">
             {PORTFOLIO_DATA.about.intro}
           </p>
-          <p className="text-gray-700 dark:text-gray-300 text-lg mb-6 leading-relaxed border-l-4 border-purple-600 pl-4 italic">
-            <span className="font-semibold text-purple-600 dark:text-purple-400">My Programming Journey:</span> {PORTFOLIO_DATA.about.journey}
+        </Reveal>
+        <Reveal>
+          <p className="reveal-item text-gray-700 dark:text-gray-300 text-lg mb-6 leading-relaxed border-l-4 border-[#744B93] pl-4 italic">
+            <span className="font-semibold text-[#744B93]">My Programming Journey:</span> {PORTFOLIO_DATA.about.journey}
           </p>
-          <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
-            <span className="font-semibold text-purple-600 dark:text-purple-400">Outside of Code:</span> {PORTFOLIO_DATA.about.hobbies}
+        </Reveal>
+        <Reveal>
+          <p className="reveal-item text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
+            <span className="font-semibold text-[#744B93]">Outside of Code:</span> {PORTFOLIO_DATA.about.hobbies}
           </p>
-          <p className="mt-6 text-xl font-bold text-pink-500 dark:text-pink-300 flex items-center">
+        </Reveal>
+        <Reveal>
+          <p className="reveal-item mt-6 text-xl font-bold text-[#C889B5] flex items-center">
             Ready to collaborate! <ArrowRight className="w-5 h-5 ml-2 transition-transform duration-300 hover:translate-x-1" />
           </p>
-        </div>
-      )}
+        </Reveal>
+      </div>
     </Section>
   );
 
   const SkillsSection = () => (
     <Section id="skills" title="Technical Skills">
-      {(isInView) => (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {PORTFOLIO_DATA.skills.map((skillGroup, index) => (
-            <div
-              key={skillGroup.category}
-              className={`bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border-t-4 border-purple-600 dark:border-purple-400 transform hover:scale-[1.02] transition-all duration-700 ease-out 
-                ${getAOSClass(isInView, index, 'rotate-in')}`}
-              style={{ transitionDelay: isInView ? `${50 + index * 100}ms` : '0ms' }}
-            >
-              <div className="flex items-center mb-4">
-                <skillGroup.icon className="w-8 h-8 text-purple-600 dark:text-purple-400 mr-3" />
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                  {skillGroup.category}
-                </h3>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {PORTFOLIO_DATA.skills.map((skillGroup, index) => (
+          <Reveal key={skillGroup.category}>
+            <div className="reveal-item">
+              <div
+                className={`bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border-t-4 border-[#744B93] transform hover:scale-[1.02] transition-transform duration-300`}
+              >
+                <div className="flex items-center mb-4">
+                  <skillGroup.icon className="w-8 h-8 text-[#744B93] mr-3" />
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                    {skillGroup.category}
+                  </h3>
+                </div>
+                <ul className="space-y-3">
+                  {skillGroup.list.map((skill) => (
+                    <li key={skill} className="flex items-center text-gray-700 dark:text-gray-300">
+                      <span className="w-2 h-2 bg-[#C889B5] rounded-full mr-3"></span>
+                      {skill}
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <ul className="space-y-3">
-                {skillGroup.list.map((skill) => (
-                  <li key={skill} className="flex items-center text-gray-700 dark:text-gray-300">
-                    <span className="w-2 h-2 bg-pink-500 rounded-full mr-3"></span>
-                    {skill}
-                  </li>
-                ))}
-              </ul>
             </div>
-          ))}
-        </div>
-      )}
+          </Reveal>
+        ))}
+      </div>
     </Section>
   );
 
   const EducationSection = () => (
     <Section id="education" title="Educational Qualification">
-      {(isInView) => (
-        <div className="relative space-y-8 md:space-y-12">
-          {PORTFOLIO_DATA.education.map((edu, index) => (
-            <div key={index} className="flex flex-col md:flex-row relative">
-              {/* Timeline Connector (Visible on desktop) */}
-              <div className={`hidden md:block absolute left-0 top-0 w-1 h-full bg-purple-300 dark:bg-purple-700 ${index === PORTFOLIO_DATA.education.length - 1 ? 'h-1/2' : ''}`}></div>
+      <div className="relative space-y-8 md:space-y-12">
+        {PORTFOLIO_DATA.education.map((edu, index) => (
+          <div key={index} className="flex flex-col md:flex-row relative">
+            <div className={`hidden md:block absolute left-0 top-0 w-1 h-full bg-[#744B93]/20 ${index === PORTFOLIO_DATA.education.length - 1 ? 'h-1/2' : ''}`}></div>
 
-              <div
-                className={`md:w-1/12 flex justify-center relative z-10 
-                  ${getAOSClass(isInView, index, 'scale-in')}`}
-                style={{ transitionDelay: isInView ? `${50 + index * 100}ms` : '0ms' }}
-              >
-                <div className="w-8 h-8 bg-purple-600 dark:bg-purple-400 rounded-full flex items-center justify-center shadow-md">
-                  <GraduationCap className="w-4 h-4 text-white" />
-                </div>
-              </div>
-
-              <div
-                className={`md:w-11/12 pl-0 md:pl-12 pt-4 md:pt-0 
-                  ${getAOSClass(isInView, index, 'slide-up')}`}
-                style={{ transitionDelay: isInView ? `${50 + index * 100}ms` : '0ms' }}
-              >
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-purple-100 dark:border-purple-900">
-                  <h3 className="text-2xl font-bold text-purple-600 dark:text-purple-400">{edu.degree}</h3>
-                  <p className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3">{edu.institution}</p>
-                  <p className="text-sm font-semibold text-pink-500 dark:text-pink-300 mb-1">{edu.period}</p>
-                  <p className="text-gray-600 dark:text-gray-400">{edu.details}</p>
-                </div>
+            <div className="md:w-1/12 flex justify-center relative z-10 pt-4">
+              <div className="w-8 h-8 bg-[#744B93] rounded-full flex items-center justify-center shadow-md">
+                <GraduationCap className="w-4 h-4 text-white" />
               </div>
             </div>
-          ))}
-        </div>
-      )}
+
+            <div className="md:w-11/12 pl-0 md:pl-12 pt-4 md:pt-0">
+              <Reveal>
+                <div className="reveal-item">
+                  <div className={`bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-[#744B93]/10 dark:border-[#744B93]/30 transform hover:scale-[1.02] transition-all duration-300`}>
+                    <h3 className="text-2xl font-bold text-[#744B93]">{edu.degree}</h3>
+                    <p className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3">{edu.institution}</p>
+                    <p className="text-sm font-semibold text-[#C889B5] mb-1">{edu.period}</p>
+                    <p className="text-gray-600 dark:text-gray-400">{edu.details}</p>
+                  </div>
+                </div>
+              </Reveal>
+            </div>
+          </div>
+        ))}
+      </div>
     </Section>
   );
 
   const ExperienceSection = () => (
     <Section id="experience" title="Professional Experience">
-      {(isInView) => (
-        <div className="relative space-y-8 md:space-y-12">
-          {PORTFOLIO_DATA.experience.map((exp, index) => (
-            <div key={index} className="flex flex-col md:flex-row relative">
-              {/* Timeline Connector (Visible on desktop) */}
-              <div className={`hidden md:block absolute left-0 top-0 w-1 h-full bg-purple-300 dark:bg-purple-700 ${index === PORTFOLIO_DATA.experience.length - 1 ? 'h-1/2' : ''}`}></div>
+      <div className="relative space-y-8 md:space-y-12">
+        {PORTFOLIO_DATA.experience.map((exp, index) => (
+          <div key={index} className="flex flex-col md:flex-row relative">
+            <div className={`hidden md:block absolute left-0 top-0 w-1 h-full bg-[#744B93]/20 ${index === PORTFOLIO_DATA.experience.length - 1 ? 'h-1/2' : ''}`}></div>
 
-              <div
-                className={`md:w-1/12 flex justify-center relative z-10 
-                  ${getAOSClass(isInView, index, 'slide-left')}`}
-                style={{ transitionDelay: isInView ? `${50 + index * 100}ms` : '0ms' }}
-              >
-                <div className="w-8 h-8 bg-purple-600 dark:bg-purple-400 rounded-full flex items-center justify-center shadow-md">
-                  <Briefcase className="w-4 h-4 text-white" />
-                </div>
-              </div>
-
-              <div
-                className={`md:w-11/12 pl-0 md:pl-12 pt-4 md:pt-0 
-                  ${getAOSClass(isInView, index, 'slide-right')}`}
-                style={{ transitionDelay: isInView ? `${50 + index * 100}ms` : '0ms' }}
-              >
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-purple-100 dark:border-purple-900">
-                  <p className="text-sm font-semibold text-pink-500 dark:text-pink-300 mb-1">{exp.period}</p>
-                  <h3 className="text-2xl font-bold text-purple-600 dark:text-purple-400">{exp.title}</h3>
-                  <p className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3">{exp.company}</p>
-                  <p className="text-gray-600 dark:text-gray-400">{exp.description}</p>
-                </div>
+            <div className="md:w-1/12 flex justify-center relative z-10 pt-4">
+              <div className="w-8 h-8 bg-[#744B93] rounded-full flex items-center justify-center shadow-md">
+                <Briefcase className="w-4 h-4 text-white" />
               </div>
             </div>
-          ))}
-        </div>
-      )}
+
+            <div className="md:w-11/12 pl-0 md:pl-12 pt-4 md:pt-0">
+              <Reveal>
+                <div className="reveal-item">
+                  <div className={`bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-[#744B93]/10 dark:border-[#744B93]/30 transform hover:scale-[1.02] transition-all duration-300`}>
+                    <p className="text-sm font-semibold text-[#C889B5] mb-1">{exp.period}</p>
+                    <h3 className="text-2xl font-bold text-[#744B93]">{exp.title}</h3>
+                    <p className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3">{exp.company}</p>
+                    <p className="text-gray-600 dark:text-gray-400">{exp.description}</p>
+                  </div>
+                </div>
+              </Reveal>
+            </div>
+          </div>
+        ))}
+      </div>
     </Section>
   );
 
   const ProjectsSection = () => (
     <Section id="projects" title="Featured Projects">
-      {(isInView) => (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {PORTFOLIO_DATA.projects.map((project, index) => (
-            <div
-              key={project.id}
-              className={`bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden group border border-purple-100 dark:border-purple-900 transform hover:scale-[1.03] transition-all duration-700 ease-out 
-                ${getAOSClass(isInView, index, 'slide-up')}`}
-              style={{ transitionDelay: isInView ? `${50 + index * 100}ms` : '0ms' }}
-            >
-              <img
-                src={project.image}
-                alt={project.name}
-                className="w-full h-48 object-cover transition-opacity duration-300 group-hover:opacity-80"
-              />
-              <div className="p-6">
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3 break-words">
-                  {project.name}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
-                  {project.description}
-                </p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.techStack.slice(0, 3).map((tech) => (
-                    <span key={tech} className="bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300 text-xs font-semibold px-2 py-1 rounded">
-                      {tech}
-                    </span>
-                  ))}
-                  {project.techStack.length > 3 && (
-                    <span className="text-xs text-gray-500 flex items-center">+{project.techStack.length - 3} more</span>
-                  )}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {PORTFOLIO_DATA.projects.map((project, index) => (
+          <Reveal key={project.id}>
+            <div className="reveal-item h-full">
+              <div
+                className={`bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden group border border-[#744B93]/10 dark:border-[#744B93]/30 transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] flex flex-col h-full`}
+              >
+                <div className="relative h-48 overflow-hidden flex-shrink-0">
+                  <img
+                    src={project.image}
+                    alt={project.name}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
+                    <button
+                      onClick={() => setSelectedProject(project)}
+                      className="bg-white text-[#744B93] p-2 rounded-full hover:bg-[#744B93] hover:text-white transition-colors duration-300"
+                    >
+                      <Zap size={20} />
+                    </button>
+                  </div>
                 </div>
-                <AnimatedButton
-                  onClick={() => setSelectedProject(project)}
-                  className="w-full text-center py-3 shadow-md shadow-purple-500/50"
-                >
-                  View Details
-                </AnimatedButton>
+                <div className="p-6 flex flex-col flex-grow">
+                  <div className="flex flex-wrap gap-2 mb-3 flex-shrink-0">
+                    {project.techStack.slice(0, 3).map((tech) => (
+                      <span key={tech} className="bg-[#744B93]/10 text-[#744B93] text-xs font-semibold px-2 py-1 rounded-md">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2 truncate flex-shrink-0">{project.name}</h3>
+                  <div className="flex-grow">
+                    <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-3 mb-6">
+                      {project.description}
+                    </p>
+                  </div>
+                  <AnimatedBorderButton
+                    onClick={() => setSelectedProject(project)}
+                    className="w-full mt-auto"
+                  >
+                    View Details
+                  </AnimatedBorderButton>
+                </div>
               </div>
             </div>
-          ))}
-        </div>
-      )}
+          </Reveal>
+        ))}
+      </div>
     </Section>
   );
 
   const ContactSection = () => {
-    const formRef = useRef();
-    const [formData, setFormData] = useState({
-      name: '',
-      email: '',
-      subject: '',
-      message: ''
-    });
+    const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [submitStatus, setSubmitStatus] = useState(null); // 'success' or 'error'
+    const [submitStatus, setSubmitStatus] = useState(null);
 
     const handleChange = (e) => {
-      setFormData({
-        ...formData,
-        [e.target.name]: e.target.value
-      });
+      setFormData({ ...formData, [e.target.name]: e.target.value });
     };
-
-    // --- EMAILJS CONFIGURATION ---
-    // Please replace these with your actual values from emailjs.com
-    const SERVICE_ID = 'YOUR_SERVICE_ID';
-    const TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
-    const PUBLIC_KEY = 'YOUR_PUBLIC_KEY';
 
     const handleSubmit = async (e) => {
       e.preventDefault();
       setIsSubmitting(true);
-      setSubmitStatus(null);
-
-      // Validation check for placeholders
-      if (SERVICE_ID === 'YOUR_SERVICE_ID' || TEMPLATE_ID === 'YOUR_TEMPLATE_ID' || PUBLIC_KEY === 'YOUR_PUBLIC_KEY') {
-        alert('EmailJS is not configured yet! Please update the SERVICE_ID, TEMPLATE_ID, and PUBLIC_KEY in the code.');
-        setIsSubmitting(false);
-        setSubmitStatus('error');
-        return;
-      }
-
       try {
-        const result = await emailjs.send(
-          SERVICE_ID,
-          TEMPLATE_ID,
+        await emailjs.send(
+          'service_vvep8u5',
+          'template_skr3515',
           {
             from_name: formData.name,
-            from_email: formData.email,
+            reply_to: formData.email,
             subject: formData.subject,
             message: formData.message,
-            to_email: 'your-email@example.com' // Optional: You can remove this if your template doesn't use it
+            to_name: 'Homayra Heme',
           },
-          PUBLIC_KEY
+          'X8l8C7oU52H46-m87'
         );
-
-        console.log('Email sent successfully:', result);
         setSubmitStatus('success');
         setFormData({ name: '', email: '', subject: '', message: '' });
       } catch (error) {
         console.error('Email send failed:', error);
         setSubmitStatus('error');
-      } finally {
-        setIsSubmitting(false);
-        // Clear status message after 5 seconds
-        setTimeout(() => setSubmitStatus(null), 5000);
       }
+      setIsSubmitting(false);
+      setTimeout(() => setSubmitStatus(null), 5000);
     };
+
+    const ContactInfo = ({ icon: Icon, title, value, href }) => (
+      <Reveal>
+        <div className="reveal-item">
+          <div className="flex items-center space-x-5 p-5 rounded-2xl bg-white dark:bg-gray-800 border border-[#744B93]/10 dark:border-[#744B93]/30 shadow-sm hover:shadow-xl hover:border-[#744B93]/30 hover:-translate-y-2 transition-all duration-300 group cursor-pointer">
+            <div className="flex-shrink-0 w-14 h-14 bg-[#744B93]/10 dark:bg-[#744B93]/20 rounded-2xl flex items-center justify-center text-[#744B93] group-hover:bg-[#744B93] group-hover:text-white transition-all duration-300 shadow-inner">
+              <Icon size={28} className="transition-all duration-300 group-hover:scale-110" />
+            </div>
+            <div className="flex-grow">
+              <p className="text-sm font-semibold text-gray-400 dark:text-gray-500 mb-0.5 tracking-wide uppercase">{title}</p>
+              {href ? (
+                <a href={href} className="text-lg font-bold text-gray-900 dark:text-gray-100 hover:text-[#744B93] transition-colors break-all">
+                  {value}
+                </a>
+              ) : (
+                <p className="text-lg font-bold text-gray-900 dark:text-gray-100 break-all">{value}</p>
+              )}
+            </div>
+          </div>
+        </div>
+      </Reveal>
+    );
 
     return (
       <Section id="contact" title="Get In Touch">
-        {(isInView) => (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Contact Info */}
-            <div
-              className={`bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl border border-purple-100 dark:border-purple-900 
-              ${getAOSClass(isInView, 0, 'slide-left')}`}
-              style={{ transitionDelay: '100ms' }}
-            >
-              <h3 className="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-6">Contact Information</h3>
-              <p className="text-gray-700 dark:text-gray-300 mb-6">
-                Have a project in mind or just want to say hello? Feel free to reach out to me! I'm always open to new opportunities and collaborations.
-              </p>
-
-              <div className="space-y-4">
-                <div className="flex items-center space-x-3 text-gray-700 dark:text-gray-300">
-                  <Mail className="w-6 h-6 text-purple-600 dark:text-purple-400" />
-                  <a href="heme5674@gmail.com" className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
-                    heme5674@gmail.com
-                  </a>
-                </div>
-                <div className="flex items-center space-x-3 text-gray-700 dark:text-gray-300">
-                  <Phone className="w-6 h-6 text-purple-600 dark:text-purple-400" />
-                  <a href="tel:+8801878654211" className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
-                    +8801878654211
-                  </a>
-                </div>
-                <div className="flex items-center space-x-3 text-gray-700 dark:text-gray-300">
-                  <MessageCircle className="w-6 h-6 text-purple-600 dark:text-purple-400" />
-                  <a
-                    href="https://wa.me/8801878654211"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
-                  >
-                    WhatsApp Message
-                  </a>
-                </div>
-              </div>
-
-              <div className="mt-8">
-                <h4 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">Connect with me:</h4>
-                <div className="flex space-x-4">
-                  {PORTFOLIO_DATA.socials.map((social) => (
-                    <a
-                      key={social.name}
-                      href={social.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-3 border-2 border-pink-500 text-pink-500 hover:bg-pink-50 dark:hover:bg-gray-700 rounded-full transition duration-300 dark:text-pink-300 dark:border-pink-300 transform hover:scale-110"
-                      aria-label={`Connect on ${social.name}`}
-                    >
-                      <social.icon className="w-6 h-6" />
-                    </a>
-                  ))}
-                </div>
-              </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* Contact Info Column */}
+          <div className="space-y-8">
+            <div className="space-y-6">
+              <ContactInfo icon={Mail} title="Email Me" value={PORTFOLIO_DATA.email} href={`mailto:${PORTFOLIO_DATA.email}`} />
+              <ContactInfo icon={Phone} title="Call Me" value={PORTFOLIO_DATA.phone} href={`tel:${PORTFOLIO_DATA.phone}`} />
+              <ContactInfo icon={MessageCircle} title="WhatsApp" value={PORTFOLIO_DATA.phone} href={`https://wa.me/${PORTFOLIO_DATA.phone.replace(/[^0-9]/g, '')}`} />
             </div>
 
-            {/* Contact Form */}
-            <div
-              className={`bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl border border-purple-100 dark:border-purple-900 
-              ${getAOSClass(isInView, 1, 'slide-right')}`}
-              style={{ transitionDelay: '200ms' }}
-            >
-              <h3 className="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-6">Send Me a Message</h3>
+            <div className="pt-6 border-t border-[#744B93]/20">
+              <h4 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">Connect on Social Media</h4>
+              <div className="flex flex-wrap gap-4">
+                {PORTFOLIO_DATA.socials.map((social, index) => (
+                  <Reveal key={social.name}>
+                    <div className="reveal-item">
+                      <a
+                        href={social.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-14 h-14 flex items-center justify-center bg-white dark:bg-gray-800 text-[#744B93] rounded-2xl shadow-md border border-[#744B93]/10 hover:border-[#744B93] hover:bg-[#744B93] hover:text-white hover:-translate-y-4 hover:shadow-2xl transition-all duration-300 group"
+                        aria-label={social.name}
+                      >
+                        <social.icon size={26} className="transition-transform duration-300 group-hover:scale-110" />
+                      </a>
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
+            </div>
+          </div>
 
-              <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Your Name *
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 rounded-lg border border-purple-200 dark:border-purple-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all"
-                    placeholder="John Doe"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Your Email *
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 rounded-lg border border-purple-200 dark:border-purple-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all"
-                    placeholder="john@example.com"
-                  />
+          {/* Contact Form Column */}
+          <Reveal>
+            <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl border border-[#744B93]/10 dark:border-[#744B93]/30 reveal-item">
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Your Name *
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 rounded-lg border border-[#744B93]/20 dark:border-[#744B93]/40 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#744B93] focus:border-transparent transition-all"
+                      placeholder="John Doe"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Your Email *
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 rounded-lg border border-[#744B93]/20 dark:border-[#744B93]/40 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#744B93] focus:border-transparent transition-all"
+                      placeholder="john@example.com"
+                    />
+                  </div>
                 </div>
 
                 <div>
@@ -1122,7 +1075,7 @@ const App = () => {
                     value={formData.subject}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 rounded-lg border border-purple-200 dark:border-purple-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 rounded-lg border border-[#744B93]/20 dark:border-[#744B93]/40 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#744B93] focus:border-transparent transition-all"
                     placeholder="Project Inquiry"
                   />
                 </div>
@@ -1138,41 +1091,43 @@ const App = () => {
                     onChange={handleChange}
                     required
                     rows="5"
-                    className="w-full px-4 py-3 rounded-lg border border-purple-200 dark:border-purple-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all resize-none"
+                    className="w-full px-4 py-3 rounded-lg border border-[#744B93]/20 dark:border-[#744B93]/40 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#744B93] focus:border-transparent transition-all resize-none"
                     placeholder="Tell me about your project..."
                   />
                 </div>
 
                 {/* Status Messages */}
                 {submitStatus === 'success' && (
-                  <div className="p-4 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded-lg">
+                  <div className="p-4 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded-lg text-center">
                     ✓ Message sent successfully! I'll get back to you soon.
                   </div>
                 )}
                 {submitStatus === 'error' && (
-                  <div className="p-4 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 rounded-lg">
-                    ✗ Failed to send message. Please try again or email me directly.
+                  <div className="p-4 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 rounded-lg text-center">
+                    ✗ Failed to send message. Please try again later.
                   </div>
                 )}
 
-                <AnimatedButton
-                  type="submit"
-                  className={`w-full py-3 shadow-lg shadow-purple-500/50 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  disabled={isSubmitting}
-                  onClick={handleSubmit} // AnimatedButton renders a button by default if no href
-                >
-                  {isSubmitting ? 'Sending...' : 'Send Message'}
-                </AnimatedButton>
+                <div className="pt-2">
+                  <AnimatedButton
+                    type="submit"
+                    className={`w-full py-3 shadow-lg shadow-[#744B93]/40 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    disabled={isSubmitting}
+                    onClick={handleSubmit}
+                  >
+                    {isSubmitting ? 'Sending...' : 'Send Message'}
+                  </AnimatedButton>
+                </div>
               </form>
             </div>
-          </div>
-        )}
+          </Reveal>
+        </div>
       </Section>
     );
   };
 
   const Footer = () => (
-    <footer className="bg-gray-100 dark:bg-gray-900 py-8 px-4 sm:px-8 lg:px-16 border-t border-purple-200 dark:border-purple-800">
+    <footer className="bg-gray-100 dark:bg-gray-900 py-8 px-4 sm:px-8 lg:px-16 border-t border-[#744B93]/10 dark:border-[#744B93]/20">
       <div className="max-w-6xl mx-auto text-center">
         <p className="text-gray-600 dark:text-gray-400 text-sm">
           &copy; {new Date().getFullYear()} Homayra Heme. All rights reserved. | Built with React and Tailwind CSS.
@@ -1181,31 +1136,46 @@ const App = () => {
     </footer>
   );
 
+
+
   return (
-    <div className={`min-h-screen ${isDarkMode ? 'dark' : ''} bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans`}>
+    <AnimationContext.Provider value={{ animationsEnabled }}>
+      <div className={`min-h-screen transition-colors duration-500 overflow-x-hidden relative ${isDarkMode ? 'dark bg-gray-900 text-gray-100' : 'bg-white text-gray-900'}`}>
 
-      {/* Custom Cursor Trail (Always rendered) */}
-      {CursorTrail}
+        {/* Full-Body Background Theme - Subtle Blobs */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#744B93]/5 dark:bg-[#744B93]/10 rounded-full blur-[120px] animate-pulse"></div>
+          <div className="absolute bottom-[20%] right-[-5%] w-[35%] h-[35%] bg-[#C889B5]/5 dark:bg-[#C889B5]/10 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '1s' }}></div>
+          <div className="absolute top-[40%] right-[10%] w-[30%] h-[30%] bg-[#744B93]/3 dark:bg-[#744B93]/5 rounded-full blur-[80px] animate-pulse" style={{ animationDelay: '2s' }}></div>
+        </div>
 
-      <Navbar />
+        <div className="relative z-10">
 
-      <main className="pt-16">
-        <HeroSection />
-        <AboutMeSection />
-        <SkillsSection />
-        <EducationSection />
-        <ExperienceSection />
-        <ProjectsSection />
-        <ContactSection />
-      </main>
 
-      <Footer />
 
-      <ProjectDetailModal
-        project={selectedProject}
-        onClose={() => setSelectedProject(null)}
-      />
-    </div>
+          <Navbar />
+
+          <CursorTrail />
+
+          <main className="pt-16">
+            <HeroSection />
+            <AboutMeSection />
+            <SkillsSection />
+            <EducationSection />
+            <ExperienceSection />
+            <ProjectsSection />
+            <ContactSection />
+          </main>
+
+          <Footer />
+
+          <ProjectDetailModal
+            project={selectedProject}
+            onClose={() => setSelectedProject(null)}
+          />
+        </div>
+      </div>
+    </AnimationContext.Provider>
   );
 };
 
