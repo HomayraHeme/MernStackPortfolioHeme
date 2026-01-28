@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo, createContext, useContext } from 'react';
 import emailjs from '@emailjs/browser';
 import {
-  Menu, X, Sun, Moon, Github, Linkedin, Twitter, Facebook, Download, Mail, Phone, MessageCircle, Code, GraduationCap, Briefcase, Zap, Star, LayoutList, ArrowRight
+  Menu, X, Sun, Moon, Github, Linkedin, Facebook, Download, Mail, Phone, MessageCircle, Code, GraduationCap, Briefcase, Zap, Star, LayoutList, ArrowRight
 } from 'lucide-react';
 
 // Create context for animation control
 const AnimationContext = createContext({ animationsEnabled: true });
 
-// --- MOCK DATA ---
+// --- YOUR PERSONAL DATA ---
 const PORTFOLIO_DATA = {
   designation: "MERN Stack Developer",
   name: "Homayra Binte Harun Heme",
@@ -61,7 +61,7 @@ const PORTFOLIO_DATA = {
       id: 1,
       name: "Book Haven - An Online Book Library",
       image: "https://i.ibb.co.com/qFJsTKW1/Book-Haven.png",
-      techStack: ["React", "Node.js", "MongoDB", "Tailwind CSS", "Firebase", "Express.js",],
+      techStack: ["React", "Node.js", "MongoDB", "Tailwind CSS", "Firebase", "Express.js"],
       description: "A full-stack bookstore web app where users can browse and manage books easily.",
       liveLink: "https://book-haven-48f66.web.app/",
       githubLink: "https://github.com/HomayraHeme/book-haven-client",
@@ -94,7 +94,7 @@ const PORTFOLIO_DATA = {
     {
       id: 4,
       name: "LoanLink - Microloan Tracker System",
-      image: "https://i.ibb.co.com/zWmBCgcQ/loanlink-banner.png", // Using a placeholder as no specific image was provided
+      image: "https://i.ibb.co.com/zWmBCgcQ/loanlink-banner.png",
       techStack: ["React", "Tailwind CSS", "Framer Motion", "Firebase Auth", "Axios", "Node.js", "Express.js", "MongoDB", "Stripe"],
       description: "A web-based microloan request, review & approval tracker system designed for small financial organizations. Streamlines applications, approvals, and EMI tracking.",
       liveLink: "https://loanlink-49d90.web.app/",
@@ -106,87 +106,80 @@ const PORTFOLIO_DATA = {
   ],
 };
 
-// --- UTILITY HOOKS & COMPONENTS ---
-
-// --- UTILITY COMPONENTS ---
-
-
-
-
 // Utility function to get Google Docs/Drive direct download URL
 const getGoogleDocsDownloadUrl = (url) => {
-  // Extract ID from Google Drive/Docs URL
   const match = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
   if (match && match[1]) {
     const fileId = match[1];
-    // Check if it's a file link (likely an uploaded PDF) vs a Doc link
     if (url.includes('/file/d/')) {
       return `https://drive.google.com/uc?export=download&id=${fileId}`;
     }
-    // Default fallback for Google Docs (export as PDF)
     return `https://docs.google.com/document/d/${fileId}/export?format=pdf`;
   }
-  // If not a recognized Google URL, return original
   return url;
 };
 
-
-
-
-
-
-// Custom Hook for Scroll Direction (Detects Up/Down)
+// Custom Hook for Scroll Direction
 const useScrollDirection = () => {
   const [scrollDirection, setScrollDirection] = useState("up");
 
   useEffect(() => {
     let lastScrollY = window.scrollY;
+    let ticking = false;
 
     const updateScrollDirection = () => {
       const scrollY = window.scrollY;
       const direction = scrollY > lastScrollY ? "down" : "up";
-      if (direction !== scrollDirection && (scrollY - lastScrollY > 10 || scrollY - lastScrollY < -10)) {
+
+      if (direction !== scrollDirection && Math.abs(scrollY - lastScrollY) > 5) {
         setScrollDirection(direction);
       }
       lastScrollY = scrollY > 0 ? scrollY : 0;
+      ticking = false;
     };
-    window.addEventListener("scroll", updateScrollDirection); // add event listener
-    return () => {
-      window.removeEventListener("scroll", updateScrollDirection); // clean up
-    }
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateScrollDirection);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [scrollDirection]);
 
   return scrollDirection;
 };
 
+// Custom Hook for InView detection
 const useInView = (options = {}) => {
   const [isInView, setIsInView] = useState(false);
   const ref = useRef(null);
-  const animationContext = useContext(AnimationContext);
-  const animationsEnabled = animationContext?.animationsEnabled ?? true;
 
   useEffect(() => {
-    // If animations are disabled, show immediately
-    if (!animationsEnabled) {
-      setIsInView(true);
-      return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+        }
+      },
+      {
+        threshold: options.threshold || 0.1,
+        rootMargin: options.rootMargin || '0px 0px -50px 0px'
+      }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
     }
 
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setIsInView(true);
-        if (ref.current) observer.unobserve(ref.current);
-      }
-    }, {
-      threshold: options.threshold || 0.1,
-      rootMargin: options.rootMargin || '0px 0px -50px 0px'
-    });
-
-    if (ref.current) observer.observe(ref.current);
     return () => {
-      if (ref.current) observer.unobserve(ref.current);
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
     };
-  }, [animationsEnabled]);
+  }, []);
 
   return [ref, isInView];
 };
@@ -194,7 +187,10 @@ const useInView = (options = {}) => {
 const Reveal = ({ children, threshold = 0.1, className = "" }) => {
   const [ref, isInView] = useInView({ threshold });
   return (
-    <div ref={ref} className={`${isInView ? 'reveal-visible' : ''} ${className}`}>
+    <div
+      ref={ref}
+      className={`transition-all duration-700 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} ${className}`}
+    >
       {children}
     </div>
   );
@@ -207,7 +203,6 @@ const useTrailingCursor = () => {
   const dotsRef = useRef([]);
 
   useEffect(() => {
-    // Initialize dots
     const initialDots = Array.from({ length: 8 }, () => ({ x: 0, y: 0 }));
     dotsRef.current = initialDots;
     setDots(initialDots);
@@ -221,13 +216,11 @@ const useTrailingCursor = () => {
     let animationFrame;
     const updateDots = () => {
       const newDots = [...dotsRef.current];
-      // First dot follows mouse
       newDots[0] = {
         x: newDots[0].x + (mousePos.current.x - newDots[0].x) * 0.4,
         y: newDots[0].y + (mousePos.current.y - newDots[0].y) * 0.4,
       };
 
-      // Rest of dots follow previous dot
       for (let i = 1; i < newDots.length; i++) {
         newDots[i] = {
           x: newDots[i].x + (newDots[i - 1].x - newDots[i].x) * 0.35,
@@ -267,7 +260,7 @@ const CursorTrail = () => {
             height: `${12 - index * 1.2}px`,
             transform: 'translate(-50%, -50%)',
             opacity: 1 - index * 0.1,
-            transition: 'width 0.2s, height 0.2s',
+            transition: 'transform 0.15s linear, opacity 0.15s linear',
           }}
         />
       ))}
@@ -288,10 +281,7 @@ const AnimatedButton = ({ children, onClick, className = "", href, download, tar
   const buttonContent = (
     <>
       <div className="absolute inset-0 bg-gradient-to-r from-[#744B93] via-[#C889B5] to-[#744B93] animate-gradient-xy opacity-80 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-      {/* Shine Effect */}
       <div className="absolute inset-0 -z-10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
-
       <span className="relative z-10 flex items-center justify-center">
         {children}
       </span>
@@ -319,10 +309,7 @@ const AnimatedBorderButton = ({ children, href, onClick, className = "" }) => {
 
   const content = (
     <>
-      {/* Dynamic Gradient Border */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#744B93] via-[#C889B5] to-[#744B93] animate-[spin_3s_linear_infinite] opacity-70 group-hover:opacity-100" />
-
-      {/* Inner Content */}
       <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-[10px] bg-white dark:bg-gray-900 px-6 py-3 text-sm font-bold text-[#744B93] dark:text-[#C889B5] backdrop-blur-3xl transition-colors hover:bg-gray-50 dark:hover:bg-gray-800">
         {children}
       </span>
@@ -353,21 +340,19 @@ const Section = ({ id, title, children }) => {
   return (
     <section
       id={id}
-      className="py-16 md:py-24 px-4 sm:px-8 lg:px-16 flex items-center justify-center"
+      className="py-16 md:py-24 px-4 sm:px-8 lg:px-16 flex items-center justify-center scroll-mt-20"
     >
       <div className="w-full max-w-6xl">
-        <Reveal>
-          <h2 className="reveal-item text-3xl md:text-4xl lg:text-5xl font-extrabold mb-8 md:mb-12 text-center text-[#744B93] border-b-4 border-[#C889B5]/30 pb-3 inline-block mx-auto">
-            {title}
-          </h2>
-        </Reveal>
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-8 md:mb-12 text-center text-[#744B93] border-b-4 border-[#C889B5]/30 pb-3 inline-block mx-auto">
+          {title}
+        </h2>
         {children}
       </div>
     </section>
   );
 };
 
-// Project Detail Modal (No changes, kept for completeness)
+// Project Detail Modal
 const ProjectDetailModal = ({ project, onClose }) => {
   if (!project) return null;
 
@@ -379,7 +364,7 @@ const ProjectDetailModal = ({ project, onClose }) => {
       <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
         <div
           className="relative w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 text-left shadow-2xl transition-all sm:my-8 border border-[#744B93]/20 dark:border-[#744B93]/40"
-          onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
+          onClick={(e) => e.stopPropagation()}
         >
           <button
             onClick={onClose}
@@ -399,7 +384,6 @@ const ProjectDetailModal = ({ project, onClose }) => {
             <h3 className="text-3xl font-bold text-[#744B93] mb-4 break-words">{project.name}</h3>
 
             <div className="space-y-6 text-gray-700 dark:text-gray-300">
-              {/* Tech Stack */}
               <div>
                 <p className="font-semibold text-lg text-[#C889B5] flex items-center mb-2"><Code className="w-5 h-5 mr-2" /> Main Technology Stack</p>
                 <div className="flex flex-wrap gap-2">
@@ -409,19 +393,16 @@ const ProjectDetailModal = ({ project, onClose }) => {
                 </div>
               </div>
 
-              {/* Description */}
               <div>
                 <p className="font-semibold text-lg text-[#C889B5] flex items-center mb-2"><LayoutList className="w-5 h-5 mr-2" /> Brief Description</p>
                 <p>{project.description}</p>
               </div>
 
-              {/* Challenges */}
               <div>
                 <p className="font-semibold text-lg text-[#C889B5] flex items-center mb-2"><Zap className="w-5 h-5 mr-2" /> Challenges Faced</p>
                 <p>{project.challenges}</p>
               </div>
 
-              {/* Future Plans */}
               <div>
                 <p className="font-semibold text-lg text-[#C889B5] flex items-center mb-2"><Star className="w-5 h-5 mr-2" /> Potential Improvements & Future Plans</p>
                 <p>{project.futurePlans}</p>
@@ -459,8 +440,7 @@ const ProjectDetailModal = ({ project, onClose }) => {
   );
 };
 
-
-// --- APP COMPONENT --- (Updated)
+// --- APP COMPONENT ---
 
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -468,42 +448,10 @@ const App = () => {
   const [selectedProject, setSelectedProject] = useState(null);
   const [activeSection, setActiveSection] = useState('home');
   const [isScrolled, setIsScrolled] = useState(false);
-  const [animationsEnabled, setAnimationsEnabled] = useState(true);
   const scrollDirection = useScrollDirection();
 
   // Toggle Dark Mode
   const toggleDarkMode = () => setIsDarkMode(prev => !prev);
-
-
-
-
-  // Scroll Spy Logic (Replaced IntersectionObserver with manual calculation for better accuracy)
-  useEffect(() => {
-    const handleScroll = () => {
-      // Toggle navbar visibility based on scroll threshold
-      setIsScrolled(window.scrollY > 50);
-
-      const sections = document.querySelectorAll('section');
-      const scrollPosition = window.scrollY + 100;
-
-      sections.forEach(section => {
-        const top = section.offsetTop;
-        const height = section.offsetHeight;
-        const id = section.getAttribute('id');
-
-        if (scrollPosition >= top && scrollPosition < top + height) {
-          setActiveSection(id);
-        }
-      });
-    };
-
-    window.addEventListener('scroll', handleScroll);
-
-    // Trigger once on mount to set initial state
-    handleScroll();
-
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   // Set dark class on body
   useEffect(() => {
@@ -514,27 +462,45 @@ const App = () => {
     }
   }, [isDarkMode]);
 
-  // Scroll to section and close menu (for mobile)
+  // Scroll Spy Logic
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+
+      const sections = document.querySelectorAll('section');
+      const scrollPosition = window.scrollY + 100;
+
+      let currentSection = 'home';
+      sections.forEach(section => {
+        const top = section.offsetTop;
+        const height = section.offsetHeight;
+        const id = section.getAttribute('id');
+
+        if (scrollPosition >= top && scrollPosition < top + height) {
+          currentSection = id;
+        }
+      });
+
+      setActiveSection(currentSection);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Smooth scroll to section
   const scrollToSection = (id) => {
+    setIsMenuOpen(false);
     const element = document.getElementById(id);
     if (element) {
-      // Temporarily disable animations
-      setAnimationsEnabled(false);
-
-      element.scrollIntoView({ behavior: 'auto' });
-      setIsMenuOpen(false);
-
-      // Re-enable animations after navigation completes
-      setTimeout(() => setAnimationsEnabled(true), 100);
+      element.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
-  // --- RENDER SECTIONS ---
-
-  // Navbar কম্পোনেন্ট: নেভিগেশন লিঙ্ক, ডার্ক মোড টগল এবং মোবাইল মেনু সহ সম্পূর্ণভাবে কার্যকরী
+  // Navbar Component
   const Navbar = () => {
-    // Removed scroll logic to make it permanently sticky
-
     const navItems = [
       { id: 'home', label: 'Home' },
       { id: 'about', label: 'About Me' },
@@ -557,12 +523,11 @@ const App = () => {
       </button>
     );
 
-    // Visible if we are at the very top OR scrolling up OR mobile menu is open
     const isVisible = !isScrolled || scrollDirection === 'up' || isMenuOpen;
 
     return (
-      <div className={`fixed top-6 left-0 right-0 z-50 flex justify-center transition-all duration-500 transform ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-28 opacity-0'}`}>
-        <header className={`w-[95%] max-w-5xl transition-all duration-300 ${isScrolled ? 'bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]' : 'bg-transparent border-transparent shadow-none'} border border-white/20 dark:border-gray-700/30 rounded-2xl ring-1 ring-[#744B93]/20`}>
+      <div className={`fixed top-6 left-0 right-0 z-50 flex justify-center transition-all duration-300 ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}>
+        <header className={`w-[95%] max-w-5xl transition-all duration-300 ${isScrolled ? 'bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl shadow-xl border border-white/20 dark:border-gray-700/30' : 'bg-transparent border-transparent'} rounded-2xl`}>
           <div className="px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               <h1 className="text-xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#744B93] to-[#C889B5] cursor-pointer" onClick={() => scrollToSection('home')}>
@@ -596,9 +561,9 @@ const App = () => {
             </div>
           </div>
 
-          {/* Mobile Menu (Attached below the pill) */}
+          {/* Mobile Menu */}
           {isMenuOpen && (
-            <div className="lg:hidden absolute top-20 left-4 right-4 bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl border border-[#744B93]/20 dark:border-[#744B93]/40 shadow-2xl overflow-hidden origin-top">
+            <div className="lg:hidden absolute top-full left-0 right-0 mt-2 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-2xl border border-[#744B93]/20 dark:border-[#744B93]/40 shadow-2xl overflow-hidden">
               <nav className="p-4 space-y-2 flex flex-col">
                 {navItems.map(item => (
                   <button
@@ -621,145 +586,59 @@ const App = () => {
   };
 
   const HeroSection = () => {
-    // Uses CSS keyframes for initial mount animation (similar to previous version)
     return (
       <section id="home" className="py-12 md:py-24 px-4 sm:px-8 lg:px-16 flex items-center justify-center min-h-screen">
         <div className="w-full max-w-6xl">
           <div className="flex flex-col lg:flex-row items-center justify-between text-center lg:text-left">
-
-            <div className="lg:w-1/2 space-y-6 order-2 lg:order-1 animate-combined-hero">
-              {/* Animation 1: Name */}
-              <h1 className="animate-combined-hero text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-gray-50 leading-tight" style={{ animationDelay: '0ms' }}>
+            <div className="lg:w-1/2 space-y-6 order-2 lg:order-1">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-gray-50 leading-tight">
                 Hi, I'm <br /> <span className="text-[#744B93]">{PORTFOLIO_DATA.name}</span>
               </h1>
-              {/* Animation 2: Designation */}
-              <p className="animate-combined-hero text-2xl sm:text-3xl font-medium text-[#C889B5] tracking-wide" style={{ animationDelay: '100ms' }}>
+              <p className="text-2xl sm:text-3xl font-medium text-[#C889B5] tracking-wide">
                 {PORTFOLIO_DATA.designation}
               </p>
-              {/* Animation 3: Description */}
-              <p className="animate-combined-hero text-xl text-gray-600 dark:text-gray-400 max-w-lg lg:max-w-none mx-auto lg:mx-0" style={{ animationDelay: '200ms' }}>
+              <p className="text-xl text-gray-600 dark:text-gray-400 max-w-lg lg:max-w-none mx-auto lg:mx-0">
                 I turn creative ideas into robust, high-performance web applications. Let's build something amazing together.
               </p>
 
               <div className="flex flex-col sm:flex-row items-center gap-6 lg:gap-8 justify-center lg:justify-start pt-4">
-                {/* 3. Resume Download Button - Animation 4 */}
                 <AnimatedButton
                   href={getGoogleDocsDownloadUrl(PORTFOLIO_DATA.resumeLink)}
                   download="Homayra_Binte_Harun_Heme_Resume.pdf"
-                  className="animate-combined-hero"
-                  style={{ animationDelay: '300ms' }}
                 >
                   <Download className="w-5 h-5 mr-2" />
                   Download Resume
                 </AnimatedButton>
 
-                {/* 4. Social Links - Grouped for mobile alignment */}
                 <div className="flex items-center gap-4">
-                  {PORTFOLIO_DATA.socials.map((social, index) => (
-                    <div
+                  {PORTFOLIO_DATA.socials.map((social) => (
+                    <a
                       key={social.name}
-                      className="animate-combined-hero"
-                      style={{ animationDelay: `${(index + 4) * 100}ms` }}
+                      href={social.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-12 h-12 flex items-center justify-center bg-white dark:bg-gray-800 text-[#744B93] rounded-full shadow-md border-2 border-[#744B93] dark:border-[#C889B5] hover:bg-[#744B93] hover:text-white dark:hover:bg-[#C889B5] dark:hover:text-black hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 group"
+                      aria-label={social.name}
                     >
-                      <a
-                        href={social.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-12 h-12 flex items-center justify-center bg-white dark:bg-gray-800 text-[#744B93] rounded-full shadow-md border-2 border-[#744B93] dark:border-[#C889B5] hover:bg-[#744B93] hover:text-white dark:hover:bg-[#C889B5] dark:hover:text-black hover:-translate-y-4 hover:shadow-2xl transition-all duration-300 group"
-                        aria-label={social.name}
-                      >
-                        <social.icon size={24} className="transition-transform duration-300 group-hover:scale-110" />
-                      </a>
-                    </div>
+                      <social.icon size={24} className="transition-transform duration-300 group-hover:scale-110" />
+                    </a>
                   ))}
                 </div>
               </div>
             </div>
 
-            {/* 2. Professional Photo - Animation 6 (Scale-in effect) with Animated Border */}
-            <div className="lg:w-1/3 mt-6 lg:mt-0 order-1 lg:order-2" style={{ perspective: '1000px' }}>
-              <div
-                className="animate-combined-hero group relative p-[10px] rounded-full shadow-2xl shadow-[#744B93]/40 overflow-hidden cursor-pointer transition-all duration-700 hover:scale-110 hover:shadow-[0_0_80px_rgba(116,75,147,0.8)] hover:rotate-[2deg]"
-                style={{ animationDelay: '0ms', transformStyle: 'preserve-3d' }}
-              >
-                {/* Dynamic Rotating Border - Soft Purple Fusion */}
-                <div
-                  className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,#744B93_0%,#C889B5_25%,#744B93_50%,#C889B5_75%,#744B93_100%)] animate-rotate-fast opacity-100 blur-[2px] group-hover:animate-rotate-very-fast group-hover:blur-[3px]"
-                />
-
+            <div className="lg:w-1/3 mt-6 lg:mt-0 order-1 lg:order-2">
+              <div className="group relative p-[10px] rounded-full shadow-2xl shadow-[#744B93]/40 overflow-hidden cursor-pointer transition-all duration-700 hover:scale-110 hover:shadow-[0_0_80px_rgba(116,75,147,0.8)]">
+                <div className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,#744B93_0%,#C889B5_25%,#744B93_50%,#C889B5_75%,#744B93_100%)] animate-[rotate_3s_linear_infinite] opacity-100 blur-[2px] group-hover:animate-[rotate_1s_linear_infinite]" />
                 <img
                   src={PORTFOLIO_DATA.photoUrl}
                   alt="Professional Profile"
-                  className="relative z-10 w-full h-auto rounded-full object-cover border-4 border-white dark:border-gray-800 transition-all duration-700 group-hover:scale-115 group-hover:brightness-110"
+                  className="relative z-10 w-full h-auto rounded-full object-cover border-4 border-white dark:border-gray-800 transition-all duration-700 group-hover:scale-105"
                 />
               </div>
             </div>
           </div>
         </div>
-
-        {/* Global Animation Styles */}
-        <style>{`
-          @keyframes softFadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-          }
-          @keyframes softFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-          }
-          .animate-combined-hero {
-            opacity: 0;
-            animation: 
-              softFadeIn 0.4s ease-out forwards,
-              softFloat 5s ease-in-out infinite 0.7s;
-          }
-          @media (prefers-reduced-motion: reduce) {
-            .animate-combined-hero {
-              animation: none;
-              opacity: 1;
-              transform: none;
-            }
-          }
-          @keyframes gradient-xy {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-          }
-          @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-          }
-          @keyframes border-glow {
-            0%, 100% { filter: brightness(1) drop-shadow(0 0 10px rgba(116,75,147,0.5)); }
-            50% { filter: brightness(1.5) drop-shadow(0 0 25px rgba(116,75,147,0.8)); }
-          }
-          .animate-gradient-xy {
-            background-size: 400% 400%;
-            animation: gradient-xy 3s ease infinite;
-          }
-          .animate-rotate-fast {
-            animation: rotate 2.5s linear infinite, border-glow 3s ease-in-out infinite;
-          }
-          .animate-rotate-very-fast {
-            animation: rotate 1s linear infinite, border-glow 1.5s ease-in-out infinite !important;
-          }
-          @keyframes revealUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-          }
-          .reveal-item {
-            opacity: 0;
-            will-change: transform, opacity;
-          }
-          .reveal-visible .reveal-item {
-            animation: revealUp 0.6s cubic-bezier(0.2, 0.65, 0.3, 0.9) forwards;
-          }
-          .stagger-1 { animation-delay: 100ms !important; }
-          .stagger-2 { animation-delay: 200ms !important; }
-          .stagger-3 { animation-delay: 300ms !important; }
-          .stagger-4 { animation-delay: 400ms !important; }
-          .stagger-5 { animation-delay: 500ms !important; }
-          .stagger-6 { animation-delay: 600ms !important; }
-        `}</style>
       </section>
     );
   };
@@ -768,22 +647,22 @@ const App = () => {
     <Section id="about" title="About My Journey">
       <div className="bg-white dark:bg-gray-800 p-8 sm:p-12 rounded-2xl shadow-xl border border-[#744B93]/20 dark:border-[#744B93]/40">
         <Reveal>
-          <p className="reveal-item text-gray-700 dark:text-gray-300 text-lg mb-6 leading-relaxed">
+          <p className="text-gray-700 dark:text-gray-300 text-lg mb-6 leading-relaxed">
             {PORTFOLIO_DATA.about.intro}
           </p>
         </Reveal>
         <Reveal>
-          <p className="reveal-item text-gray-700 dark:text-gray-300 text-lg mb-6 leading-relaxed border-l-4 border-[#744B93] pl-4 italic">
+          <p className="text-gray-700 dark:text-gray-300 text-lg mb-6 leading-relaxed border-l-4 border-[#744B93] pl-4 italic">
             <span className="font-semibold text-[#744B93]">My Programming Journey:</span> {PORTFOLIO_DATA.about.journey}
           </p>
         </Reveal>
         <Reveal>
-          <p className="reveal-item text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
+          <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
             <span className="font-semibold text-[#744B93]">Outside of Code:</span> {PORTFOLIO_DATA.about.hobbies}
           </p>
         </Reveal>
         <Reveal>
-          <p className="reveal-item mt-6 text-xl font-bold text-[#C889B5] flex items-center">
+          <p className="mt-6 text-xl font-bold text-[#C889B5] flex items-center">
             Ready to collaborate! <ArrowRight className="w-5 h-5 ml-2 transition-transform duration-300 hover:translate-x-1" />
           </p>
         </Reveal>
@@ -794,27 +673,23 @@ const App = () => {
   const SkillsSection = () => (
     <Section id="skills" title="Technical Skills">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {PORTFOLIO_DATA.skills.map((skillGroup, index) => (
+        {PORTFOLIO_DATA.skills.map((skillGroup) => (
           <Reveal key={skillGroup.category}>
-            <div className="reveal-item">
-              <div
-                className={`bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border-t-4 border-[#744B93] transform hover:scale-[1.02] transition-transform duration-300`}
-              >
-                <div className="flex items-center mb-4">
-                  <skillGroup.icon className="w-8 h-8 text-[#744B93] mr-3" />
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                    {skillGroup.category}
-                  </h3>
-                </div>
-                <ul className="space-y-3">
-                  {skillGroup.list.map((skill) => (
-                    <li key={skill} className="flex items-center text-gray-700 dark:text-gray-300">
-                      <span className="w-2 h-2 bg-[#C889B5] rounded-full mr-3"></span>
-                      {skill}
-                    </li>
-                  ))}
-                </ul>
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border-t-4 border-[#744B93] transform transition-all duration-300 hover:scale-[1.02]">
+              <div className="flex items-center mb-4">
+                <skillGroup.icon className="w-8 h-8 text-[#744B93] mr-3" />
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  {skillGroup.category}
+                </h3>
               </div>
+              <ul className="space-y-3">
+                {skillGroup.list.map((skill) => (
+                  <li key={skill} className="flex items-center text-gray-700 dark:text-gray-300">
+                    <span className="w-2 h-2 bg-[#C889B5] rounded-full mr-3"></span>
+                    {skill}
+                  </li>
+                ))}
+              </ul>
             </div>
           </Reveal>
         ))}
@@ -837,13 +712,11 @@ const App = () => {
 
             <div className="md:w-11/12 pl-0 md:pl-12 pt-4 md:pt-0">
               <Reveal>
-                <div className="reveal-item">
-                  <div className={`bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-[#744B93]/10 dark:border-[#744B93]/30 transform hover:scale-[1.02] transition-all duration-300`}>
-                    <h3 className="text-2xl font-bold text-[#744B93]">{edu.degree}</h3>
-                    <p className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3">{edu.institution}</p>
-                    <p className="text-sm font-semibold text-[#C889B5] mb-1">{edu.period}</p>
-                    <p className="text-gray-600 dark:text-gray-400">{edu.details}</p>
-                  </div>
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-[#744B93]/10 dark:border-[#744B93]/30 transform transition-all duration-300 hover:scale-[1.02]">
+                  <h3 className="text-2xl font-bold text-[#744B93]">{edu.degree}</h3>
+                  <p className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3">{edu.institution}</p>
+                  <p className="text-sm font-semibold text-[#C889B5] mb-1">{edu.period}</p>
+                  <p className="text-gray-600 dark:text-gray-400">{edu.details}</p>
                 </div>
               </Reveal>
             </div>
@@ -868,13 +741,11 @@ const App = () => {
 
             <div className="md:w-11/12 pl-0 md:pl-12 pt-4 md:pt-0">
               <Reveal>
-                <div className="reveal-item">
-                  <div className={`bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-[#744B93]/10 dark:border-[#744B93]/30 transform hover:scale-[1.02] transition-all duration-300`}>
-                    <p className="text-sm font-semibold text-[#C889B5] mb-1">{exp.period}</p>
-                    <h3 className="text-2xl font-bold text-[#744B93]">{exp.title}</h3>
-                    <p className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3">{exp.company}</p>
-                    <p className="text-gray-600 dark:text-gray-400">{exp.description}</p>
-                  </div>
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-[#744B93]/10 dark:border-[#744B93]/30 transform transition-all duration-300 hover:scale-[1.02]">
+                  <p className="text-sm font-semibold text-[#C889B5] mb-1">{exp.period}</p>
+                  <h3 className="text-2xl font-bold text-[#744B93]">{exp.title}</h3>
+                  <p className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3">{exp.company}</p>
+                  <p className="text-gray-600 dark:text-gray-400">{exp.description}</p>
                 </div>
               </Reveal>
             </div>
@@ -887,48 +758,44 @@ const App = () => {
   const ProjectsSection = () => (
     <Section id="projects" title="Featured Projects">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        {PORTFOLIO_DATA.projects.map((project, index) => (
+        {PORTFOLIO_DATA.projects.map((project) => (
           <Reveal key={project.id}>
-            <div className="reveal-item h-full">
-              <div
-                className={`bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden group border border-[#744B93]/10 dark:border-[#744B93]/30 transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] flex flex-col h-full`}
-              >
-                <div className="relative h-48 overflow-hidden flex-shrink-0">
-                  <img
-                    src={project.image}
-                    alt={project.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
-                    <button
-                      onClick={() => setSelectedProject(project)}
-                      className="bg-white text-[#744B93] p-2 rounded-full hover:bg-[#744B93] hover:text-white transition-colors duration-300"
-                    >
-                      <Zap size={20} />
-                    </button>
-                  </div>
-                </div>
-                <div className="p-6 flex flex-col flex-grow">
-                  <div className="flex flex-wrap gap-2 mb-3 flex-shrink-0">
-                    {project.techStack.slice(0, 3).map((tech) => (
-                      <span key={tech} className="bg-[#744B93]/10 text-[#744B93] text-xs font-semibold px-2 py-1 rounded-md">
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2 truncate flex-shrink-0">{project.name}</h3>
-                  <div className="flex-grow">
-                    <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-3 mb-6">
-                      {project.description}
-                    </p>
-                  </div>
-                  <AnimatedBorderButton
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden group border border-[#744B93]/10 dark:border-[#744B93]/30 transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] flex flex-col h-full">
+              <div className="relative h-48 overflow-hidden flex-shrink-0">
+                <img
+                  src={project.image}
+                  alt={project.name}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
+                  <button
                     onClick={() => setSelectedProject(project)}
-                    className="w-full mt-auto"
+                    className="bg-white text-[#744B93] p-2 rounded-full hover:bg-[#744B93] hover:text-white transition-colors duration-300"
                   >
-                    View Details
-                  </AnimatedBorderButton>
+                    <Zap size={20} />
+                  </button>
                 </div>
+              </div>
+              <div className="p-6 flex flex-col flex-grow">
+                <div className="flex flex-wrap gap-2 mb-3 flex-shrink-0">
+                  {project.techStack.slice(0, 3).map((tech) => (
+                    <span key={tech} className="bg-[#744B93]/10 text-[#744B93] text-xs font-semibold px-2 py-1 rounded-md">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2 truncate flex-shrink-0">{project.name}</h3>
+                <div className="flex-grow">
+                  <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-3 mb-6">
+                    {project.description}
+                  </p>
+                </div>
+                <AnimatedBorderButton
+                  onClick={() => setSelectedProject(project)}
+                  className="w-full mt-auto"
+                >
+                  View Details
+                </AnimatedBorderButton>
               </div>
             </div>
           </Reveal>
@@ -974,21 +841,19 @@ const App = () => {
 
     const ContactInfo = ({ icon: Icon, title, value, href }) => (
       <Reveal>
-        <div className="reveal-item">
-          <div className="flex items-center space-x-5 p-5 rounded-2xl bg-white dark:bg-gray-800 border border-[#744B93]/10 dark:border-[#744B93]/30 shadow-sm hover:shadow-xl hover:border-[#744B93]/30 hover:-translate-y-2 transition-all duration-300 group cursor-pointer">
-            <div className="flex-shrink-0 w-14 h-14 bg-[#744B93]/10 dark:bg-[#744B93]/20 rounded-2xl flex items-center justify-center text-[#744B93] group-hover:bg-[#744B93] group-hover:text-white transition-all duration-300 shadow-inner">
-              <Icon size={28} className="transition-all duration-300 group-hover:scale-110" />
-            </div>
-            <div className="flex-grow">
-              <p className="text-sm font-semibold text-gray-400 dark:text-gray-500 mb-0.5 tracking-wide uppercase">{title}</p>
-              {href ? (
-                <a href={href} className="text-lg font-bold text-gray-900 dark:text-gray-100 hover:text-[#744B93] transition-colors break-all">
-                  {value}
-                </a>
-              ) : (
-                <p className="text-lg font-bold text-gray-900 dark:text-gray-100 break-all">{value}</p>
-              )}
-            </div>
+        <div className="flex items-center space-x-5 p-5 rounded-2xl bg-white dark:bg-gray-800 border border-[#744B93]/10 dark:border-[#744B93]/30 shadow-sm hover:shadow-xl hover:border-[#744B93]/30 hover:-translate-y-2 transition-all duration-300 group cursor-pointer">
+          <div className="flex-shrink-0 w-14 h-14 bg-[#744B93]/10 dark:bg-[#744B93]/20 rounded-2xl flex items-center justify-center text-[#744B93] group-hover:bg-[#744B93] group-hover:text-white transition-all duration-300 shadow-inner">
+            <Icon size={28} className="transition-all duration-300 group-hover:scale-110" />
+          </div>
+          <div className="flex-grow">
+            <p className="text-sm font-semibold text-gray-400 dark:text-gray-500 mb-0.5 tracking-wide uppercase">{title}</p>
+            {href ? (
+              <a href={href} className="text-lg font-bold text-gray-900 dark:text-gray-100 hover:text-[#744B93] transition-colors break-all">
+                {value}
+              </a>
+            ) : (
+              <p className="text-lg font-bold text-gray-900 dark:text-gray-100 break-all">{value}</p>
+            )}
           </div>
         </div>
       </Reveal>
@@ -1008,19 +873,17 @@ const App = () => {
             <div className="pt-6 border-t border-[#744B93]/20">
               <h4 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">Connect on Social Media</h4>
               <div className="flex flex-wrap gap-4">
-                {PORTFOLIO_DATA.socials.map((social, index) => (
+                {PORTFOLIO_DATA.socials.map((social) => (
                   <Reveal key={social.name}>
-                    <div className="reveal-item">
-                      <a
-                        href={social.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-14 h-14 flex items-center justify-center bg-white dark:bg-gray-800 text-[#744B93] rounded-2xl shadow-md border border-[#744B93]/10 hover:border-[#744B93] hover:bg-[#744B93] hover:text-white hover:-translate-y-4 hover:shadow-2xl transition-all duration-300 group"
-                        aria-label={social.name}
-                      >
-                        <social.icon size={26} className="transition-transform duration-300 group-hover:scale-110" />
-                      </a>
-                    </div>
+                    <a
+                      href={social.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-14 h-14 flex items-center justify-center bg-white dark:bg-gray-800 text-[#744B93] rounded-2xl shadow-md border border-[#744B93]/10 hover:border-[#744B93] hover:bg-[#744B93] hover:text-white hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 group"
+                      aria-label={social.name}
+                    >
+                      <social.icon size={26} className="transition-transform duration-300 group-hover:scale-110" />
+                    </a>
                   </Reveal>
                 ))}
               </div>
@@ -1029,7 +892,7 @@ const App = () => {
 
           {/* Contact Form Column */}
           <Reveal>
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl border border-[#744B93]/10 dark:border-[#744B93]/30 reveal-item">
+            <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl border border-[#744B93]/10 dark:border-[#744B93]/30">
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
@@ -1113,7 +976,6 @@ const App = () => {
                     type="submit"
                     className={`w-full py-3 shadow-lg shadow-[#744B93]/40 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
                     disabled={isSubmitting}
-                    onClick={handleSubmit}
                   >
                     {isSubmitting ? 'Sending...' : 'Send Message'}
                   </AnimatedButton>
@@ -1136,25 +998,17 @@ const App = () => {
     </footer>
   );
 
-
-
   return (
-    <AnimationContext.Provider value={{ animationsEnabled }}>
+    <AnimationContext.Provider value={{ animationsEnabled: true }}>
       <div className={`min-h-screen transition-colors duration-500 overflow-x-hidden relative ${isDarkMode ? 'dark bg-gray-900 text-gray-100' : 'bg-white text-gray-900'}`}>
-
-        {/* Full-Body Background Theme - Subtle Blobs */}
+        {/* Background Elements */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#744B93]/5 dark:bg-[#744B93]/10 rounded-full blur-[120px] animate-pulse"></div>
-          <div className="absolute bottom-[20%] right-[-5%] w-[35%] h-[35%] bg-[#C889B5]/5 dark:bg-[#C889B5]/10 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '1s' }}></div>
-          <div className="absolute top-[40%] right-[10%] w-[30%] h-[30%] bg-[#744B93]/3 dark:bg-[#744B93]/5 rounded-full blur-[80px] animate-pulse" style={{ animationDelay: '2s' }}></div>
+          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#744B93]/5 dark:bg-[#744B93]/10 rounded-full blur-[120px]"></div>
+          <div className="absolute bottom-[20%] right-[-5%] w-[35%] h-[35%] bg-[#C889B5]/5 dark:bg-[#C889B5]/10 rounded-full blur-[100px]"></div>
         </div>
 
         <div className="relative z-10">
-
-
-
           <Navbar />
-
           <CursorTrail />
 
           <main className="pt-16">
@@ -1174,6 +1028,27 @@ const App = () => {
             onClose={() => setSelectedProject(null)}
           />
         </div>
+
+        <style>{`
+          @keyframes gradient-xy {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+          }
+          .animate-gradient-xy {
+            background-size: 400% 400%;
+            animation: gradient-xy 3s ease infinite;
+          }
+          
+          @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+          }
+          
+          /* Smooth scrolling */
+          html {
+            scroll-behavior: smooth;
+          }
+        `}</style>
       </div>
     </AnimationContext.Provider>
   );
