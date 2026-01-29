@@ -106,6 +106,95 @@ const PORTFOLIO_DATA = {
   ],
 };
 
+// Enhanced Floating Background Video Component
+const BackgroundVideo = () => {
+  return (
+    <div className="fixed inset-0 z-0 overflow-hidden">
+      {/* Multiple Video Layers for Parallax Effect */}
+      <div className="absolute inset-0">
+        {/* Main Background Video */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover opacity-30 dark:opacity-25"
+          style={{ filter: 'brightness(0.7) contrast(1.3) saturate(1.2)' }}
+        >
+          <source
+            src="https://assets.mixkit.co/videos/preview/mixkit-abstract-geometric-shapes-background-34417-1080p.mp4"
+            type="video/mp4"
+          />
+          <source
+            src="https://cdn.coverr.co/videos/coverr-abstract-lines-and-shapes-rotating-2163/1080p.mp4"
+            type="video/mp4"
+          />
+        </video>
+
+        {/* Secondary floating video element */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 opacity-40 animate-float-very-slow">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full rounded-full object-cover"
+            style={{ filter: 'blur(5px) brightness(0.8)' }}
+          >
+            <source
+              src="https://assets.mixkit.co/videos/preview/mixkit-geometric-lines-rotating-in-space-34418-1080p.mp4"
+              type="video/mp4"
+            />
+          </video>
+        </div>
+
+        {/* Third floating video element */}
+        <div className="absolute bottom-1/3 right-1/4 w-64 h-64 opacity-30 animate-float-medium">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full rounded-full object-cover"
+            style={{ filter: 'blur(8px) brightness(0.6)' }}
+          >
+            <source
+              src="https://assets.mixkit.co/videos/preview/mixkit-rotating-abstract-geometric-shapes-34415-1080p.mp4"
+              type="video/mp4"
+            />
+          </video>
+        </div>
+
+        {/* Overlay gradients */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-900/5 to-gray-900/20 dark:via-gray-900/10 dark:to-gray-900/40"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#744B93]/10 via-transparent to-[#C889B5]/10"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent"></div>
+      </div>
+
+      {/* Animated floating geometric elements */}
+      <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-gradient-to-r from-[#744B93]/20 to-[#C889B5]/20 rounded-full blur-3xl animate-float-slow"></div>
+      <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-gradient-to-r from-[#C889B5]/15 to-[#744B93]/15 rounded-full blur-3xl animate-float-medium"></div>
+      <div className="absolute top-2/3 left-2/3 w-48 h-48 bg-gradient-to-r from-[#744B93]/25 to-transparent rounded-full blur-2xl animate-float-fast"></div>
+      <div className="absolute top-1/3 right-1/3 w-72 h-72 bg-gradient-to-l from-[#C889B5]/10 to-transparent rounded-full blur-3xl animate-float-very-slow"></div>
+
+      {/* Floating particles */}
+      {Array.from({ length: 15 }).map((_, i) => (
+        <div
+          key={i}
+          className="absolute w-2 h-2 bg-gradient-to-r from-[#744B93]/40 to-[#C889B5]/40 rounded-full"
+          style={{
+            top: `${Math.random() * 100}%`,
+            left: `${Math.random() * 100}%`,
+            animation: `float-particle ${10 + Math.random() * 20}s ease-in-out infinite`,
+            animationDelay: `${Math.random() * 5}s`,
+            opacity: 0.3 + Math.random() * 0.4,
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
 // Utility function to get Google Docs/Drive direct download URL
 const getGoogleDocsDownloadUrl = (url) => {
   const match = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
@@ -189,7 +278,7 @@ const Reveal = ({ children, threshold = 0.1, className = "" }) => {
   return (
     <div
       ref={ref}
-      className={`transition-all duration-700 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} ${className}`}
+      className={`transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} ${className}`}
     >
       {children}
     </div>
@@ -252,7 +341,7 @@ const CursorTrail = () => {
       {dots.map((dot, index) => (
         <div
           key={index}
-          className="absolute bg-[#744B93]/60 dark:bg-[#C889B5]/60 rounded-full blur-[1px]"
+          className="absolute bg-[#744B93]/60 dark:bg-[#C889B5]/60 rounded-full blur-[1px] transition-transform duration-150 ease-out"
           style={{
             left: dot.x,
             top: dot.y,
@@ -260,7 +349,6 @@ const CursorTrail = () => {
             height: `${12 - index * 1.2}px`,
             transform: 'translate(-50%, -50%)',
             opacity: 1 - index * 0.1,
-            transition: 'transform 0.15s linear, opacity 0.15s linear',
           }}
         />
       ))}
@@ -342,7 +430,7 @@ const Section = ({ id, title, children }) => {
       id={id}
       className="py-16 md:py-24 px-4 sm:px-8 lg:px-16 flex items-center justify-center scroll-mt-20"
     >
-      <div className="w-full max-w-6xl">
+      <div className="w-full max-w-6xl relative z-10">
         <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-8 md:mb-12 text-center text-[#744B93] border-b-4 border-[#C889B5]/30 pb-3 inline-block mx-auto">
           {title}
         </h2>
@@ -352,7 +440,7 @@ const Section = ({ id, title, children }) => {
   );
 };
 
-// Project Detail Modal
+// Project Detail Modal - UPDATED: Removed Close Button, Added X in corner
 const ProjectDetailModal = ({ project, onClose }) => {
   if (!project) return null;
 
@@ -366,12 +454,13 @@ const ProjectDetailModal = ({ project, onClose }) => {
           className="relative w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 text-left shadow-2xl transition-all sm:my-8 border border-[#744B93]/20 dark:border-[#744B93]/40"
           onClick={(e) => e.stopPropagation()}
         >
+          {/* Close X button in top-right corner */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-gray-800 dark:text-gray-200 hover:text-[#744B93] p-2 rounded-full transition-colors"
+            className="absolute top-6 right-6 z-50 w-12 h-12 flex items-center justify-center bg-white/90 dark:bg-gray-800/90 text-gray-800 dark:text-gray-200 hover:text-[#744B93] dark:hover:text-[#C889B5] rounded-full transition-all duration-300 hover:scale-110 hover:bg-white dark:hover:bg-gray-700 shadow-lg hover:shadow-2xl border border-gray-200 dark:border-gray-700"
             aria-label="Close Project Details"
           >
-            <X size={24} />
+            <X size={28} className="transition-transform duration-300 hover:rotate-90" />
           </button>
 
           <img
@@ -380,7 +469,7 @@ const ProjectDetailModal = ({ project, onClose }) => {
             className="w-full h-64 object-cover rounded-t-2xl"
           />
 
-          <div className="p-8">
+          <div className="p-8 pt-12">
             <h3 className="text-3xl font-bold text-[#744B93] mb-4 break-words">{project.name}</h3>
 
             <div className="space-y-6 text-gray-700 dark:text-gray-300">
@@ -426,17 +515,88 @@ const ProjectDetailModal = ({ project, onClose }) => {
                   Server Repo
                 </AnimatedBorderButton>
               )}
-              <button
-                onClick={onClose}
-                className="flex-1 w-full text-center bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-xl transition duration-300 shadow-md"
-              >
-                Close
-              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
+  );
+};
+
+// Enhanced Hero Section with improved profile animation
+const HeroSection = ({ scrollToSection }) => {
+  const [rotation, setRotation] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRotation(prev => (prev + 0.5) % 360);
+    }, 50);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <section id="home" className="py-12 md:py-24 px-4 sm:px-8 lg:px-16 flex items-center justify-center min-h-screen relative z-10">
+      <div className="w-full max-w-6xl">
+        <div className="flex flex-col lg:flex-row items-center justify-between text-center lg:text-left">
+          <div className="lg:w-1/2 space-y-6 order-2 lg:order-1">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-gray-50 leading-tight">
+              Hi, I'm <br /> <span className="text-[#744B93]">{PORTFOLIO_DATA.name}</span>
+            </h1>
+            <p className="text-2xl sm:text-3xl font-medium text-[#C889B5] tracking-wide">
+              {PORTFOLIO_DATA.designation}
+            </p>
+            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-lg lg:max-w-none mx-auto lg:mx-0">
+              I turn creative ideas into robust, high-performance web applications. Let's build something amazing together.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center gap-6 lg:gap-8 justify-center lg:justify-start pt-4">
+              <AnimatedButton
+                href={getGoogleDocsDownloadUrl(PORTFOLIO_DATA.resumeLink)}
+                download="Homayra_Binte_Harun_Heme_Resume.pdf"
+              >
+                <Download className="w-5 h-5 mr-2" />
+                Download Resume
+              </AnimatedButton>
+
+              <div className="flex items-center gap-4">
+                {PORTFOLIO_DATA.socials.map((social) => (
+                  <a
+                    key={social.name}
+                    href={social.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-12 h-12 flex items-center justify-center bg-white dark:bg-gray-800 text-[#744B93] rounded-full shadow-md border-2 border-[#744B93] dark:border-[#C889B5] hover:bg-[#744B93] hover:text-white dark:hover:bg-[#C889B5] dark:hover:text-black hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 group"
+                    aria-label={social.name}
+                  >
+                    <social.icon size={24} className="transition-transform duration-300 group-hover:scale-110" />
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:w-1/3 mt-6 lg:mt-0 order-1 lg:order-2">
+            <div className="group relative p-[10px] rounded-full shadow-2xl shadow-[#744B93]/40 overflow-hidden cursor-pointer transition-all duration-700 hover:scale-110 hover:shadow-[0_0_80px_rgba(116,75,147,0.8)]">
+              <div
+                className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,#744B93_0%,#C889B5_25%,#744B93_50%,#C889B5_75%,#744B93_100%)] opacity-100 blur-[2px]"
+                style={{
+                  transform: `rotate(${rotation}deg)`,
+                  transition: 'transform 0.05s linear'
+                }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#744B93]/20 to-[#C889B5]/20 animate-pulse-slow rounded-full"></div>
+              <img
+                src={PORTFOLIO_DATA.photoUrl}
+                alt="Professional Profile"
+                className="relative z-10 w-full h-auto rounded-full object-cover border-4 border-white dark:border-gray-800 transition-all duration-700 group-hover:scale-105 group-hover:border-[#C889B5]"
+              />
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 };
 
@@ -462,7 +622,7 @@ const App = () => {
     }
   }, [isDarkMode]);
 
-  // Scroll Spy Logic
+  // Smooth Scroll Spy Logic
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -484,10 +644,22 @@ const App = () => {
       setActiveSection(currentSection);
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    // Throttle scroll events for better performance
+    let ticking = false;
+    const throttledScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', throttledScroll, { passive: true });
     handleScroll();
 
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', throttledScroll);
   }, []);
 
   // Smooth scroll to section
@@ -495,7 +667,11 @@ const App = () => {
     setIsMenuOpen(false);
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      // Modern smooth scroll with behavior smooth
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
     }
   };
 
@@ -526,8 +702,8 @@ const App = () => {
     const isVisible = !isScrolled || scrollDirection === 'up' || isMenuOpen;
 
     return (
-      <div className={`fixed top-6 left-0 right-0 z-50 flex justify-center transition-all duration-300 ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}>
-        <header className={`w-[95%] max-w-5xl transition-all duration-300 ${isScrolled ? 'bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl shadow-xl border border-white/20 dark:border-gray-700/30' : 'bg-transparent border-transparent'} rounded-2xl`}>
+      <div className={`fixed top-6 left-0 right-0 z-50 flex justify-center transition-all duration-300 ease-out ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}>
+        <header className={`w-[95%] max-w-5xl transition-all duration-300 backdrop-blur-xl ${isScrolled ? 'bg-white/90 dark:bg-gray-900/90 shadow-xl border border-white/20 dark:border-gray-700/30' : 'bg-transparent border-transparent'} rounded-2xl`}>
           <div className="px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               <h1 className="text-xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#744B93] to-[#C889B5] cursor-pointer" onClick={() => scrollToSection('home')}>
@@ -585,67 +761,9 @@ const App = () => {
     );
   };
 
-  const HeroSection = () => {
-    return (
-      <section id="home" className="py-12 md:py-24 px-4 sm:px-8 lg:px-16 flex items-center justify-center min-h-screen">
-        <div className="w-full max-w-6xl">
-          <div className="flex flex-col lg:flex-row items-center justify-between text-center lg:text-left">
-            <div className="lg:w-1/2 space-y-6 order-2 lg:order-1">
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-gray-50 leading-tight">
-                Hi, I'm <br /> <span className="text-[#744B93]">{PORTFOLIO_DATA.name}</span>
-              </h1>
-              <p className="text-2xl sm:text-3xl font-medium text-[#C889B5] tracking-wide">
-                {PORTFOLIO_DATA.designation}
-              </p>
-              <p className="text-xl text-gray-600 dark:text-gray-400 max-w-lg lg:max-w-none mx-auto lg:mx-0">
-                I turn creative ideas into robust, high-performance web applications. Let's build something amazing together.
-              </p>
-
-              <div className="flex flex-col sm:flex-row items-center gap-6 lg:gap-8 justify-center lg:justify-start pt-4">
-                <AnimatedButton
-                  href={getGoogleDocsDownloadUrl(PORTFOLIO_DATA.resumeLink)}
-                  download="Homayra_Binte_Harun_Heme_Resume.pdf"
-                >
-                  <Download className="w-5 h-5 mr-2" />
-                  Download Resume
-                </AnimatedButton>
-
-                <div className="flex items-center gap-4">
-                  {PORTFOLIO_DATA.socials.map((social) => (
-                    <a
-                      key={social.name}
-                      href={social.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-12 h-12 flex items-center justify-center bg-white dark:bg-gray-800 text-[#744B93] rounded-full shadow-md border-2 border-[#744B93] dark:border-[#C889B5] hover:bg-[#744B93] hover:text-white dark:hover:bg-[#C889B5] dark:hover:text-black hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 group"
-                      aria-label={social.name}
-                    >
-                      <social.icon size={24} className="transition-transform duration-300 group-hover:scale-110" />
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="lg:w-1/3 mt-6 lg:mt-0 order-1 lg:order-2">
-              <div className="group relative p-[10px] rounded-full shadow-2xl shadow-[#744B93]/40 overflow-hidden cursor-pointer transition-all duration-700 hover:scale-110 hover:shadow-[0_0_80px_rgba(116,75,147,0.8)]">
-                <div className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,#744B93_0%,#C889B5_25%,#744B93_50%,#C889B5_75%,#744B93_100%)] animate-[rotate_3s_linear_infinite] opacity-100 blur-[2px] group-hover:animate-[rotate_1s_linear_infinite]" />
-                <img
-                  src={PORTFOLIO_DATA.photoUrl}
-                  alt="Professional Profile"
-                  className="relative z-10 w-full h-auto rounded-full object-cover border-4 border-white dark:border-gray-800 transition-all duration-700 group-hover:scale-105"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-  };
-
   const AboutMeSection = () => (
     <Section id="about" title="About My Journey">
-      <div className="bg-white dark:bg-gray-800 p-8 sm:p-12 rounded-2xl shadow-xl border border-[#744B93]/20 dark:border-[#744B93]/40">
+      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 sm:p-12 rounded-2xl shadow-xl border border-[#744B93]/20 dark:border-[#744B93]/40">
         <Reveal>
           <p className="text-gray-700 dark:text-gray-300 text-lg mb-6 leading-relaxed">
             {PORTFOLIO_DATA.about.intro}
@@ -675,7 +793,7 @@ const App = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {PORTFOLIO_DATA.skills.map((skillGroup) => (
           <Reveal key={skillGroup.category}>
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border-t-4 border-[#744B93] transform transition-all duration-300 hover:scale-[1.02]">
+            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border-t-4 border-[#744B93] transform transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl">
               <div className="flex items-center mb-4">
                 <skillGroup.icon className="w-8 h-8 text-[#744B93] mr-3" />
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
@@ -684,8 +802,8 @@ const App = () => {
               </div>
               <ul className="space-y-3">
                 {skillGroup.list.map((skill) => (
-                  <li key={skill} className="flex items-center text-gray-700 dark:text-gray-300">
-                    <span className="w-2 h-2 bg-[#C889B5] rounded-full mr-3"></span>
+                  <li key={skill} className="flex items-center text-gray-700 dark:text-gray-300 hover:text-[#744B93] transition-colors duration-200">
+                    <span className="w-2 h-2 bg-[#C889B5] rounded-full mr-3 animate-pulse"></span>
                     {skill}
                   </li>
                 ))}
@@ -702,17 +820,17 @@ const App = () => {
       <div className="relative space-y-8 md:space-y-12">
         {PORTFOLIO_DATA.education.map((edu, index) => (
           <div key={index} className="flex flex-col md:flex-row relative">
-            <div className={`hidden md:block absolute left-0 top-0 w-1 h-full bg-[#744B93]/20 ${index === PORTFOLIO_DATA.education.length - 1 ? 'h-1/2' : ''}`}></div>
+            <div className={`hidden md:block absolute left-0 top-0 w-1 h-full bg-gradient-to-b from-[#744B93]/20 to-[#C889B5]/20 ${index === PORTFOLIO_DATA.education.length - 1 ? 'h-1/2' : ''}`}></div>
 
             <div className="md:w-1/12 flex justify-center relative z-10 pt-4">
-              <div className="w-8 h-8 bg-[#744B93] rounded-full flex items-center justify-center shadow-md">
+              <div className="w-8 h-8 bg-gradient-to-r from-[#744B93] to-[#C889B5] rounded-full flex items-center justify-center shadow-md animate-pulse">
                 <GraduationCap className="w-4 h-4 text-white" />
               </div>
             </div>
 
             <div className="md:w-11/12 pl-0 md:pl-12 pt-4 md:pt-0">
               <Reveal>
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-[#744B93]/10 dark:border-[#744B93]/30 transform transition-all duration-300 hover:scale-[1.02]">
+                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-[#744B93]/10 dark:border-[#744B93]/30 transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
                   <h3 className="text-2xl font-bold text-[#744B93]">{edu.degree}</h3>
                   <p className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3">{edu.institution}</p>
                   <p className="text-sm font-semibold text-[#C889B5] mb-1">{edu.period}</p>
@@ -731,17 +849,17 @@ const App = () => {
       <div className="relative space-y-8 md:space-y-12">
         {PORTFOLIO_DATA.experience.map((exp, index) => (
           <div key={index} className="flex flex-col md:flex-row relative">
-            <div className={`hidden md:block absolute left-0 top-0 w-1 h-full bg-[#744B93]/20 ${index === PORTFOLIO_DATA.experience.length - 1 ? 'h-1/2' : ''}`}></div>
+            <div className={`hidden md:block absolute left-0 top-0 w-1 h-full bg-gradient-to-b from-[#744B93]/20 to-[#C889B5]/20 ${index === PORTFOLIO_DATA.experience.length - 1 ? 'h-1/2' : ''}`}></div>
 
             <div className="md:w-1/12 flex justify-center relative z-10 pt-4">
-              <div className="w-8 h-8 bg-[#744B93] rounded-full flex items-center justify-center shadow-md">
+              <div className="w-8 h-8 bg-gradient-to-r from-[#744B93] to-[#C889B5] rounded-full flex items-center justify-center shadow-md animate-pulse">
                 <Briefcase className="w-4 h-4 text-white" />
               </div>
             </div>
 
             <div className="md:w-11/12 pl-0 md:pl-12 pt-4 md:pt-0">
               <Reveal>
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-[#744B93]/10 dark:border-[#744B93]/30 transform transition-all duration-300 hover:scale-[1.02]">
+                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-[#744B93]/10 dark:border-[#744B93]/30 transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
                   <p className="text-sm font-semibold text-[#C889B5] mb-1">{exp.period}</p>
                   <h3 className="text-2xl font-bold text-[#744B93]">{exp.title}</h3>
                   <p className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3">{exp.company}</p>
@@ -760,7 +878,7 @@ const App = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {PORTFOLIO_DATA.projects.map((project) => (
           <Reveal key={project.id}>
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden group border border-[#744B93]/10 dark:border-[#744B93]/30 transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] flex flex-col h-full">
+            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden group border border-[#744B93]/10 dark:border-[#744B93]/30 transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] flex flex-col h-full">
               <div className="relative h-48 overflow-hidden flex-shrink-0">
                 <img
                   src={project.image}
@@ -770,7 +888,7 @@ const App = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
                   <button
                     onClick={() => setSelectedProject(project)}
-                    className="bg-white text-[#744B93] p-2 rounded-full hover:bg-[#744B93] hover:text-white transition-colors duration-300"
+                    className="bg-white text-[#744B93] p-2 rounded-full hover:bg-[#744B93] hover:text-white transition-colors duration-300 transform hover:scale-110"
                   >
                     <Zap size={20} />
                   </button>
@@ -779,7 +897,7 @@ const App = () => {
               <div className="p-6 flex flex-col flex-grow">
                 <div className="flex flex-wrap gap-2 mb-3 flex-shrink-0">
                   {project.techStack.slice(0, 3).map((tech) => (
-                    <span key={tech} className="bg-[#744B93]/10 text-[#744B93] text-xs font-semibold px-2 py-1 rounded-md">
+                    <span key={tech} className="bg-[#744B93]/10 text-[#744B93] text-xs font-semibold px-2 py-1 rounded-md hover:bg-[#744B93]/20 transition-colors">
                       {tech}
                     </span>
                   ))}
@@ -841,8 +959,8 @@ const App = () => {
 
     const ContactInfo = ({ icon: Icon, title, value, href }) => (
       <Reveal>
-        <div className="flex items-center space-x-5 p-5 rounded-2xl bg-white dark:bg-gray-800 border border-[#744B93]/10 dark:border-[#744B93]/30 shadow-sm hover:shadow-xl hover:border-[#744B93]/30 hover:-translate-y-2 transition-all duration-300 group cursor-pointer">
-          <div className="flex-shrink-0 w-14 h-14 bg-[#744B93]/10 dark:bg-[#744B93]/20 rounded-2xl flex items-center justify-center text-[#744B93] group-hover:bg-[#744B93] group-hover:text-white transition-all duration-300 shadow-inner">
+        <div className="flex items-center space-x-5 p-5 rounded-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-[#744B93]/10 dark:border-[#744B93]/30 shadow-sm hover:shadow-xl hover:border-[#744B93]/30 hover:-translate-y-2 transition-all duration-300 group cursor-pointer">
+          <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 dark:from-[#744B93]/20 dark:to-[#C889B5]/20 rounded-2xl flex items-center justify-center text-[#744B93] group-hover:from-[#744B93] group-hover:to-[#C889B5] group-hover:text-white transition-all duration-300 shadow-inner">
             <Icon size={28} className="transition-all duration-300 group-hover:scale-110" />
           </div>
           <div className="flex-grow">
@@ -879,7 +997,7 @@ const App = () => {
                       href={social.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-14 h-14 flex items-center justify-center bg-white dark:bg-gray-800 text-[#744B93] rounded-2xl shadow-md border border-[#744B93]/10 hover:border-[#744B93] hover:bg-[#744B93] hover:text-white hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 group"
+                      className="w-14 h-14 flex items-center justify-center bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-[#744B93] rounded-2xl shadow-md border border-[#744B93]/10 hover:border-[#744B93] hover:bg-gradient-to-r hover:from-[#744B93] hover:to-[#C889B5] hover:text-white hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 group"
                       aria-label={social.name}
                     >
                       <social.icon size={26} className="transition-transform duration-300 group-hover:scale-110" />
@@ -892,7 +1010,7 @@ const App = () => {
 
           {/* Contact Form Column */}
           <Reveal>
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl border border-[#744B93]/10 dark:border-[#744B93]/30">
+            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-[#744B93]/10 dark:border-[#744B93]/30">
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
@@ -906,7 +1024,7 @@ const App = () => {
                       value={formData.name}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 rounded-lg border border-[#744B93]/20 dark:border-[#744B93]/40 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#744B93] focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 rounded-lg border border-[#744B93]/20 dark:border-[#744B93]/40 bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#744B93] focus:border-transparent transition-all backdrop-blur-sm"
                       placeholder="John Doe"
                     />
                   </div>
@@ -921,7 +1039,7 @@ const App = () => {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 rounded-lg border border-[#744B93]/20 dark:border-[#744B93]/40 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#744B93] focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 rounded-lg border border-[#744B93]/20 dark:border-[#744B93]/40 bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#744B93] focus:border-transparent transition-all backdrop-blur-sm"
                       placeholder="john@example.com"
                     />
                   </div>
@@ -938,7 +1056,7 @@ const App = () => {
                     value={formData.subject}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 rounded-lg border border-[#744B93]/20 dark:border-[#744B93]/40 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#744B93] focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 rounded-lg border border-[#744B93]/20 dark:border-[#744B93]/40 bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#744B93] focus:border-transparent transition-all backdrop-blur-sm"
                     placeholder="Project Inquiry"
                   />
                 </div>
@@ -954,19 +1072,19 @@ const App = () => {
                     onChange={handleChange}
                     required
                     rows="5"
-                    className="w-full px-4 py-3 rounded-lg border border-[#744B93]/20 dark:border-[#744B93]/40 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#744B93] focus:border-transparent transition-all resize-none"
+                    className="w-full px-4 py-3 rounded-lg border border-[#744B93]/20 dark:border-[#744B93]/40 bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#744B93] focus:border-transparent transition-all backdrop-blur-sm resize-none"
                     placeholder="Tell me about your project..."
                   />
                 </div>
 
                 {/* Status Messages */}
                 {submitStatus === 'success' && (
-                  <div className="p-4 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded-lg text-center">
+                  <div className="p-4 bg-green-100/80 dark:bg-green-900/80 backdrop-blur-sm text-green-700 dark:text-green-300 rounded-lg text-center">
                     ✓ Message sent successfully! I'll get back to you soon.
                   </div>
                 )}
                 {submitStatus === 'error' && (
-                  <div className="p-4 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 rounded-lg text-center">
+                  <div className="p-4 bg-red-100/80 dark:bg-red-900/80 backdrop-blur-sm text-red-700 dark:text-red-300 rounded-lg text-center">
                     ✗ Failed to send message. Please try again later.
                   </div>
                 )}
@@ -989,7 +1107,7 @@ const App = () => {
   };
 
   const Footer = () => (
-    <footer className="bg-gray-100 dark:bg-gray-900 py-8 px-4 sm:px-8 lg:px-16 border-t border-[#744B93]/10 dark:border-[#744B93]/20">
+    <footer className="bg-gray-100/80 dark:bg-gray-900/80 backdrop-blur-sm py-8 px-4 sm:px-8 lg:px-16 border-t border-[#744B93]/10 dark:border-[#744B93]/20 relative z-10">
       <div className="max-w-6xl mx-auto text-center">
         <p className="text-gray-600 dark:text-gray-400 text-sm">
           &copy; {new Date().getFullYear()} Homayra Heme. All rights reserved. | Built with React and Tailwind CSS.
@@ -1001,18 +1119,16 @@ const App = () => {
   return (
     <AnimationContext.Provider value={{ animationsEnabled: true }}>
       <div className={`min-h-screen transition-colors duration-500 overflow-x-hidden relative ${isDarkMode ? 'dark bg-gray-900 text-gray-100' : 'bg-white text-gray-900'}`}>
-        {/* Background Elements */}
-        <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#744B93]/5 dark:bg-[#744B93]/10 rounded-full blur-[120px]"></div>
-          <div className="absolute bottom-[20%] right-[-5%] w-[35%] h-[35%] bg-[#C889B5]/5 dark:bg-[#C889B5]/10 rounded-full blur-[100px]"></div>
-        </div>
+        {/* Enhanced Floating Background Video */}
+        <BackgroundVideo />
 
+        {/* Main Content */}
         <div className="relative z-10">
           <Navbar />
           <CursorTrail />
 
           <main className="pt-16">
-            <HeroSection />
+            <HeroSection scrollToSection={scrollToSection} />
             <AboutMeSection />
             <SkillsSection />
             <EducationSection />
@@ -1030,23 +1146,101 @@ const App = () => {
         </div>
 
         <style>{`
+          /* Smooth scrolling */
+          html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 100px;
+          }
+          
+          /* Remove scroll blinking */
+          * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+          }
+          
+          /* Smooth scrollbar */
+          ::-webkit-scrollbar {
+            width: 10px;
+          }
+          
+          ::-webkit-scrollbar-track {
+            background: rgba(116, 75, 147, 0.1);
+          }
+          
+          ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #744B93, #C889B5);
+            border-radius: 5px;
+          }
+          
+          /* Animations */
           @keyframes gradient-xy {
             0%, 100% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
           }
+          
           .animate-gradient-xy {
             background-size: 400% 400%;
             animation: gradient-xy 3s ease infinite;
           }
           
-          @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+          @keyframes float-slow {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-20px) translateX(10px); }
           }
           
-          /* Smooth scrolling */
-          html {
-            scroll-behavior: smooth;
+          @keyframes float-medium {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-15px) translateX(-15px); }
+          }
+          
+          @keyframes float-fast {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-10px) translateX(5px); }
+          }
+          
+          @keyframes float-very-slow {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-30px) translateX(20px); }
+          }
+          
+          @keyframes float-particle {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(10px, -15px); }
+            50% { transform: translate(20px, 0); }
+            75% { transform: translate(10px, 15px); }
+          }
+          
+          @keyframes pulse-slow {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.4; }
+          }
+          
+          .animate-float-slow {
+            animation: float-slow 8s ease-in-out infinite;
+          }
+          
+          .animate-float-medium {
+            animation: float-medium 6s ease-in-out infinite;
+          }
+          
+          .animate-float-fast {
+            animation: float-fast 4s ease-in-out infinite;
+          }
+          
+          .animate-float-very-slow {
+            animation: float-very-slow 12s ease-in-out infinite;
+          }
+          
+          .animate-pulse-slow {
+            animation: pulse-slow 3s ease-in-out infinite;
+          }
+          
+          /* Prevent layout shift */
+          .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
           }
         `}</style>
       </div>
