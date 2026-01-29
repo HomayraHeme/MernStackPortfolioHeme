@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef, useMemo, createContext, useContext } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo, createContext } from 'react';
 import emailjs from '@emailjs/browser';
 import {
   Menu, X, Sun, Moon, Github, Linkedin, Facebook, Download, Mail, Phone, MessageCircle, Code, GraduationCap, Briefcase, Zap, Star, LayoutList, ArrowRight, ExternalLink, ChevronRight, Sparkles, Award, Users, Globe, Clock
@@ -125,9 +125,6 @@ const PORTFOLIO_DATA = {
 };
 
 // Enhanced Floating Background with Glassmorphism
-// Enhanced Floating Background with Glassmorphism
-
-
 const BackgroundVideo = () => {
   // Tech icons for dark/light mode with adjusted opacity
   const techIconsDark = [
@@ -185,7 +182,7 @@ const BackgroundVideo = () => {
               left: `${5 + (i * 14) % 85}%`,
               animation: `tech-float-light ${18 + i * 3}s ease-in-out infinite`,
               animationDelay: `${i * 0.5}s`,
-              opacity: 0.15 + Math.random() * 0.1, // Very low opacity: 0.15-0.25
+              opacity: 0.15 + Math.random() * 0.1,
               transform: `rotate(${i % 2 === 0 ? '5deg' : '-5deg'})`,
             }}
           >
@@ -239,7 +236,7 @@ const BackgroundVideo = () => {
               left: `${5 + (i * 14) % 85}%`,
               animation: `tech-float-dark ${22 + i * 4}s ease-in-out infinite`,
               animationDelay: `${i * 0.7}s`,
-              opacity: 0.12 + Math.random() * 0.08, // Very low opacity: 0.12-0.20
+              opacity: 0.12 + Math.random() * 0.08,
               transform: `rotate(${i % 2 === 0 ? '5deg' : '-5deg'})`,
             }}
           >
@@ -295,7 +292,6 @@ const BackgroundVideo = () => {
         ))}
       </div>
 
-      {/* CSS Animations */}
       <style jsx global>{`
         @keyframes tech-float-light {
           0%, 100% { 
@@ -326,217 +322,9 @@ const BackgroundVideo = () => {
             transform: translateY(15px) translateX(-10px) rotate(calc(var(--rotation, 0deg) + 8deg)) scale(1.08); 
           }
         }
-        
-        @keyframes line-move-light {
-          0% { transform: translateX(-100%) rotate(0.5deg); opacity: 0.05; }
-          50% { opacity: 0.08; }
-          100% { transform: translateX(100%) rotate(0.5deg); opacity: 0.05; }
-        }
-        
-        @keyframes grid-move-light {
-          0% { background-position: 0 0; }
-          100% { background-position: 40px 40px; }
-        }
-        
-        @keyframes binary-fall {
-          0% { 
-            transform: translateY(-100px) translateX(0); 
-            opacity: 0; 
-          }
-          5% { 
-            opacity: 0.05; 
-          }
-          95% { 
-            opacity: 0.05; 
-          }
-          100% { 
-            transform: translateY(100vh) translateX(${Math.random() > 0.5 ? '50' : '-50'}px); 
-            opacity: 0; 
-          }
-        }
-        
-        @keyframes dot-move {
-          0% { 
-            transform: translate(0, 0) scale(1); 
-            opacity: 0.15; 
-          }
-          25% { 
-            transform: translate(50px, -30px) scale(1.2); 
-            opacity: 0.25; 
-          }
-          50% { 
-            transform: translate(100px, 20px) scale(1); 
-            opacity: 0.15; 
-          }
-          75% { 
-            transform: translate(50px, 50px) scale(0.8); 
-            opacity: 0.1; 
-          }
-          100% { 
-            transform: translate(0, 0) scale(1); 
-            opacity: 0.15; 
-          }
-        }
-        
-        @keyframes particle-trail {
-          0% { 
-            transform: translate(0, 0) scale(0); 
-            opacity: 0; 
-          }
-          10% { 
-            transform: translate(10px, 10px) scale(1); 
-            opacity: 0.02; 
-          }
-          90% { 
-            transform: translate(200px, 100px) scale(1); 
-            opacity: 0.02; 
-          }
-          100% { 
-            transform: translate(250px, 120px) scale(0); 
-            opacity: 0; 
-          }
-        }
-        
-        @keyframes pulse {
-          0%, 100% { opacity: 0.1; transform: scale(1); }
-          50% { opacity: 0.2; transform: scale(1.3); }
-        }
       `}</style>
     </>
   );
-};
-
-
-
-// Add these new animations to your existing style tag:
-const additionalStyles = `
-  @keyframes float-horizontal {
-    0%, 100% { transform: translateX(-5%) rotate(0deg); }
-    50% { transform: translateX(5%) rotate(0.5deg); }
-  }
-  
-  @keyframes float-diamond {
-    0%, 100% { 
-      transform: translateY(0) translateX(0) rotate(45deg) scale(1);
-      opacity: 0.2;
-    }
-    33% { 
-      transform: translateY(-20px) translateX(10px) rotate(45deg) scale(1.2);
-      opacity: 0.4;
-    }
-    66% { 
-      transform: translateY(10px) translateX(-10px) rotate(45deg) scale(0.8);
-      opacity: 0.1;
-    }
-  }
-  
-  @keyframes float-blob {
-    0%, 100% { 
-      transform: translate(0, 0) scale(1);
-      border-radius: 50% 30% 70% 40% / 40% 60% 30% 70%;
-    }
-    33% { 
-      transform: translate(-30px, -20px) scale(1.1);
-      border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
-    }
-    66% { 
-      transform: translate(20px, 30px) scale(0.9);
-      border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
-    }
-  }
-  
-  @keyframes particle-move {
-    0% { 
-      transform: translate(0, 0);
-      opacity: 0;
-    }
-    10% {
-      opacity: 0.3;
-    }
-    90% {
-      opacity: 0.3;
-    }
-    100% { 
-      transform: translate(
-        ${Math.random() > 0.5 ? '-' : ''}${100 + Math.random() * 100}vw,
-        ${Math.random() > 0.5 ? '-' : ''}${100 + Math.random() * 100}vh
-      );
-      opacity: 0;
-    }
-  }
-  
-  @keyframes particle-trail {
-    0% { 
-      transform: translate(0, 0) scale(0);
-      opacity: 0;
-    }
-    5% {
-      transform: translate(0, 0) scale(1);
-      opacity: 0.1;
-    }
-    100% { 
-      transform: translate(
-        ${Math.random() > 0.5 ? '-' : ''}${100 + Math.random() * 100}vw,
-        ${Math.random() > 0.5 ? '-' : ''}${100 + Math.random() * 100}vh
-      ) scale(0);
-      opacity: 0;
-    }
-  }
-  
-  /* Subtle vignette effect */
-  .vignette {
-    background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.02) 100%);
-  }
-  
-  .dark .vignette {
-    background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.1) 100%);
-  }
-`;
-
-// Utility function to get Google Docs/Drive direct download URL
-const getGoogleDocsDownloadUrl = (url) => {
-  const match = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
-  if (match && match[1]) {
-    const fileId = match[1];
-    if (url.includes('/file/d/')) {
-      return `https://drive.google.com/uc?export=download&id=${fileId}`;
-    }
-    return `https://docs.google.com/document/d/${fileId}/export?format=pdf`;
-  }
-  return url;
-};
-
-// Custom Hook for Scroll Direction
-const useScrollDirection = () => {
-  const [scrollDirection, setScrollDirection] = useState("up");
-
-  useEffect(() => {
-    let lastScrollY = window.scrollY;
-    let ticking = false;
-
-    const updateScrollDirection = () => {
-      const scrollY = window.scrollY;
-      const direction = scrollY > lastScrollY ? "down" : "up";
-
-      if (direction !== scrollDirection && Math.abs(scrollY - lastScrollY) > 5) {
-        setScrollDirection(direction);
-      }
-      lastScrollY = scrollY > 0 ? scrollY : 0;
-      ticking = false;
-    };
-
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(updateScrollDirection);
-        ticking = true;
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [scrollDirection]);
-
-  return scrollDirection;
 };
 
 // Custom Hook for InView detection
@@ -654,8 +442,6 @@ const CursorTrail = () => {
     </div>
   );
 };
-
-// --- MAIN COMPONENTS ---
 
 // Animated Neon Button Component
 const AnimatedButton = ({ children, onClick, className = "", href, download, target, rel, type = "button" }) => {
@@ -861,16 +647,6 @@ const ProjectDetailModal = ({ project, onClose }) => {
 
 // Enhanced Hero Section
 const HeroSection = ({ scrollToSection }) => {
-  const [rotation, setRotation] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setRotation(prev => (prev + 0.5) % 360);
-    }, 50);
-
-    return () => clearInterval(interval);
-  }, []);
-
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center pt-16 px-4 sm:px-8 lg:px-16">
       <div className="w-full max-w-6xl relative z-10">
@@ -902,8 +678,9 @@ const HeroSection = ({ scrollToSection }) => {
             <Reveal delay={300}>
               <div className="flex flex-col sm:flex-row items-center gap-6 pt-4">
                 <AnimatedButton
-                  href={getGoogleDocsDownloadUrl(PORTFOLIO_DATA.resumeLink)}
-                  download="Homayra_Binte_Harun_Heme_Resume.pdf"
+                  href={PORTFOLIO_DATA.resumeLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <Download className="w-5 h-5" />
                   Download Resume
@@ -952,11 +729,121 @@ const HeroSection = ({ scrollToSection }) => {
             </Reveal>
           </div>
         </div>
-
-        {/* Removed StatsSection and replaced with icon-based stats */}
-
       </div>
     </section>
+  );
+};
+
+// Fixed Navbar Component - ALWAYS VISIBLE
+const Navbar = ({ activeSection, isDarkMode, toggleDarkMode, scrollToSection, isMenuOpen, setIsMenuOpen }) => {
+  const navItems = [
+    { id: 'home', label: 'Home' },
+    { id: 'about', label: 'About' },
+    { id: 'skills', label: 'Skills' },
+    { id: 'education', label: 'Education' },
+    { id: 'experience', label: 'Experience' },
+    { id: 'projects', label: 'Projects' },
+    { id: 'contact', label: 'Contact' },
+  ];
+
+  const NavLink = ({ id, label }) => {
+    const isActive = activeSection === id;
+
+    const handleClick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      scrollToSection(id);
+      setIsMenuOpen(false);
+    };
+
+    return (
+      <button
+        onClick={handleClick}
+        className={`relative px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 ${isActive
+          ? 'text-white bg-gradient-to-r from-[#744B93] to-[#C889B5] shadow-lg'
+          : 'text-gray-600 dark:text-gray-300 hover:text-[#744B93] dark:hover:text-[#C889B5] hover:bg-gray-100 dark:hover:bg-gray-800/50'
+          }`}
+      >
+        {label}
+      </button>
+    );
+  };
+
+  return (
+    <div className="fixed top-0 left-0 right-0 z-50">
+      <header className="w-full backdrop-blur-xl bg-white/95 dark:bg-gray-900/95 shadow-xl border-b border-white/20 dark:border-gray-700/30">
+        <div className="px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                scrollToSection('home');
+              }}
+              className="flex items-center gap-2 group"
+            >
+              <div className="relative group">
+                <div className="w-10 h-10 flex items-center justify-center bg-gradient-to-r from-[#744B93] to-[#C889B5] rounded-xl shadow-lg group-hover:shadow-2xl transition-all duration-300">
+                  <span className="text-white font-bold text-xl tracking-tighter">
+                    &lt;/&gt;
+                  </span>
+                </div>
+                <div className="absolute -inset-1 bg-gradient-to-r from-[#744B93] to-[#C889B5] rounded-xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300 -z-10"></div>
+              </div>
+              <span className="text-xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#744B93] to-[#C889B5]">
+                HEME.DEV
+              </span>
+            </button>
+
+            <nav className="hidden lg:flex space-x-1 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm p-1.5 rounded-xl border border-white/20 dark:border-gray-700/30">
+              {navItems.map(item => <NavLink key={item.id} {...item} />)}
+            </nav>
+
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={toggleDarkMode}
+                className="p-2.5 rounded-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-[#744B93] dark:text-[#C889B5] hover:bg-gradient-to-r hover:from-[#744B93] hover:to-[#C889B5] hover:text-white transition-all duration-300 shadow-sm hover:shadow-lg"
+                aria-label="Toggle dark mode"
+              >
+                {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+              </button>
+
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="lg:hidden p-2.5 rounded-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-[#744B93] dark:text-[#C889B5] hover:bg-gradient-to-r hover:from-[#744B93] hover:to-[#C889B5] hover:text-white transition-all duration-300"
+                aria-label="Toggle navigation menu"
+              >
+                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {isMenuOpen && (
+          <div className="lg:hidden absolute top-full left-0 right-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border-b border-white/20 dark:border-gray-700/30 shadow-2xl">
+            <nav className="p-4 space-y-1 flex flex-col">
+              {navItems.map(item => (
+                <button
+                  key={item.id}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsMenuOpen(false);
+                    scrollToSection(item.id);
+                  }}
+                  className={`block text-left px-4 py-3 rounded-lg text-base font-medium transition-all ${activeSection === item.id
+                    ? 'bg-gradient-to-r from-[#744B93] to-[#C889B5] text-white shadow-md'
+                    : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800'
+                    }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </nav>
+          </div>
+        )}
+      </header>
+    </div>
   );
 };
 
@@ -967,8 +854,7 @@ const App = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [selectedProject, setSelectedProject] = useState(null);
   const [activeSection, setActiveSection] = useState('home');
-  const [isScrolled, setIsScrolled] = useState(false);
-  const scrollDirection = useScrollDirection();
+  const [isScrolling, setIsScrolling] = useState(false);
 
   // Toggle Dark Mode
   const toggleDarkMode = () => setIsDarkMode(prev => !prev);
@@ -982,11 +868,35 @@ const App = () => {
     }
   }, [isDarkMode]);
 
-  // Smooth Scroll Spy Logic
+  // Smooth scroll to section - OPTIMIZED VERSION
+  const scrollToSection = useCallback((id) => {
+    setIsMenuOpen(false);
+
+    // Prevent multiple scrolls
+    if (isScrolling) return;
+
+    setIsScrolling(true);
+
+    const element = document.getElementById(id);
+    if (element) {
+      // Use native scrollIntoView with smooth behavior
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+
+      // Reset scrolling state after animation
+      const scrollDuration = 1000; // Match CSS transition duration
+      setTimeout(() => {
+        setIsScrolling(false);
+      }, scrollDuration);
+    }
+  }, [isScrolling]);
+
+  // Optimized Scroll Spy Logic - FIXED
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-
+      // Smooth scroll spy for active section
       const sections = document.querySelectorAll('section');
       const scrollPosition = window.scrollY + 100;
 
@@ -1004,137 +914,17 @@ const App = () => {
       setActiveSection(currentSection);
     };
 
-    let ticking = false;
-    const throttledScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          handleScroll();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
 
-    window.addEventListener('scroll', throttledScroll, { passive: true });
+    // Initial check
     handleScroll();
 
-    return () => window.removeEventListener('scroll', throttledScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
-  // Smooth scroll to section
-  const scrollToSection = (id) => {
-    setIsMenuOpen(false);
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-    }
-  };
-
-  // Navbar Component with </> logo
-  const Navbar = () => {
-    const navItems = [
-      { id: 'home', label: 'Home' },
-      { id: 'about', label: 'About' },
-      { id: 'skills', label: 'Skills' },
-      { id: 'education', label: 'Education' },
-      { id: 'experience', label: 'Experience' },
-      { id: 'projects', label: 'Projects' },
-      { id: 'contact', label: 'Contact' },
-    ];
-
-    const NavLink = ({ id, label }) => (
-      <button
-        onClick={() => scrollToSection(id)}
-        className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${activeSection === id
-          ? 'text-white'
-          : 'text-gray-600 dark:text-gray-300 hover:text-[#744B93] dark:hover:text-[#C889B5]'
-          }`}
-      >
-        {activeSection === id && (
-          <div className="absolute inset-0 bg-gradient-to-r from-[#744B93] to-[#C889B5] rounded-lg -z-10"></div>
-        )}
-        {label}
-      </button>
-    );
-
-    const isVisible = !isScrolled || scrollDirection === 'up' || isMenuOpen;
-
-    return (
-      <div className={`fixed top-4 left-0 right-0 z-50 flex justify-center transition-all duration-300 ease-out ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}>
-        <header className="w-[95%] max-w-5xl transition-all duration-300 backdrop-blur-xl bg-white/90 dark:bg-gray-900/90 shadow-xl border border-white/20 dark:border-gray-700/30 rounded-2xl">
-          <div className="px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16">
-              <button
-                onClick={() => scrollToSection('home')}
-                className="flex items-center gap-2"
-              >
-                {/* </> Logo */}
-                <div className="relative group">
-                  <div className="w-10 h-10 flex items-center justify-center bg-gradient-to-r from-[#744B93] to-[#C889B5] rounded-xl shadow-lg">
-                    <span className="text-white font-bold text-xl tracking-tighter">
-                      &lt;/&gt;
-                    </span>
-                  </div>
-                  {/* Hover effect */}
-                  <div className="absolute -inset-1 bg-gradient-to-r from-[#744B93] to-[#C889B5] rounded-xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300 -z-10"></div>
-                </div>
-                <span className="text-xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#744B93] to-[#C889B5]">
-                  HEME.DEV
-                </span>
-              </button>
-
-              {/* Desktop Navigation */}
-              <nav className="hidden lg:flex space-x-2">
-                {navItems.map(item => <NavLink key={item.id} {...item} />)}
-              </nav>
-
-              <div className="flex items-center space-x-4">
-                <button
-                  onClick={toggleDarkMode}
-                  className="p-2 rounded-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-[#744B93] dark:text-[#C889B5] hover:bg-gradient-to-r hover:from-[#744B93] hover:to-[#C889B5] hover:text-white transition-all duration-300 shadow-sm"
-                  aria-label="Toggle dark mode"
-                >
-                  {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-                </button>
-
-                <button
-                  onClick={() => setIsMenuOpen(!isMenuOpen)}
-                  className="lg:hidden p-2 rounded-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-[#744B93] dark:text-[#C889B5] hover:bg-gradient-to-r hover:from-[#744B93] hover:to-[#C889B5] hover:text-white transition-all duration-300"
-                  aria-label="Toggle navigation menu"
-                >
-                  {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Mobile Menu */}
-          {isMenuOpen && (
-            <div className="lg:hidden absolute top-full left-0 right-0 mt-2 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-gray-700/30 shadow-2xl overflow-hidden">
-              <nav className="p-4 space-y-2 flex flex-col">
-                {navItems.map(item => (
-                  <button
-                    key={item.id}
-                    onClick={() => scrollToSection(item.id)}
-                    className={`block text-left px-4 py-3 rounded-lg text-base font-medium transition-all ${activeSection === item.id
-                      ? 'bg-gradient-to-r from-[#744B93] to-[#C889B5] text-white'
-                      : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800'
-                      }`}
-                  >
-                    {item.label}
-                  </button>
-                ))}
-              </nav>
-            </div>
-          )}
-        </header>
-      </div>
-    );
-  };
-
+  // Rest of the components remain the same...
   const AboutMeSection = () => (
     <Section id="about" title="About Me" subtitle="My journey in web development">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -1417,7 +1207,6 @@ const App = () => {
     return (
       <Section id="contact" title="Get In Touch" subtitle="Let's work together">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Contact Info Column */}
           <div className="space-y-8">
             <Reveal>
               <div className="space-y-6">
@@ -1449,7 +1238,6 @@ const App = () => {
             </Reveal>
           </div>
 
-          {/* Contact Form Column */}
           <Reveal delay={100}>
             <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/30">
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -1518,7 +1306,6 @@ const App = () => {
                   />
                 </div>
 
-                {/* Status Messages */}
                 {submitStatus === 'success' && (
                   <div className="p-4 bg-gradient-to-r from-green-500/10 to-emerald-500/10 backdrop-blur-sm text-green-700 dark:text-green-300 rounded-lg text-center border border-green-500/20">
                     ✓ Message sent successfully! I'll get back to you soon.
@@ -1562,7 +1349,6 @@ const App = () => {
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-3">
-            {/* </> Logo in footer */}
             <div className="w-10 h-10 flex items-center justify-center bg-gradient-to-r from-[#744B93] to-[#C889B5] rounded-xl shadow-lg">
               <span className="text-white font-bold text-xl tracking-tighter">
                 &lt;/&gt;
@@ -1609,15 +1395,21 @@ const App = () => {
   return (
     <AnimationContext.Provider value={{ animationsEnabled: true }}>
       <div className={`min-h-screen transition-colors duration-500 overflow-x-hidden relative ${isDarkMode ? 'dark bg-gray-900 text-gray-100' : 'bg-white text-gray-900'}`}>
-        {/* Enhanced Floating Background */}
         <BackgroundVideo />
 
-        {/* Main Content */}
         <div className="relative z-10">
-          <Navbar />
+          {/* Fixed Navbar - Always Visible */}
+          <Navbar
+            activeSection={activeSection}
+            isDarkMode={isDarkMode}
+            toggleDarkMode={toggleDarkMode}
+            scrollToSection={scrollToSection}
+            isMenuOpen={isMenuOpen}
+            setIsMenuOpen={setIsMenuOpen}
+          />
           <CursorTrail />
 
-          <main className="pt-20">
+          <main>
             <HeroSection scrollToSection={scrollToSection} />
             <AboutMeSection />
             <SkillsSection />
@@ -1636,19 +1428,16 @@ const App = () => {
         </div>
 
         <style>{`
-          /* Smooth scrolling */
           html {
             scroll-behavior: smooth;
-            scroll-padding-top: 100px;
+            scroll-padding-top: 80px;
           }
           
-          /* Remove scroll blinking */
           * {
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
           }
           
-          /* Smooth scrollbar */
           ::-webkit-scrollbar {
             width: 10px;
           }
@@ -1662,7 +1451,6 @@ const App = () => {
             border-radius: 5px;
           }
           
-          /* Animations */
           @keyframes gradient-xy {
             0%, 100% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -1673,50 +1461,6 @@ const App = () => {
             animation: gradient-xy 3s ease infinite;
           }
           
-          @keyframes float-slow {
-            0%, 100% { transform: translateY(0) translateX(0); }
-            50% { transform: translateY(-20px) translateX(10px); }
-          }
-          
-          @keyframes float-medium {
-            0%, 100% { transform: translateY(0) translateX(0); }
-            50% { transform: translateY(-15px) translateX(-15px); }
-          }
-          
-          @keyframes float-fast {
-            0%, 100% { transform: translateY(0) translateX(0); }
-            50% { transform: translateY(-10px) translateX(5px); }
-          }
-          
-          @keyframes float-very-slow {
-            0%, 100% { transform: translateY(0) translateX(0); }
-            50% { transform: translateY(-30px) translateX(20px); }
-          }
-          
-          @keyframes float-particle {
-            0%, 100% { transform: translate(0, 0); }
-            25% { transform: translate(10px, -15px); }
-            50% { transform: translate(20px, 0); }
-            75% { transform: translate(10px, 15px); }
-          }
-          
-          .animate-float-slow {
-            animation: float-slow 8s ease-in-out infinite;
-          }
-          
-          .animate-float-medium {
-            animation: float-medium 6s ease-in-out infinite;
-          }
-          
-          .animate-float-fast {
-            animation: float-fast 4s ease-in-out infinite;
-          }
-          
-          .animate-float-very-slow {
-            animation: float-very-slow 12s ease-in-out infinite;
-          }
-          
-          /* Prevent layout shift */
           .line-clamp-3 {
             display: -webkit-box;
             -webkit-line-clamp: 3;
@@ -1724,7 +1468,6 @@ const App = () => {
             overflow: hidden;
           }
           
-          /* Glassmorphism */
           .backdrop-blur-sm {
             backdrop-filter: blur(8px);
           }
@@ -1738,4 +1481,4 @@ const App = () => {
   );
 };
 
-export default App; 
+export default App;
