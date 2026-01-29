@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo, createContext, useContext } from 'react';
 import emailjs from '@emailjs/browser';
 import {
-  Menu, X, Sun, Moon, Github, Linkedin, Facebook, Download, Mail, Phone, MessageCircle, Code, GraduationCap, Briefcase, Zap, Star, LayoutList, ArrowRight
+  Menu, X, Sun, Moon, Github, Linkedin, Facebook, Download, Mail, Phone, MessageCircle, Code, GraduationCap, Briefcase, Zap, Star, LayoutList, ArrowRight, ExternalLink, ChevronRight, Sparkles, Award, Users, Globe, Clock
 } from 'lucide-react';
 
 // Create context for animation control
@@ -53,7 +53,7 @@ const PORTFOLIO_DATA = {
       title: "Fresher/Student",
       company: "Currently Seeking Opportunities",
       period: "N/A",
-      description: "Focusing on building production-ready projects and continuously learning new technologies to start a professional journey .",
+      description: "Focusing on building production-ready projects and continuously learning new technologies to start a professional journey.",
     },
   ],
   projects: [
@@ -106,88 +106,36 @@ const PORTFOLIO_DATA = {
   ],
 };
 
-// Enhanced Floating Background Video Component
+// Enhanced Floating Background with Glassmorphism
 const BackgroundVideo = () => {
   return (
     <div className="fixed inset-0 z-0 overflow-hidden">
-      {/* Multiple Video Layers for Parallax Effect */}
-      <div className="absolute inset-0">
-        {/* Main Background Video */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-30 dark:opacity-25"
-          style={{ filter: 'brightness(0.7) contrast(1.3) saturate(1.2)' }}
-        >
-          <source
-            src="https://assets.mixkit.co/videos/preview/mixkit-abstract-geometric-shapes-background-34417-1080p.mp4"
-            type="video/mp4"
-          />
-          <source
-            src="https://cdn.coverr.co/videos/coverr-abstract-lines-and-shapes-rotating-2163/1080p.mp4"
-            type="video/mp4"
-          />
-        </video>
+      {/* Main Background with gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-[#744B93]/10 to-gray-900 dark:from-gray-900 dark:via-[#744B93]/5 dark:to-gray-900"></div>
 
-        {/* Secondary floating video element */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 opacity-40 animate-float-very-slow">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full rounded-full object-cover"
-            style={{ filter: 'blur(5px) brightness(0.8)' }}
-          >
-            <source
-              src="https://assets.mixkit.co/videos/preview/mixkit-geometric-lines-rotating-in-space-34418-1080p.mp4"
-              type="video/mp4"
-            />
-          </video>
-        </div>
+      {/* Animated gradient orbs */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-[#744B93]/20 to-[#C889B5]/20 rounded-full blur-3xl animate-float-very-slow opacity-30"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-r from-[#C889B5]/15 to-[#744B93]/15 rounded-full blur-3xl animate-float-medium opacity-20"></div>
 
-        {/* Third floating video element */}
-        <div className="absolute bottom-1/3 right-1/4 w-64 h-64 opacity-30 animate-float-medium">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full rounded-full object-cover"
-            style={{ filter: 'blur(8px) brightness(0.6)' }}
-          >
-            <source
-              src="https://assets.mixkit.co/videos/preview/mixkit-rotating-abstract-geometric-shapes-34415-1080p.mp4"
-              type="video/mp4"
-            />
-          </video>
-        </div>
-
-        {/* Overlay gradients */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-900/5 to-gray-900/20 dark:via-gray-900/10 dark:to-gray-900/40"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-[#744B93]/10 via-transparent to-[#C889B5]/10"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent"></div>
-      </div>
-
-      {/* Animated floating geometric elements */}
-      <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-gradient-to-r from-[#744B93]/20 to-[#C889B5]/20 rounded-full blur-3xl animate-float-slow"></div>
-      <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-gradient-to-r from-[#C889B5]/15 to-[#744B93]/15 rounded-full blur-3xl animate-float-medium"></div>
-      <div className="absolute top-2/3 left-2/3 w-48 h-48 bg-gradient-to-r from-[#744B93]/25 to-transparent rounded-full blur-2xl animate-float-fast"></div>
-      <div className="absolute top-1/3 right-1/3 w-72 h-72 bg-gradient-to-l from-[#C889B5]/10 to-transparent rounded-full blur-3xl animate-float-very-slow"></div>
+      {/* Grid pattern overlay */}
+      <div
+        className="absolute inset-0 opacity-40"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23744B93' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+        }}
+      ></div>
 
       {/* Floating particles */}
-      {Array.from({ length: 15 }).map((_, i) => (
+      {Array.from({ length: 20 }).map((_, i) => (
         <div
           key={i}
-          className="absolute w-2 h-2 bg-gradient-to-r from-[#744B93]/40 to-[#C889B5]/40 rounded-full"
+          className="absolute w-1 h-1 bg-gradient-to-r from-[#744B93] to-[#C889B5] rounded-full"
           style={{
             top: `${Math.random() * 100}%`,
             left: `${Math.random() * 100}%`,
             animation: `float-particle ${10 + Math.random() * 20}s ease-in-out infinite`,
             animationDelay: `${Math.random() * 5}s`,
-            opacity: 0.3 + Math.random() * 0.4,
+            opacity: 0.1 + Math.random() * 0.3,
           }}
         />
       ))}
@@ -273,12 +221,13 @@ const useInView = (options = {}) => {
   return [ref, isInView];
 };
 
-const Reveal = ({ children, threshold = 0.1, className = "" }) => {
+const Reveal = ({ children, threshold = 0.1, className = "", delay = 0 }) => {
   const [ref, isInView] = useInView({ threshold });
   return (
     <div
       ref={ref}
-      className={`transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} ${className}`}
+      className={`transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} ${className}`}
+      style={{ transitionDelay: `${delay}ms` }}
     >
       {children}
     </div>
@@ -341,14 +290,14 @@ const CursorTrail = () => {
       {dots.map((dot, index) => (
         <div
           key={index}
-          className="absolute bg-[#744B93]/60 dark:bg-[#C889B5]/60 rounded-full blur-[1px] transition-transform duration-150 ease-out"
+          className="absolute bg-gradient-to-r from-[#744B93] to-[#C889B5] rounded-full transition-transform duration-150 ease-out"
           style={{
             left: dot.x,
             top: dot.y,
-            width: `${12 - index * 1.2}px`,
-            height: `${12 - index * 1.2}px`,
+            width: `${10 - index * 1}px`,
+            height: `${10 - index * 1}px`,
             transform: 'translate(-50%, -50%)',
-            opacity: 1 - index * 0.1,
+            opacity: 0.7 - index * 0.08,
           }}
         />
       ))}
@@ -359,18 +308,18 @@ const CursorTrail = () => {
 // --- MAIN COMPONENTS ---
 
 // Animated Neon Button Component
-const AnimatedButton = ({ children, onClick, className = "", href, download, target, rel }) => {
+const AnimatedButton = ({ children, onClick, className = "", href, download, target, rel, type = "button" }) => {
   const baseClass = `
     relative group overflow-hidden px-6 sm:px-8 py-3 rounded-xl font-bold text-white transition-all duration-300
-    shadow-[0_0_20px_rgba(116,75,147,0.5)] hover:shadow-[0_0_35px_rgba(116,75,147,0.7)]
+    shadow-lg hover:shadow-xl
     scale-100 hover:scale-105 active:scale-95
   `;
 
   const buttonContent = (
     <>
-      <div className="absolute inset-0 bg-gradient-to-r from-[#744B93] via-[#C889B5] to-[#744B93] animate-gradient-xy opacity-80 group-hover:opacity-100 transition-opacity duration-300"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-[#744B93] via-[#C889B5] to-[#744B93] animate-gradient-xy opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
       <div className="absolute inset-0 -z-10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
-      <span className="relative z-10 flex items-center justify-center">
+      <span className="relative z-10 flex items-center justify-center gap-2">
         {children}
       </span>
     </>
@@ -385,20 +334,24 @@ const AnimatedButton = ({ children, onClick, className = "", href, download, tar
   }
 
   return (
-    <button onClick={onClick} className={`${baseClass} ${className}`}>
+    <button onClick={onClick} className={`${baseClass} ${className}`} type={type}>
       {buttonContent}
     </button>
   );
 };
 
 // Animated Border Button (for Repos)
-const AnimatedBorderButton = ({ children, href, onClick, className = "" }) => {
-  const buttonClasses = `relative group flex items-center justify-center overflow-hidden rounded-xl p-[2px] transition-all duration-300 hover:scale-105 active:scale-95 ${className}`;
+const AnimatedBorderButton = ({ children, href, onClick, className = "", variant = "default" }) => {
+  const baseClasses = `relative group flex items-center justify-center overflow-hidden rounded-xl p-[2px] transition-all duration-300 hover:scale-105 active:scale-95 ${className}`;
 
   const content = (
     <>
-      <div className="absolute inset-0 bg-gradient-to-r from-[#744B93] via-[#C889B5] to-[#744B93] animate-[spin_3s_linear_infinite] opacity-70 group-hover:opacity-100" />
-      <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-[10px] bg-white dark:bg-gray-900 px-6 py-3 text-sm font-bold text-[#744B93] dark:text-[#C889B5] backdrop-blur-3xl transition-colors hover:bg-gray-50 dark:hover:bg-gray-800">
+      <div className={`absolute inset-0 bg-gradient-to-r from-[#744B93] via-[#C889B5] to-[#744B93] animate-gradient-xy ${variant === "outline" ? 'opacity-30' : 'opacity-70'} group-hover:opacity-100`} />
+      <span className={`inline-flex h-full w-full cursor-pointer items-center justify-center rounded-[10px] px-6 py-3 text-sm font-bold backdrop-blur-3xl transition-colors
+        ${variant === "outline"
+          ? 'bg-transparent text-[#744B93] dark:text-[#C889B5] border border-[#744B93]/30 dark:border-[#C889B5]/30 hover:bg-[#744B93]/5 dark:hover:bg-[#C889B5]/5'
+          : 'bg-white/90 dark:bg-gray-900/90 text-[#744B93] dark:text-[#C889B5] hover:bg-white dark:hover:bg-gray-800'
+        }`}>
         {children}
       </span>
     </>
@@ -410,7 +363,7 @@ const AnimatedBorderButton = ({ children, href, onClick, className = "" }) => {
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        className={buttonClasses}
+        className={baseClasses}
       >
         {content}
       </a>
@@ -418,29 +371,36 @@ const AnimatedBorderButton = ({ children, href, onClick, className = "" }) => {
   }
 
   return (
-    <button onClick={onClick} className={buttonClasses}>
+    <button onClick={onClick} className={baseClasses}>
       {content}
     </button>
   );
 };
 
-const Section = ({ id, title, children }) => {
+const Section = ({ id, title, subtitle, children, className = "" }) => {
   return (
     <section
       id={id}
-      className="py-16 md:py-24 px-4 sm:px-8 lg:px-16 flex items-center justify-center scroll-mt-20"
+      className={`py-16 md:py-24 px-4 sm:px-8 lg:px-16 flex items-center justify-center scroll-mt-20 ${className}`}
     >
       <div className="w-full max-w-6xl relative z-10">
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-8 md:mb-12 text-center text-[#744B93] border-b-4 border-[#C889B5]/30 pb-3 inline-block mx-auto">
-          {title}
-        </h2>
+        <Reveal>
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-[#744B93] to-[#C889B5]">
+              {title}
+            </h2>
+            {subtitle && (
+              <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">{subtitle}</p>
+            )}
+          </div>
+        </Reveal>
         {children}
       </div>
     </section>
   );
 };
 
-// Project Detail Modal - UPDATED: Removed Close Button, Added X in corner
+// Project Detail Modal
 const ProjectDetailModal = ({ project, onClose }) => {
   if (!project) return null;
 
@@ -454,7 +414,6 @@ const ProjectDetailModal = ({ project, onClose }) => {
           className="relative w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 text-left shadow-2xl transition-all sm:my-8 border border-[#744B93]/20 dark:border-[#744B93]/40"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Close X button in top-right corner */}
           <button
             onClick={onClose}
             className="absolute top-6 right-6 z-50 w-12 h-12 flex items-center justify-center bg-white/90 dark:bg-gray-800/90 text-gray-800 dark:text-gray-200 hover:text-[#744B93] dark:hover:text-[#C889B5] rounded-full transition-all duration-300 hover:scale-110 hover:bg-white dark:hover:bg-gray-700 shadow-lg hover:shadow-2xl border border-gray-200 dark:border-gray-700"
@@ -463,38 +422,62 @@ const ProjectDetailModal = ({ project, onClose }) => {
             <X size={28} className="transition-transform duration-300 hover:rotate-90" />
           </button>
 
-          <img
-            src={project.image}
-            alt={project.name}
-            className="w-full h-64 object-cover rounded-t-2xl"
-          />
+          <div className="relative h-64 overflow-hidden">
+            <img
+              src={project.image}
+              alt={project.name}
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent"></div>
+          </div>
 
           <div className="p-8 pt-12">
-            <h3 className="text-3xl font-bold text-[#744B93] mb-4 break-words">{project.name}</h3>
+            <h3 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#744B93] to-[#C889B5] mb-6 break-words">
+              {project.name}
+            </h3>
 
-            <div className="space-y-6 text-gray-700 dark:text-gray-300">
+            <div className="space-y-6">
               <div>
-                <p className="font-semibold text-lg text-[#C889B5] flex items-center mb-2"><Code className="w-5 h-5 mr-2" /> Main Technology Stack</p>
+                <p className="font-semibold text-lg text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+                  <Code className="w-5 h-5 mr-2 text-[#C889B5]" />
+                  Technology Stack
+                </p>
                 <div className="flex flex-wrap gap-2">
                   {project.techStack.map((tech) => (
-                    <span key={tech} className="bg-[#744B93]/10 dark:bg-[#744B93]/20 text-[#744B93] text-sm font-medium px-3 py-1 rounded-full">{tech}</span>
+                    <span
+                      key={tech}
+                      className="bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 dark:from-[#744B93]/20 dark:to-[#C889B5]/20 text-[#744B93] dark:text-[#C889B5] text-sm font-medium px-3 py-2 rounded-lg backdrop-blur-sm"
+                    >
+                      {tech}
+                    </span>
                   ))}
                 </div>
               </div>
 
-              <div>
-                <p className="font-semibold text-lg text-[#C889B5] flex items-center mb-2"><LayoutList className="w-5 h-5 mr-2" /> Brief Description</p>
-                <p>{project.description}</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <p className="font-semibold text-lg text-gray-900 dark:text-gray-100 mb-2 flex items-center">
+                    <Zap className="w-5 h-5 mr-2 text-[#C889B5]" />
+                    Challenges Faced
+                  </p>
+                  <p className="text-gray-600 dark:text-gray-300">{project.challenges}</p>
+                </div>
+
+                <div>
+                  <p className="font-semibold text-lg text-gray-900 dark:text-gray-100 mb-2 flex items-center">
+                    <Star className="w-5 h-5 mr-2 text-[#C889B5]" />
+                    Future Plans
+                  </p>
+                  <p className="text-gray-600 dark:text-gray-300">{project.futurePlans}</p>
+                </div>
               </div>
 
               <div>
-                <p className="font-semibold text-lg text-[#C889B5] flex items-center mb-2"><Zap className="w-5 h-5 mr-2" /> Challenges Faced</p>
-                <p>{project.challenges}</p>
-              </div>
-
-              <div>
-                <p className="font-semibold text-lg text-[#C889B5] flex items-center mb-2"><Star className="w-5 h-5 mr-2" /> Potential Improvements & Future Plans</p>
-                <p>{project.futurePlans}</p>
+                <p className="font-semibold text-lg text-gray-900 dark:text-gray-100 mb-2 flex items-center">
+                  <LayoutList className="w-5 h-5 mr-2 text-[#C889B5]" />
+                  Project Description
+                </p>
+                <p className="text-gray-600 dark:text-gray-300">{project.description}</p>
               </div>
             </div>
 
@@ -503,15 +486,18 @@ const ProjectDetailModal = ({ project, onClose }) => {
                 href={project.liveLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 w-full text-center py-3 shadow-md shadow-[#744B93]/40"
+                className="flex-1 w-full text-center py-3"
               >
-                Live Link
+                <Globe className="w-5 h-5" />
+                Live Demo
               </AnimatedButton>
               <AnimatedBorderButton href={project.githubLink} className="flex-1 w-full">
+                <Github className="w-5 h-5 mr-2" />
                 Client Repo
               </AnimatedBorderButton>
               {project.serverLink && (
                 <AnimatedBorderButton href={project.serverLink} className="flex-1 w-full">
+                  <Code className="w-5 h-5 mr-2" />
                   Server Repo
                 </AnimatedBorderButton>
               )}
@@ -523,7 +509,7 @@ const ProjectDetailModal = ({ project, onClose }) => {
   );
 };
 
-// Enhanced Hero Section with improved profile animation
+// Enhanced Hero Section
 const HeroSection = ({ scrollToSection }) => {
   const [rotation, setRotation] = useState(0);
 
@@ -536,65 +522,89 @@ const HeroSection = ({ scrollToSection }) => {
   }, []);
 
   return (
-    <section id="home" className="py-12 md:py-24 px-4 sm:px-8 lg:px-16 flex items-center justify-center min-h-screen relative z-10">
-      <div className="w-full max-w-6xl">
-        <div className="flex flex-col lg:flex-row items-center justify-between text-center lg:text-left">
-          <div className="lg:w-1/2 space-y-6 order-2 lg:order-1">
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-gray-50 leading-tight">
-              Hi, I'm <br /> <span className="text-[#744B93]">{PORTFOLIO_DATA.name}</span>
-            </h1>
-            <p className="text-2xl sm:text-3xl font-medium text-[#C889B5] tracking-wide">
-              {PORTFOLIO_DATA.designation}
-            </p>
-            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-lg lg:max-w-none mx-auto lg:mx-0">
-              I turn creative ideas into robust, high-performance web applications. Let's build something amazing together.
-            </p>
+    <section id="home" className="relative min-h-screen flex items-center justify-center pt-16 px-4 sm:px-8 lg:px-16">
+      <div className="w-full max-w-6xl relative z-10">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
+          <div className="lg:w-1/2 space-y-8">
+            <Reveal>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 backdrop-blur-sm text-[#744B93] dark:text-[#C889B5] text-sm font-medium mb-4">
+                <Sparkles className="w-4 h-4" />
+                MERN Stack Developer
+              </div>
+            </Reveal>
 
-            <div className="flex flex-col sm:flex-row items-center gap-6 lg:gap-8 justify-center lg:justify-start pt-4">
-              <AnimatedButton
-                href={getGoogleDocsDownloadUrl(PORTFOLIO_DATA.resumeLink)}
-                download="Homayra_Binte_Harun_Heme_Resume.pdf"
-              >
-                <Download className="w-5 h-5 mr-2" />
-                Download Resume
-              </AnimatedButton>
+            <Reveal delay={100}>
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight">
+                <span className="block text-gray-900 dark:text-gray-100">Hello, I'm</span>
+                <span className="block bg-clip-text text-transparent bg-gradient-to-r from-[#744B93] via-[#C889B5] to-[#744B93] animate-gradient-xy">
+                  {PORTFOLIO_DATA.name}
+                </span>
+              </h1>
+            </Reveal>
 
-              <div className="flex items-center gap-4">
+            <Reveal delay={200}>
+              <p className="text-xl text-gray-600 dark:text-gray-400 max-w-xl leading-relaxed">
+                I craft exceptional digital experiences with modern web technologies.
+                Passionate about building scalable applications that make an impact.
+              </p>
+            </Reveal>
+
+            <Reveal delay={300}>
+              <div className="flex flex-col sm:flex-row items-center gap-6 pt-4">
+                <AnimatedButton
+                  href={getGoogleDocsDownloadUrl(PORTFOLIO_DATA.resumeLink)}
+                  download="Homayra_Binte_Harun_Heme_Resume.pdf"
+                >
+                  <Download className="w-5 h-5" />
+                  Download Resume
+                </AnimatedButton>
+
+                <AnimatedBorderButton variant="outline" onClick={() => scrollToSection('projects')}>
+                  <Code className="w-5 h-5 mr-2" />
+                  View Projects
+                </AnimatedBorderButton>
+              </div>
+            </Reveal>
+
+            <Reveal delay={400}>
+              <div className="flex items-center gap-6 pt-8">
                 {PORTFOLIO_DATA.socials.map((social) => (
                   <a
                     key={social.name}
                     href={social.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-12 h-12 flex items-center justify-center bg-white dark:bg-gray-800 text-[#744B93] rounded-full shadow-md border-2 border-[#744B93] dark:border-[#C889B5] hover:bg-[#744B93] hover:text-white dark:hover:bg-[#C889B5] dark:hover:text-black hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 group"
+                    className="w-12 h-12 flex items-center justify-center bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-[#744B93] dark:text-[#C889B5] rounded-xl shadow-lg border border-[#744B93]/10 dark:border-[#C889B5]/10 hover:bg-gradient-to-r hover:from-[#744B93] hover:to-[#C889B5] hover:text-white hover:-translate-y-1 hover:shadow-xl transition-all duration-300 group"
                     aria-label={social.name}
                   >
                     <social.icon size={24} className="transition-transform duration-300 group-hover:scale-110" />
                   </a>
                 ))}
               </div>
-            </div>
+            </Reveal>
           </div>
 
-          <div className="lg:w-1/3 mt-6 lg:mt-0 order-1 lg:order-2">
-            <div className="group relative p-[10px] rounded-full shadow-2xl shadow-[#744B93]/40 overflow-hidden cursor-pointer transition-all duration-700 hover:scale-110 hover:shadow-[0_0_80px_rgba(116,75,147,0.8)]">
-              <div
-                className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,#744B93_0%,#C889B5_25%,#744B93_50%,#C889B5_75%,#744B93_100%)] opacity-100 blur-[2px]"
-                style={{
-                  transform: `rotate(${rotation}deg)`,
-                  transition: 'transform 0.05s linear'
-                }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#744B93]/20 to-[#C889B5]/20 animate-pulse-slow rounded-full"></div>
-              <img
-                src={PORTFOLIO_DATA.photoUrl}
-                alt="Professional Profile"
-                className="relative z-10 w-full h-auto rounded-full object-cover border-4 border-white dark:border-gray-800 transition-all duration-700 group-hover:scale-105 group-hover:border-[#C889B5]"
-              />
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </div>
+          <div className="lg:w-1/3">
+            <Reveal delay={200}>
+              <div className="relative group">
+                <div className="absolute -inset-4 bg-gradient-to-r from-[#744B93] via-[#C889B5] to-[#744B93] rounded-3xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300 animate-gradient-xy"></div>
+                <div className="relative p-2 bg-gradient-to-br from-white/20 to-white/5 dark:from-gray-800/20 dark:to-gray-800/5 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-gray-700/30">
+                  <img
+                    src={PORTFOLIO_DATA.photoUrl}
+                    alt="Professional Profile"
+                    className="w-full h-auto rounded-2xl object-cover shadow-2xl"
+                  />
+                  <div className="absolute -bottom-6 -right-6 w-20 h-20 bg-gradient-to-r from-[#744B93] to-[#C889B5] rounded-2xl flex items-center justify-center shadow-2xl">
+                    <Code className="w-10 h-10 text-white" />
+                  </div>
+                </div>
+              </div>
+            </Reveal>
           </div>
         </div>
+
+        {/* Removed StatsSection and replaced with icon-based stats */}
+
       </div>
     </section>
   );
@@ -644,7 +654,6 @@ const App = () => {
       setActiveSection(currentSection);
     };
 
-    // Throttle scroll events for better performance
     let ticking = false;
     const throttledScroll = () => {
       if (!ticking) {
@@ -667,7 +676,6 @@ const App = () => {
     setIsMenuOpen(false);
     const element = document.getElementById(id);
     if (element) {
-      // Modern smooth scroll with behavior smooth
       element.scrollIntoView({
         behavior: 'smooth',
         block: 'start'
@@ -675,11 +683,11 @@ const App = () => {
     }
   };
 
-  // Navbar Component
+  // Navbar Component with </> logo
   const Navbar = () => {
     const navItems = [
       { id: 'home', label: 'Home' },
-      { id: 'about', label: 'About Me' },
+      { id: 'about', label: 'About' },
       { id: 'skills', label: 'Skills' },
       { id: 'education', label: 'Education' },
       { id: 'experience', label: 'Experience' },
@@ -690,11 +698,14 @@ const App = () => {
     const NavLink = ({ id, label }) => (
       <button
         onClick={() => scrollToSection(id)}
-        className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${activeSection === id
-          ? 'bg-[#744B93] text-white shadow-[0_0_15px_rgba(116,75,147,0.5)]'
-          : 'text-gray-700 dark:text-gray-200 hover:bg-[#744B93]/10 dark:hover:bg-gray-700/50 hover:text-[#744B93] dark:hover:text-[#C889B5]'
+        className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${activeSection === id
+          ? 'text-white'
+          : 'text-gray-600 dark:text-gray-300 hover:text-[#744B93] dark:hover:text-[#C889B5]'
           }`}
       >
+        {activeSection === id && (
+          <div className="absolute inset-0 bg-gradient-to-r from-[#744B93] to-[#C889B5] rounded-lg -z-10"></div>
+        )}
         {label}
       </button>
     );
@@ -702,33 +713,46 @@ const App = () => {
     const isVisible = !isScrolled || scrollDirection === 'up' || isMenuOpen;
 
     return (
-      <div className={`fixed top-6 left-0 right-0 z-50 flex justify-center transition-all duration-300 ease-out ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}>
-        <header className={`w-[95%] max-w-5xl transition-all duration-300 backdrop-blur-xl ${isScrolled ? 'bg-white/90 dark:bg-gray-900/90 shadow-xl border border-white/20 dark:border-gray-700/30' : 'bg-transparent border-transparent'} rounded-2xl`}>
-          <div className="px-4 sm:px-6 lg:px-8">
+      <div className={`fixed top-4 left-0 right-0 z-50 flex justify-center transition-all duration-300 ease-out ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}>
+        <header className="w-[95%] max-w-5xl transition-all duration-300 backdrop-blur-xl bg-white/90 dark:bg-gray-900/90 shadow-xl border border-white/20 dark:border-gray-700/30 rounded-2xl">
+          <div className="px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
-              <h1 className="text-xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#744B93] to-[#C889B5] cursor-pointer" onClick={() => scrollToSection('home')}>
-                HEME.DEV
-              </h1>
+              <button
+                onClick={() => scrollToSection('home')}
+                className="flex items-center gap-2"
+              >
+                {/* </> Logo */}
+                <div className="relative group">
+                  <div className="w-10 h-10 flex items-center justify-center bg-gradient-to-r from-[#744B93] to-[#C889B5] rounded-xl shadow-lg">
+                    <span className="text-white font-bold text-xl tracking-tighter">
+                      &lt;/&gt;
+                    </span>
+                  </div>
+                  {/* Hover effect */}
+                  <div className="absolute -inset-1 bg-gradient-to-r from-[#744B93] to-[#C889B5] rounded-xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300 -z-10"></div>
+                </div>
+                <span className="text-xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#744B93] to-[#C889B5]">
+                  HEME.DEV
+                </span>
+              </button>
 
               {/* Desktop Navigation */}
-              <nav className="hidden lg:flex space-x-1">
+              <nav className="hidden lg:flex space-x-2">
                 {navItems.map(item => <NavLink key={item.id} {...item} />)}
               </nav>
 
               <div className="flex items-center space-x-4">
-                {/* Dark Mode Toggle */}
                 <button
                   onClick={toggleDarkMode}
-                  className="p-2 rounded-full text-[#744B93] dark:text-[#C889B5] hover:bg-[#744B93]/10 dark:hover:bg-gray-700 transition-colors shadow-sm"
+                  className="p-2 rounded-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-[#744B93] dark:text-[#C889B5] hover:bg-gradient-to-r hover:from-[#744B93] hover:to-[#C889B5] hover:text-white transition-all duration-300 shadow-sm"
                   aria-label="Toggle dark mode"
                 >
                   {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
                 </button>
 
-                {/* Mobile Menu Button */}
                 <button
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
-                  className="lg:hidden p-2 rounded-lg text-[#744B93] dark:text-[#C889B5] hover:bg-[#744B93]/10 dark:hover:bg-gray-700 transition-colors"
+                  className="lg:hidden p-2 rounded-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-[#744B93] dark:text-[#C889B5] hover:bg-gradient-to-r hover:from-[#744B93] hover:to-[#C889B5] hover:text-white transition-all duration-300"
                   aria-label="Toggle navigation menu"
                 >
                   {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -739,15 +763,15 @@ const App = () => {
 
           {/* Mobile Menu */}
           {isMenuOpen && (
-            <div className="lg:hidden absolute top-full left-0 right-0 mt-2 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-2xl border border-[#744B93]/20 dark:border-[#744B93]/40 shadow-2xl overflow-hidden">
+            <div className="lg:hidden absolute top-full left-0 right-0 mt-2 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-gray-700/30 shadow-2xl overflow-hidden">
               <nav className="p-4 space-y-2 flex flex-col">
                 {navItems.map(item => (
                   <button
                     key={item.id}
                     onClick={() => scrollToSection(item.id)}
-                    className={`block text-left px-4 py-3 rounded-xl text-base font-medium transition-all ${activeSection === item.id
-                      ? 'bg-gradient-to-r from-[#744B93] to-[#C889B5] text-white shadow-lg'
-                      : 'text-gray-700 dark:text-gray-200 hover:bg-[#744B93]/10 dark:hover:bg-gray-700'
+                    className={`block text-left px-4 py-3 rounded-lg text-base font-medium transition-all ${activeSection === item.id
+                      ? 'bg-gradient-to-r from-[#744B93] to-[#C889B5] text-white'
+                      : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800'
                       }`}
                   >
                     {item.label}
@@ -762,49 +786,88 @@ const App = () => {
   };
 
   const AboutMeSection = () => (
-    <Section id="about" title="About My Journey">
-      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 sm:p-12 rounded-2xl shadow-xl border border-[#744B93]/20 dark:border-[#744B93]/40">
+    <Section id="about" title="About Me" subtitle="My journey in web development">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <Reveal>
-          <p className="text-gray-700 dark:text-gray-300 text-lg mb-6 leading-relaxed">
-            {PORTFOLIO_DATA.about.intro}
-          </p>
+          <div className="space-y-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 backdrop-blur-sm text-[#744B93] dark:text-[#C889B5] text-sm font-medium mb-4">
+              <Users className="w-4 h-4" />
+              Personal Journey
+            </div>
+            <h3 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+              Crafting Digital Experiences with Passion
+            </h3>
+            <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
+              {PORTFOLIO_DATA.about.intro}
+            </p>
+            <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
+              {PORTFOLIO_DATA.about.journey}
+            </p>
+            <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
+              {PORTFOLIO_DATA.about.hobbies}
+            </p>
+          </div>
         </Reveal>
-        <Reveal>
-          <p className="text-gray-700 dark:text-gray-300 text-lg mb-6 leading-relaxed border-l-4 border-[#744B93] pl-4 italic">
-            <span className="font-semibold text-[#744B93]">My Programming Journey:</span> {PORTFOLIO_DATA.about.journey}
-          </p>
-        </Reveal>
-        <Reveal>
-          <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
-            <span className="font-semibold text-[#744B93]">Outside of Code:</span> {PORTFOLIO_DATA.about.hobbies}
-          </p>
-        </Reveal>
-        <Reveal>
-          <p className="mt-6 text-xl font-bold text-[#C889B5] flex items-center">
-            Ready to collaborate! <ArrowRight className="w-5 h-5 ml-2 transition-transform duration-300 hover:translate-x-1" />
-          </p>
+
+        <Reveal delay={200}>
+          <div className="relative group">
+            <div className="absolute -inset-4 bg-gradient-to-r from-[#744B93] to-[#C889B5] rounded-3xl blur-xl opacity-20 group-hover:opacity-30 transition-opacity duration-300"></div>
+            <div className="relative p-8 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/30">
+              <div className="space-y-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-xl flex items-center justify-center">
+                    <Zap className="w-6 h-6 text-[#744B93] dark:text-[#C889B5]" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-gray-900 dark:text-gray-100">Quick Learner</h4>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">Adapting to new technologies</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-xl flex items-center justify-center">
+                    <Star className="w-6 h-6 text-[#744B93] dark:text-[#C889B5]" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-gray-900 dark:text-gray-100">Attention to Detail</h4>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">Pixel-perfect implementations</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-xl flex items-center justify-center">
+                    <Users className="w-6 h-6 text-[#744B93] dark:text-[#C889B5]" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-gray-900 dark:text-gray-100">Team Player</h4>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">Collaborative development</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </Reveal>
       </div>
     </Section>
   );
 
   const SkillsSection = () => (
-    <Section id="skills" title="Technical Skills">
+    <Section id="skills" title="Technical Expertise" subtitle="Technologies I work with">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {PORTFOLIO_DATA.skills.map((skillGroup) => (
-          <Reveal key={skillGroup.category}>
-            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border-t-4 border-[#744B93] transform transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl">
-              <div className="flex items-center mb-4">
-                <skillGroup.icon className="w-8 h-8 text-[#744B93] mr-3" />
+        {PORTFOLIO_DATA.skills.map((skillGroup, index) => (
+          <Reveal key={skillGroup.category} delay={index * 100}>
+            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-white/20 dark:border-gray-700/30 transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-14 h-14 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-xl flex items-center justify-center">
+                  <skillGroup.icon className="w-7 h-7 text-[#744B93] dark:text-[#C889B5]" />
+                </div>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                   {skillGroup.category}
                 </h3>
               </div>
-              <ul className="space-y-3">
+              <ul className="space-y-4">
                 {skillGroup.list.map((skill) => (
-                  <li key={skill} className="flex items-center text-gray-700 dark:text-gray-300 hover:text-[#744B93] transition-colors duration-200">
-                    <span className="w-2 h-2 bg-[#C889B5] rounded-full mr-3 animate-pulse"></span>
-                    {skill}
+                  <li key={skill} className="flex items-center gap-3 text-gray-700 dark:text-gray-300 hover:text-[#744B93] dark:hover:text-[#C889B5] transition-colors duration-200 group">
+                    <div className="w-2 h-2 bg-gradient-to-r from-[#744B93] to-[#C889B5] rounded-full group-hover:scale-150 transition-transform duration-300"></div>
+                    <span className="text-lg">{skill}</span>
                   </li>
                 ))}
               </ul>
@@ -816,104 +879,127 @@ const App = () => {
   );
 
   const EducationSection = () => (
-    <Section id="education" title="Educational Qualification">
-      <div className="relative space-y-8 md:space-y-12">
+    <Section id="education" title="Education" subtitle="My academic journey">
+      <div className="relative max-w-4xl mx-auto">
+        <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gradient-to-b from-[#744B93]/20 to-[#C889B5]/20 hidden md:block"></div>
+
         {PORTFOLIO_DATA.education.map((edu, index) => (
-          <div key={index} className="flex flex-col md:flex-row relative">
-            <div className={`hidden md:block absolute left-0 top-0 w-1 h-full bg-gradient-to-b from-[#744B93]/20 to-[#C889B5]/20 ${index === PORTFOLIO_DATA.education.length - 1 ? 'h-1/2' : ''}`}></div>
-
-            <div className="md:w-1/12 flex justify-center relative z-10 pt-4">
-              <div className="w-8 h-8 bg-gradient-to-r from-[#744B93] to-[#C889B5] rounded-full flex items-center justify-center shadow-md animate-pulse">
-                <GraduationCap className="w-4 h-4 text-white" />
-              </div>
-            </div>
-
-            <div className="md:w-11/12 pl-0 md:pl-12 pt-4 md:pt-0">
-              <Reveal>
-                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-[#744B93]/10 dark:border-[#744B93]/30 transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
-                  <h3 className="text-2xl font-bold text-[#744B93]">{edu.degree}</h3>
-                  <p className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3">{edu.institution}</p>
-                  <p className="text-sm font-semibold text-[#C889B5] mb-1">{edu.period}</p>
-                  <p className="text-gray-600 dark:text-gray-400">{edu.details}</p>
+          <Reveal key={index} delay={index * 100}>
+            <div className={`flex flex-col md:flex-row items-center gap-8 mb-12 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
+              <div className="md:w-1/2">
+                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-white/20 dark:border-gray-700/30">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-xl flex items-center justify-center">
+                      <GraduationCap className="w-6 h-6 text-[#744B93] dark:text-[#C889B5]" />
+                    </div>
+                    <div>
+                      <div className="inline-block px-3 py-1 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-full text-sm font-medium text-[#744B93] dark:text-[#C889B5]">
+                        {edu.period}
+                      </div>
+                    </div>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">{edu.degree}</h3>
+                  <p className="text-lg font-medium text-[#744B93] dark:text-[#C889B5] mb-3">{edu.institution}</p>
+                  {edu.details && (
+                    <p className="text-gray-600 dark:text-gray-400">{edu.details}</p>
+                  )}
                 </div>
-              </Reveal>
+              </div>
+
+              <div className="hidden md:flex w-12 h-12 bg-gradient-to-r from-[#744B93] to-[#C889B5] rounded-full items-center justify-center relative z-10">
+                <div className="w-8 h-8 bg-white dark:bg-gray-900 rounded-full"></div>
+              </div>
+
+              <div className="md:w-1/2"></div>
             </div>
-          </div>
+          </Reveal>
         ))}
       </div>
     </Section>
   );
 
   const ExperienceSection = () => (
-    <Section id="experience" title="Professional Experience">
-      <div className="relative space-y-8 md:space-y-12">
+    <Section id="experience" title="Experience" subtitle="My professional journey">
+      <div className="max-w-4xl mx-auto">
         {PORTFOLIO_DATA.experience.map((exp, index) => (
-          <div key={index} className="flex flex-col md:flex-row relative">
-            <div className={`hidden md:block absolute left-0 top-0 w-1 h-full bg-gradient-to-b from-[#744B93]/20 to-[#C889B5]/20 ${index === PORTFOLIO_DATA.experience.length - 1 ? 'h-1/2' : ''}`}></div>
-
-            <div className="md:w-1/12 flex justify-center relative z-10 pt-4">
-              <div className="w-8 h-8 bg-gradient-to-r from-[#744B93] to-[#C889B5] rounded-full flex items-center justify-center shadow-md animate-pulse">
-                <Briefcase className="w-4 h-4 text-white" />
-              </div>
-            </div>
-
-            <div className="md:w-11/12 pl-0 md:pl-12 pt-4 md:pt-0">
-              <Reveal>
-                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-[#744B93]/10 dark:border-[#744B93]/30 transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
-                  <p className="text-sm font-semibold text-[#C889B5] mb-1">{exp.period}</p>
-                  <h3 className="text-2xl font-bold text-[#744B93]">{exp.title}</h3>
-                  <p className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3">{exp.company}</p>
-                  <p className="text-gray-600 dark:text-gray-400">{exp.description}</p>
+          <Reveal key={index} delay={index * 100}>
+            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-white/20 dark:border-gray-700/30 mb-8 transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-2xl flex items-center justify-center">
+                    <Briefcase className="w-7 h-7 text-[#744B93] dark:text-[#C889B5]" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{exp.title}</h3>
+                    <p className="text-lg text-[#744B93] dark:text-[#C889B5]">{exp.company}</p>
+                  </div>
                 </div>
-              </Reveal>
+                <div className="inline-block px-4 py-2 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-full text-sm font-medium text-[#744B93] dark:text-[#C889B5]">
+                  {exp.period}
+                </div>
+              </div>
+              <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">{exp.description}</p>
             </div>
-          </div>
+          </Reveal>
         ))}
       </div>
     </Section>
   );
 
   const ProjectsSection = () => (
-    <Section id="projects" title="Featured Projects">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        {PORTFOLIO_DATA.projects.map((project) => (
-          <Reveal key={project.id}>
-            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden group border border-[#744B93]/10 dark:border-[#744B93]/30 transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] flex flex-col h-full">
-              <div className="relative h-48 overflow-hidden flex-shrink-0">
+    <Section id="projects" title="Featured Projects" subtitle="My recent work">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {PORTFOLIO_DATA.projects.map((project, index) => (
+          <Reveal key={project.id} delay={index * 100}>
+            <div className="group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden border border-white/20 dark:border-gray-700/30 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 flex flex-col h-full">
+              <div className="relative h-48 overflow-hidden">
                 <img
                   src={project.image}
                   alt={project.name}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
+                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                   <button
                     onClick={() => setSelectedProject(project)}
-                    className="bg-white text-[#744B93] p-2 rounded-full hover:bg-[#744B93] hover:text-white transition-colors duration-300 transform hover:scale-110"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-lg text-[#744B93] dark:text-[#C889B5] hover:bg-gradient-to-r hover:from-[#744B93] hover:to-[#C889B5] hover:text-white transition-all duration-300"
                   >
-                    <Zap size={20} />
+                    <Zap size={16} />
+                    View Details
                   </button>
                 </div>
               </div>
               <div className="p-6 flex flex-col flex-grow">
-                <div className="flex flex-wrap gap-2 mb-3 flex-shrink-0">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-3 truncate">{project.name}</h3>
+                <div className="flex flex-wrap gap-2 mb-4">
                   {project.techStack.slice(0, 3).map((tech) => (
-                    <span key={tech} className="bg-[#744B93]/10 text-[#744B93] text-xs font-semibold px-2 py-1 rounded-md hover:bg-[#744B93]/20 transition-colors">
+                    <span key={tech} className="px-3 py-1 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-full text-xs font-medium text-[#744B93] dark:text-[#C889B5]">
                       {tech}
                     </span>
                   ))}
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2 truncate flex-shrink-0">{project.name}</h3>
-                <div className="flex-grow">
-                  <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-3 mb-6">
-                    {project.description}
-                  </p>
+                <p className="text-gray-600 dark:text-gray-300 text-sm flex-grow line-clamp-3 mb-6">
+                  {project.description}
+                </p>
+                <div className="flex gap-3 mt-auto">
+                  <a
+                    href={project.liveLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 hover:from-[#744B93] hover:to-[#C889B5] hover:text-white text-[#744B93] dark:text-[#C889B5] rounded-lg text-sm font-medium transition-all duration-300"
+                  >
+                    <Globe size={16} />
+                    Live
+                  </a>
+                  <a
+                    href={project.githubLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 hover:from-[#744B93] hover:to-[#C889B5] hover:text-white text-[#744B93] dark:text-[#C889B5] rounded-lg text-sm font-medium transition-all duration-300"
+                  >
+                    <Github size={16} />
+                    Code
+                  </a>
                 </div>
-                <AnimatedBorderButton
-                  onClick={() => setSelectedProject(project)}
-                  className="w-full mt-auto"
-                >
-                  View Details
-                </AnimatedBorderButton>
               </div>
             </div>
           </Reveal>
@@ -959,62 +1045,67 @@ const App = () => {
 
     const ContactInfo = ({ icon: Icon, title, value, href }) => (
       <Reveal>
-        <div className="flex items-center space-x-5 p-5 rounded-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-[#744B93]/10 dark:border-[#744B93]/30 shadow-sm hover:shadow-xl hover:border-[#744B93]/30 hover:-translate-y-2 transition-all duration-300 group cursor-pointer">
-          <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 dark:from-[#744B93]/20 dark:to-[#C889B5]/20 rounded-2xl flex items-center justify-center text-[#744B93] group-hover:from-[#744B93] group-hover:to-[#C889B5] group-hover:text-white transition-all duration-300 shadow-inner">
-            <Icon size={28} className="transition-all duration-300 group-hover:scale-110" />
-          </div>
-          <div className="flex-grow">
-            <p className="text-sm font-semibold text-gray-400 dark:text-gray-500 mb-0.5 tracking-wide uppercase">{title}</p>
-            {href ? (
-              <a href={href} className="text-lg font-bold text-gray-900 dark:text-gray-100 hover:text-[#744B93] transition-colors break-all">
-                {value}
-              </a>
-            ) : (
+        <a
+          href={href}
+          target={href?.startsWith('http') ? '_blank' : undefined}
+          rel={href?.startsWith('http') ? 'noopener noreferrer' : undefined}
+          className="block group"
+        >
+          <div className="flex items-center gap-5 p-6 rounded-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-white/20 dark:border-gray-700/30 shadow-sm hover:shadow-xl hover:border-[#744B93]/30 hover:-translate-y-1 transition-all duration-300">
+            <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-2xl flex items-center justify-center text-[#744B93] group-hover:from-[#744B93] group-hover:to-[#C889B5] group-hover:text-white transition-all duration-300">
+              <Icon size={26} className="transition-transform duration-300 group-hover:scale-110" />
+            </div>
+            <div className="flex-grow">
+              <p className="text-sm font-semibold text-gray-400 dark:text-gray-500 mb-1 uppercase tracking-wide">{title}</p>
               <p className="text-lg font-bold text-gray-900 dark:text-gray-100 break-all">{value}</p>
-            )}
+            </div>
           </div>
-        </div>
+        </a>
       </Reveal>
     );
 
     return (
-      <Section id="contact" title="Get In Touch">
+      <Section id="contact" title="Get In Touch" subtitle="Let's work together">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Contact Info Column */}
           <div className="space-y-8">
-            <div className="space-y-6">
-              <ContactInfo icon={Mail} title="Email Me" value={PORTFOLIO_DATA.email} href={`mailto:${PORTFOLIO_DATA.email}`} />
-              <ContactInfo icon={Phone} title="Call Me" value={PORTFOLIO_DATA.phone} href={`tel:${PORTFOLIO_DATA.phone}`} />
-              <ContactInfo icon={MessageCircle} title="WhatsApp" value={PORTFOLIO_DATA.phone} href={`https://wa.me/${PORTFOLIO_DATA.phone.replace(/[^0-9]/g, '')}`} />
-            </div>
-
-            <div className="pt-6 border-t border-[#744B93]/20">
-              <h4 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">Connect on Social Media</h4>
-              <div className="flex flex-wrap gap-4">
-                {PORTFOLIO_DATA.socials.map((social) => (
-                  <Reveal key={social.name}>
-                    <a
-                      href={social.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-14 h-14 flex items-center justify-center bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-[#744B93] rounded-2xl shadow-md border border-[#744B93]/10 hover:border-[#744B93] hover:bg-gradient-to-r hover:from-[#744B93] hover:to-[#C889B5] hover:text-white hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 group"
-                      aria-label={social.name}
-                    >
-                      <social.icon size={26} className="transition-transform duration-300 group-hover:scale-110" />
-                    </a>
-                  </Reveal>
-                ))}
+            <Reveal>
+              <div className="space-y-6">
+                <ContactInfo icon={Mail} title="Email" value={PORTFOLIO_DATA.email} href={`mailto:${PORTFOLIO_DATA.email}`} />
+                <ContactInfo icon={Phone} title="Phone" value={PORTFOLIO_DATA.phone} href={`tel:${PORTFOLIO_DATA.phone}`} />
+                <ContactInfo icon={MessageCircle} title="WhatsApp" value={PORTFOLIO_DATA.phone} href={`https://wa.me/${PORTFOLIO_DATA.phone.replace(/[^0-9]/g, '')}`} />
               </div>
-            </div>
+            </Reveal>
+
+            <Reveal delay={100}>
+              <div className="pt-8 border-t border-white/20 dark:border-gray-700/30">
+                <h4 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">Connect on Social</h4>
+                <div className="flex flex-wrap gap-4">
+                  {PORTFOLIO_DATA.socials.map((social, index) => (
+                    <Reveal key={social.name} delay={index * 50}>
+                      <a
+                        href={social.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-14 h-14 flex items-center justify-center bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-[#744B93] dark:text-[#C889B5] rounded-2xl shadow-lg border border-[#744B93]/10 dark:border-[#C889B5]/10 hover:bg-gradient-to-r hover:from-[#744B93] hover:to-[#C889B5] hover:text-white hover:-translate-y-1 hover:shadow-xl transition-all duration-300 group"
+                        aria-label={social.name}
+                      >
+                        <social.icon size={26} className="transition-transform duration-300 group-hover:scale-110" />
+                      </a>
+                    </Reveal>
+                  ))}
+                </div>
+              </div>
+            </Reveal>
           </div>
 
           {/* Contact Form Column */}
-          <Reveal>
-            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-[#744B93]/10 dark:border-[#744B93]/30">
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Reveal delay={100}>
+            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/30">
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Your Name *
                     </label>
                     <input
@@ -1024,12 +1115,12 @@ const App = () => {
                       value={formData.name}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 rounded-lg border border-[#744B93]/20 dark:border-[#744B93]/40 bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#744B93] focus:border-transparent transition-all backdrop-blur-sm"
+                      className="w-full px-4 py-3 rounded-lg border border-[#744B93]/20 dark:border-[#C889B5]/20 bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#744B93] focus:border-transparent transition-all backdrop-blur-sm placeholder-gray-400 dark:placeholder-gray-500"
                       placeholder="John Doe"
                     />
                   </div>
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Your Email *
                     </label>
                     <input
@@ -1039,14 +1130,14 @@ const App = () => {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 rounded-lg border border-[#744B93]/20 dark:border-[#744B93]/40 bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#744B93] focus:border-transparent transition-all backdrop-blur-sm"
+                      className="w-full px-4 py-3 rounded-lg border border-[#744B93]/20 dark:border-[#C889B5]/20 bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#744B93] focus:border-transparent transition-all backdrop-blur-sm placeholder-gray-400 dark:placeholder-gray-500"
                       placeholder="john@example.com"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Subject *
                   </label>
                   <input
@@ -1056,13 +1147,13 @@ const App = () => {
                     value={formData.subject}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 rounded-lg border border-[#744B93]/20 dark:border-[#744B93]/40 bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#744B93] focus:border-transparent transition-all backdrop-blur-sm"
+                    className="w-full px-4 py-3 rounded-lg border border-[#744B93]/20 dark:border-[#C889B5]/20 bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#744B93] focus:border-transparent transition-all backdrop-blur-sm placeholder-gray-400 dark:placeholder-gray-500"
                     placeholder="Project Inquiry"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Message *
                   </label>
                   <textarea
@@ -1072,30 +1163,40 @@ const App = () => {
                     onChange={handleChange}
                     required
                     rows="5"
-                    className="w-full px-4 py-3 rounded-lg border border-[#744B93]/20 dark:border-[#744B93]/40 bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#744B93] focus:border-transparent transition-all backdrop-blur-sm resize-none"
+                    className="w-full px-4 py-3 rounded-lg border border-[#744B93]/20 dark:border-[#C889B5]/20 bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#744B93] focus:border-transparent transition-all backdrop-blur-sm placeholder-gray-400 dark:placeholder-gray-500 resize-none"
                     placeholder="Tell me about your project..."
                   />
                 </div>
 
                 {/* Status Messages */}
                 {submitStatus === 'success' && (
-                  <div className="p-4 bg-green-100/80 dark:bg-green-900/80 backdrop-blur-sm text-green-700 dark:text-green-300 rounded-lg text-center">
+                  <div className="p-4 bg-gradient-to-r from-green-500/10 to-emerald-500/10 backdrop-blur-sm text-green-700 dark:text-green-300 rounded-lg text-center border border-green-500/20">
                     ✓ Message sent successfully! I'll get back to you soon.
                   </div>
                 )}
                 {submitStatus === 'error' && (
-                  <div className="p-4 bg-red-100/80 dark:bg-red-900/80 backdrop-blur-sm text-red-700 dark:text-red-300 rounded-lg text-center">
+                  <div className="p-4 bg-gradient-to-r from-red-500/10 to-pink-500/10 backdrop-blur-sm text-red-700 dark:text-red-300 rounded-lg text-center border border-red-500/20">
                     ✗ Failed to send message. Please try again later.
                   </div>
                 )}
 
-                <div className="pt-2">
+                <div className="pt-4">
                   <AnimatedButton
                     type="submit"
-                    className={`w-full py-3 shadow-lg shadow-[#744B93]/40 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`w-full py-4 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? 'Sending...' : 'Send Message'}
+                    {isSubmitting ? (
+                      <>
+                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        Send Message
+                        <ArrowRight className="w-5 h-5" />
+                      </>
+                    )}
                   </AnimatedButton>
                 </div>
               </form>
@@ -1107,11 +1208,50 @@ const App = () => {
   };
 
   const Footer = () => (
-    <footer className="bg-gray-100/80 dark:bg-gray-900/80 backdrop-blur-sm py-8 px-4 sm:px-8 lg:px-16 border-t border-[#744B93]/10 dark:border-[#744B93]/20 relative z-10">
-      <div className="max-w-6xl mx-auto text-center">
-        <p className="text-gray-600 dark:text-gray-400 text-sm">
-          &copy; {new Date().getFullYear()} Homayra Heme. All rights reserved. | Built with React and Tailwind CSS.
-        </p>
+    <footer className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm py-8 px-4 sm:px-8 lg:px-16 border-t border-white/20 dark:border-gray-700/30 relative z-10">
+      <div className="max-w-6xl mx-auto">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex items-center gap-3">
+            {/* </> Logo in footer */}
+            <div className="w-10 h-10 flex items-center justify-center bg-gradient-to-r from-[#744B93] to-[#C889B5] rounded-xl shadow-lg">
+              <span className="text-white font-bold text-xl tracking-tighter">
+                &lt;/&gt;
+              </span>
+            </div>
+            <div>
+              <h2 className="text-xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#744B93] to-[#C889B5] mb-1">
+                HEME.DEV
+              </h2>
+              <p className="text-gray-600 dark:text-gray-400 text-sm">
+                Crafting exceptional digital experiences
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-6">
+            {PORTFOLIO_DATA.socials.map((social) => (
+              <a
+                key={social.name}
+                href={social.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-600 dark:text-gray-400 hover:text-[#744B93] dark:hover:text-[#C889B5] transition-colors duration-300"
+                aria-label={social.name}
+              >
+                <social.icon size={20} />
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-8 pt-8 border-t border-white/20 dark:border-gray-700/30 text-center">
+          <p className="text-gray-600 dark:text-gray-400 text-sm">
+            &copy; {new Date().getFullYear()} Homayra Binte Harun Heme. All rights reserved.
+          </p>
+          <p className="text-gray-500 dark:text-gray-500 text-xs mt-2">
+            Built with React & Tailwind CSS • Modern Professional Portfolio
+          </p>
+        </div>
       </div>
     </footer>
   );
@@ -1119,7 +1259,7 @@ const App = () => {
   return (
     <AnimationContext.Provider value={{ animationsEnabled: true }}>
       <div className={`min-h-screen transition-colors duration-500 overflow-x-hidden relative ${isDarkMode ? 'dark bg-gray-900 text-gray-100' : 'bg-white text-gray-900'}`}>
-        {/* Enhanced Floating Background Video */}
+        {/* Enhanced Floating Background */}
         <BackgroundVideo />
 
         {/* Main Content */}
@@ -1127,7 +1267,7 @@ const App = () => {
           <Navbar />
           <CursorTrail />
 
-          <main className="pt-16">
+          <main className="pt-20">
             <HeroSection scrollToSection={scrollToSection} />
             <AboutMeSection />
             <SkillsSection />
@@ -1210,11 +1350,6 @@ const App = () => {
             75% { transform: translate(10px, 15px); }
           }
           
-          @keyframes pulse-slow {
-            0%, 100% { opacity: 0.2; }
-            50% { opacity: 0.4; }
-          }
-          
           .animate-float-slow {
             animation: float-slow 8s ease-in-out infinite;
           }
@@ -1231,10 +1366,6 @@ const App = () => {
             animation: float-very-slow 12s ease-in-out infinite;
           }
           
-          .animate-pulse-slow {
-            animation: pulse-slow 3s ease-in-out infinite;
-          }
-          
           /* Prevent layout shift */
           .line-clamp-3 {
             display: -webkit-box;
@@ -1242,10 +1373,19 @@ const App = () => {
             -webkit-box-orient: vertical;
             overflow: hidden;
           }
+          
+          /* Glassmorphism */
+          .backdrop-blur-sm {
+            backdrop-filter: blur(8px);
+          }
+          
+          .backdrop-blur-xl {
+            backdrop-filter: blur(20px);
+          }
         `}</style>
       </div>
     </AnimationContext.Provider>
   );
 };
 
-export default App;
+export default App; 
