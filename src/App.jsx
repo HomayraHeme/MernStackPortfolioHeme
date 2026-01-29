@@ -3,6 +3,24 @@ import emailjs from '@emailjs/browser';
 import {
   Menu, X, Sun, Moon, Github, Linkedin, Facebook, Download, Mail, Phone, MessageCircle, Code, GraduationCap, Briefcase, Zap, Star, LayoutList, ArrowRight, ExternalLink, ChevronRight, Sparkles, Award, Users, Globe, Clock
 } from 'lucide-react';
+import {
+  FaReact,
+  FaNodeJs,
+  FaJs,
+  FaHtml5,
+  FaCss3Alt,
+  FaGitAlt,
+  FaFigma,
+  FaFire
+} from 'react-icons/fa';
+import {
+  SiNextdotjs,
+  SiTailwindcss,
+  SiExpress,
+  SiMongodb,
+  SiFirebase,
+  SiVercel,
+} from 'react-icons/si';
 
 // Create context for animation control
 const AnimationContext = createContext({ animationsEnabled: true });
@@ -107,41 +125,373 @@ const PORTFOLIO_DATA = {
 };
 
 // Enhanced Floating Background with Glassmorphism
+// Enhanced Floating Background with Glassmorphism
+
+
 const BackgroundVideo = () => {
+  // Tech icons for dark/light mode with adjusted opacity
+  const techIconsDark = [
+    { icon: <FaReact className="text-cyan-400" />, name: "React" },
+    { icon: <SiNextdotjs className="text-white" />, name: "Next.js" },
+    { icon: <FaJs className="text-yellow-400" />, name: "JavaScript" },
+    { icon: <FaHtml5 className="text-orange-500" />, name: "HTML" },
+    { icon: <FaCss3Alt className="text-blue-500" />, name: "CSS" },
+    { icon: <SiTailwindcss className="text-cyan-300" />, name: "Tailwind" },
+    { icon: <FaNodeJs className="text-green-500" />, name: "Node.js" },
+    { icon: <SiExpress className="text-gray-300" />, name: "Express" },
+    { icon: <SiMongodb className="text-green-400" />, name: "MongoDB" },
+    { icon: <FaGitAlt className="text-orange-600" />, name: "Git" },
+    { icon: <FaFigma className="text-purple-500" />, name: "Figma" },
+    { icon: <SiFirebase className="text-yellow-500" />, name: "Firebase" },
+    { icon: <SiVercel className="text-white" />, name: "Vercel" },
+  ];
+
+  const techIconsLight = [
+    { icon: <FaReact className="text-cyan-600" />, name: "React" },
+    { icon: <SiNextdotjs className="text-gray-900" />, name: "Next.js" },
+    { icon: <FaJs className="text-yellow-600" />, name: "JavaScript" },
+    { icon: <FaHtml5 className="text-orange-600" />, name: "HTML" },
+    { icon: <FaCss3Alt className="text-blue-600" />, name: "CSS" },
+    { icon: <SiTailwindcss className="text-cyan-500" />, name: "Tailwind" },
+    { icon: <FaNodeJs className="text-green-600" />, name: "Node.js" },
+    { icon: <SiExpress className="text-gray-700" />, name: "Express" },
+    { icon: <SiMongodb className="text-green-500" />, name: "MongoDB" },
+    { icon: <FaGitAlt className="text-orange-700" />, name: "Git" },
+    { icon: <FaFigma className="text-purple-600" />, name: "Figma" },
+    { icon: <FaFire className="text-red-500" />, name: "Firebase" },
+    { icon: <SiVercel className="text-gray-900" />, name: "Vercel" },
+  ];
+
   return (
-    <div className="fixed inset-0 z-0 overflow-hidden">
-      {/* Main Background with gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-[#744B93]/10 to-gray-900 dark:from-gray-900 dark:via-[#744B93]/5 dark:to-gray-900"></div>
+    <>
+      {/* Light Mode Background */}
+      <div className="fixed inset-0 z-0 overflow-hidden dark:hidden">
+        {/* Light mode gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/90 via-white/90 to-purple-50/90"></div>
 
-      {/* Animated gradient orbs */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-[#744B93]/20 to-[#C889B5]/20 rounded-full blur-3xl animate-float-very-slow opacity-30"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-r from-[#C889B5]/15 to-[#744B93]/15 rounded-full blur-3xl animate-float-medium opacity-20"></div>
+        {/* Light mode subtle pattern */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{
+          backgroundImage: `radial-gradient(circle at 1px 1px, #4f46e5 1px, transparent 1px)`,
+          backgroundSize: '50px 50px'
+        }}></div>
 
-      {/* Grid pattern overlay */}
-      <div
-        className="absolute inset-0 opacity-40"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23744B93' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-        }}
-      ></div>
+        {/* Floating tech icons - Light mode - Reduced opacity and better movement */}
+        {techIconsLight.map((tech, i) => (
+          <div
+            key={`light-${tech.name}-${i}`}
+            className="absolute flex items-center justify-center w-14 h-14 rounded-xl bg-white/20 backdrop-blur-sm border border-gray-200/30 shadow-lg"
+            style={{
+              top: `${10 + (i * 7) % 80}%`,
+              left: `${5 + (i * 14) % 85}%`,
+              animation: `tech-float-light ${18 + i * 3}s ease-in-out infinite`,
+              animationDelay: `${i * 0.5}s`,
+              opacity: 0.15 + Math.random() * 0.1, // Very low opacity: 0.15-0.25
+              transform: `rotate(${i % 2 === 0 ? '5deg' : '-5deg'})`,
+            }}
+          >
+            <div className="text-2xl opacity-70">{tech.icon}</div>
+          </div>
+        ))}
 
-      {/* Floating particles */}
-      {Array.from({ length: 20 }).map((_, i) => (
-        <div
-          key={i}
-          className="absolute w-1 h-1 bg-gradient-to-r from-[#744B93] to-[#C889B5] rounded-full"
-          style={{
-            top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 100}%`,
-            animation: `float-particle ${10 + Math.random() * 20}s ease-in-out infinite`,
-            animationDelay: `${Math.random() * 5}s`,
-            opacity: 0.1 + Math.random() * 0.3,
-          }}
-        />
-      ))}
-    </div>
+        {/* Subtle moving lines - Light */}
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div
+            key={`light-line-${i}`}
+            className="absolute h-[1px] bg-gradient-to-r from-transparent via-blue-300/10 to-transparent"
+            style={{
+              top: `${15 + i * 14}%`,
+              left: '-10%',
+              width: '120%',
+              animation: `line-move-light ${15 + i * 3}s linear infinite`,
+              animationDelay: `${i * 1}s`,
+              opacity: 0.05,
+            }}
+          />
+        ))}
+
+        {/* Moving dots pattern - Light */}
+        <div className="absolute inset-0" style={{
+          backgroundImage: `radial-gradient(circle at 1px 1px, #4f46e5 0.5px, transparent 0.5px)`,
+          backgroundSize: '40px 40px',
+          opacity: 0.03,
+          animation: 'grid-move-light 20s linear infinite'
+        }}></div>
+      </div>
+
+      {/* Dark Mode Background */}
+      <div className="fixed inset-0 z-0 overflow-hidden hidden dark:block">
+        {/* Dark mode gradient with more opacity */}
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-purple-900/10 to-gray-900"></div>
+
+        {/* Subtle grid pattern for dark mode - Removed circuit lines, keeping only dots */}
+        <div className="absolute inset-0 opacity-[0.02]" style={{
+          backgroundImage: `radial-gradient(circle at 2px 2px, #00ffaa 1px, transparent 1px)`,
+          backgroundSize: '80px 80px'
+        }}></div>
+
+        {/* Floating tech icons - Dark mode - Reduced opacity */}
+        {techIconsDark.map((tech, i) => (
+          <div
+            key={`dark-${tech.name}-${i}`}
+            className="absolute flex items-center justify-center w-16 h-16 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 shadow-lg"
+            style={{
+              top: `${10 + (i * 7) % 80}%`,
+              left: `${5 + (i * 14) % 85}%`,
+              animation: `tech-float-dark ${22 + i * 4}s ease-in-out infinite`,
+              animationDelay: `${i * 0.7}s`,
+              opacity: 0.12 + Math.random() * 0.08, // Very low opacity: 0.12-0.20
+              transform: `rotate(${i % 2 === 0 ? '5deg' : '-5deg'})`,
+            }}
+          >
+            <div className="text-2xl opacity-60">{tech.icon}</div>
+          </div>
+        ))}
+
+        {/* Binary rain effect - Dark only with slower movement */}
+        {Array.from({ length: 20 }).map((_, i) => (
+          <div
+            key={`binary-${i}`}
+            className="absolute top-0 font-mono text-xs text-green-400/5 tracking-widest whitespace-nowrap"
+            style={{
+              left: `${5 + (i * 5)}%`,
+              animation: `binary-fall ${25 + Math.random() * 15}s linear infinite`,
+              animationDelay: `${Math.random() * 10}s`,
+            }}
+          >
+            {Array.from({ length: 10 }).map(() =>
+              Math.random() > 0.5 ? '1' : '0'
+            ).join(' ')}
+          </div>
+        ))}
+
+        {/* Moving glowing dots - Dark only */}
+        {Array.from({ length: 15 }).map((_, i) => (
+          <div
+            key={`dot-${i}`}
+            className="absolute w-[2px] h-[2px] rounded-full bg-cyan-400/15"
+            style={{
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              animation: `dot-move ${15 + Math.random() * 10}s linear infinite`,
+              animationDelay: `${Math.random() * 5}s`,
+              boxShadow: '0 0 3px rgba(0, 255, 255, 0.1)'
+            }}
+          />
+        ))}
+
+        {/* Moving particle trails */}
+        {Array.from({ length: 8 }).map((_, i) => (
+          <div
+            key={`particle-${i}`}
+            className="absolute w-[1px] h-[1px] rounded-full bg-gradient-to-r from-transparent via-cyan-500/8 to-transparent"
+            style={{
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              animation: `particle-trail ${20 + Math.random() * 15}s linear infinite`,
+              animationDelay: `${Math.random() * 8}s`,
+              opacity: 0.02,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* CSS Animations */}
+      <style jsx global>{`
+        @keyframes tech-float-light {
+          0%, 100% { 
+            transform: translateY(0) translateX(0) rotate(var(--rotation, 0deg)) scale(1); 
+          }
+          25% { 
+            transform: translateY(-15px) translateX(10px) rotate(calc(var(--rotation, 0deg) + 5deg)) scale(1.05); 
+          }
+          50% { 
+            transform: translateY(-5px) translateX(20px) rotate(calc(var(--rotation, 0deg) + 10deg)) scale(1.1); 
+          }
+          75% { 
+            transform: translateY(10px) translateX(5px) rotate(calc(var(--rotation, 0deg) + 5deg)) scale(1.05); 
+          }
+        }
+        
+        @keyframes tech-float-dark {
+          0%, 100% { 
+            transform: translateY(0) translateX(0) rotate(var(--rotation, 0deg)) scale(1); 
+          }
+          25% { 
+            transform: translateY(-20px) translateX(-15px) rotate(calc(var(--rotation, 0deg) + 8deg)) scale(1.08); 
+          }
+          50% { 
+            transform: translateY(5px) translateX(25px) rotate(calc(var(--rotation, 0deg) + 15deg)) scale(1.15); 
+          }
+          75% { 
+            transform: translateY(15px) translateX(-10px) rotate(calc(var(--rotation, 0deg) + 8deg)) scale(1.08); 
+          }
+        }
+        
+        @keyframes line-move-light {
+          0% { transform: translateX(-100%) rotate(0.5deg); opacity: 0.05; }
+          50% { opacity: 0.08; }
+          100% { transform: translateX(100%) rotate(0.5deg); opacity: 0.05; }
+        }
+        
+        @keyframes grid-move-light {
+          0% { background-position: 0 0; }
+          100% { background-position: 40px 40px; }
+        }
+        
+        @keyframes binary-fall {
+          0% { 
+            transform: translateY(-100px) translateX(0); 
+            opacity: 0; 
+          }
+          5% { 
+            opacity: 0.05; 
+          }
+          95% { 
+            opacity: 0.05; 
+          }
+          100% { 
+            transform: translateY(100vh) translateX(${Math.random() > 0.5 ? '50' : '-50'}px); 
+            opacity: 0; 
+          }
+        }
+        
+        @keyframes dot-move {
+          0% { 
+            transform: translate(0, 0) scale(1); 
+            opacity: 0.15; 
+          }
+          25% { 
+            transform: translate(50px, -30px) scale(1.2); 
+            opacity: 0.25; 
+          }
+          50% { 
+            transform: translate(100px, 20px) scale(1); 
+            opacity: 0.15; 
+          }
+          75% { 
+            transform: translate(50px, 50px) scale(0.8); 
+            opacity: 0.1; 
+          }
+          100% { 
+            transform: translate(0, 0) scale(1); 
+            opacity: 0.15; 
+          }
+        }
+        
+        @keyframes particle-trail {
+          0% { 
+            transform: translate(0, 0) scale(0); 
+            opacity: 0; 
+          }
+          10% { 
+            transform: translate(10px, 10px) scale(1); 
+            opacity: 0.02; 
+          }
+          90% { 
+            transform: translate(200px, 100px) scale(1); 
+            opacity: 0.02; 
+          }
+          100% { 
+            transform: translate(250px, 120px) scale(0); 
+            opacity: 0; 
+          }
+        }
+        
+        @keyframes pulse {
+          0%, 100% { opacity: 0.1; transform: scale(1); }
+          50% { opacity: 0.2; transform: scale(1.3); }
+        }
+      `}</style>
+    </>
   );
 };
+
+
+
+// Add these new animations to your existing style tag:
+const additionalStyles = `
+  @keyframes float-horizontal {
+    0%, 100% { transform: translateX(-5%) rotate(0deg); }
+    50% { transform: translateX(5%) rotate(0.5deg); }
+  }
+  
+  @keyframes float-diamond {
+    0%, 100% { 
+      transform: translateY(0) translateX(0) rotate(45deg) scale(1);
+      opacity: 0.2;
+    }
+    33% { 
+      transform: translateY(-20px) translateX(10px) rotate(45deg) scale(1.2);
+      opacity: 0.4;
+    }
+    66% { 
+      transform: translateY(10px) translateX(-10px) rotate(45deg) scale(0.8);
+      opacity: 0.1;
+    }
+  }
+  
+  @keyframes float-blob {
+    0%, 100% { 
+      transform: translate(0, 0) scale(1);
+      border-radius: 50% 30% 70% 40% / 40% 60% 30% 70%;
+    }
+    33% { 
+      transform: translate(-30px, -20px) scale(1.1);
+      border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    }
+    66% { 
+      transform: translate(20px, 30px) scale(0.9);
+      border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+    }
+  }
+  
+  @keyframes particle-move {
+    0% { 
+      transform: translate(0, 0);
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.3;
+    }
+    90% {
+      opacity: 0.3;
+    }
+    100% { 
+      transform: translate(
+        ${Math.random() > 0.5 ? '-' : ''}${100 + Math.random() * 100}vw,
+        ${Math.random() > 0.5 ? '-' : ''}${100 + Math.random() * 100}vh
+      );
+      opacity: 0;
+    }
+  }
+  
+  @keyframes particle-trail {
+    0% { 
+      transform: translate(0, 0) scale(0);
+      opacity: 0;
+    }
+    5% {
+      transform: translate(0, 0) scale(1);
+      opacity: 0.1;
+    }
+    100% { 
+      transform: translate(
+        ${Math.random() > 0.5 ? '-' : ''}${100 + Math.random() * 100}vw,
+        ${Math.random() > 0.5 ? '-' : ''}${100 + Math.random() * 100}vh
+      ) scale(0);
+      opacity: 0;
+    }
+  }
+  
+  /* Subtle vignette effect */
+  .vignette {
+    background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.02) 100%);
+  }
+  
+  .dark .vignette {
+    background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.1) 100%);
+  }
+`;
 
 // Utility function to get Google Docs/Drive direct download URL
 const getGoogleDocsDownloadUrl = (url) => {
