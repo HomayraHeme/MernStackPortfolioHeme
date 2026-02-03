@@ -41,8 +41,8 @@ const ContactSection = () => {
         setTimeout(() => setSubmitStatus(null), 5000);
     };
 
-    const ContactInfo = ({ icon: Icon, title, value, href }) => (
-        <Reveal>
+    const ContactInfo = ({ icon: Icon, title, value, href, delay = 0 }) => (
+        <Reveal delay={delay} direction="right">
             <a
                 href={href}
                 target={href?.startsWith('http') ? '_blank' : undefined}
@@ -66,37 +66,35 @@ const ContactSection = () => {
         <Section id="contact" title="Get In Touch" subtitle="Let's work together">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 <div className="space-y-8">
-                    <Reveal>
-                        <div className="space-y-6">
-                            <ContactInfo icon={Mail} title="Email" value={PORTFOLIO_DATA.email} href={`mailto:${PORTFOLIO_DATA.email}`} />
-                            <ContactInfo icon={Phone} title="Phone" value={PORTFOLIO_DATA.phone} href={`tel:${PORTFOLIO_DATA.phone}`} />
-                            <ContactInfo icon={MessageCircle} title="WhatsApp" value={PORTFOLIO_DATA.phone} href={`https://wa.me/${PORTFOLIO_DATA.phone.replace(/[^0-9]/g, '')}`} />
-                        </div>
-                    </Reveal>
+                    <div className="space-y-6">
+                        <ContactInfo icon={Mail} title="Email" value={PORTFOLIO_DATA.email} href={`mailto:${PORTFOLIO_DATA.email}`} delay={100} />
+                        <ContactInfo icon={Phone} title="Phone" value={PORTFOLIO_DATA.phone} href={`tel:${PORTFOLIO_DATA.phone}`} delay={200} />
+                        <ContactInfo icon={MessageCircle} title="WhatsApp" value={PORTFOLIO_DATA.phone} href={`https://wa.me/${PORTFOLIO_DATA.phone.replace(/[^0-9]/g, '')}`} delay={300} />
+                    </div>
 
-                    <Reveal delay={100}>
-                        <div className="pt-8 border-t border-white/20 dark:border-gray-700/30">
+                    <div className="pt-8 border-t border-white/20 dark:border-gray-700/30">
+                        <Reveal delay={400} direction="up">
                             <h4 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">Connect on Social</h4>
-                            <div className="flex flex-wrap gap-4">
-                                {PORTFOLIO_DATA.socials.map((social, index) => (
-                                    <Reveal key={social.name} delay={index * 50}>
-                                        <a
-                                            href={social.link}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="w-14 h-14 flex items-center justify-center bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-[#744B93] dark:text-[#C889B5] rounded-2xl shadow-lg border border-[#744B93]/10 dark:border-[#C889B5]/10 hover:bg-gradient-to-r hover:from-[#744B93] hover:to-[#C889B5] hover:text-white hover:-translate-y-1 hover:shadow-xl transition-all duration-300 group"
-                                            aria-label={social.name}
-                                        >
-                                            <social.icon size={26} className="transition-transform duration-300 group-hover:scale-110" />
-                                        </a>
-                                    </Reveal>
-                                ))}
-                            </div>
+                        </Reveal>
+                        <div className="flex flex-wrap gap-4">
+                            {PORTFOLIO_DATA.socials.map((social, index) => (
+                                <Reveal key={social.name} delay={500 + index * 50} direction="up">
+                                    <a
+                                        href={social.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="w-14 h-14 flex items-center justify-center bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-[#744B93] dark:text-[#C889B5] rounded-2xl shadow-lg border border-[#744B93]/10 dark:border-[#C889B5]/10 hover:bg-gradient-to-r hover:from-[#744B93] hover:to-[#C889B5] hover:text-white hover:-translate-y-1 hover:shadow-xl transition-all duration-300 group"
+                                        aria-label={social.name}
+                                    >
+                                        <social.icon size={26} className="transition-transform duration-300 group-hover:scale-110" />
+                                    </a>
+                                </Reveal>
+                            ))}
                         </div>
-                    </Reveal>
+                    </div>
                 </div>
 
-                <Reveal delay={100}>
+                <Reveal delay={400} direction="left">
                     <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/30">
                         <form onSubmit={handleSubmit} className="space-y-6">
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">

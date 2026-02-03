@@ -35,7 +35,7 @@ const Reveal = ({
     return (
         <div
             ref={ref}
-            className={`transition-all cubic-bezier(0.16, 1, 0.3, 1) will-change-transform ${inView ? getInViewStyles() : getInitialStyles()
+            className={`transition-[transform,opacity] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-[transform,opacity] ${inView ? getInViewStyles() : getInitialStyles()
                 } ${className}`}
             style={{
                 transitionDelay: `${delay}ms`,
