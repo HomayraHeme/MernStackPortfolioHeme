@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, createContext } from 'react';
+import React, { useState, useEffect, useCallback, createContext, useRef } from 'react';
 import Lenis from 'lenis';
 
 import Navbar from './components/layout/Navbar';
@@ -22,6 +22,7 @@ const App = () => {
   const [selectedProject, setSelectedProject] = useState(null);
   const [activeSection, setActiveSection] = useState('home');
   const [isScrolling, setIsScrolling] = useState(false);
+  const lenisRef = useRef(null);
 
   // Initialize Lenis for smooth scrolling
   useEffect(() => {
@@ -36,6 +37,8 @@ const App = () => {
       touchMultiplier: 2,
     });
 
+    lenisRef.current = lenis;
+
     function raf(time) {
       lenis.raf(time);
       requestAnimationFrame(raf);
@@ -45,8 +48,20 @@ const App = () => {
 
     return () => {
       lenis.destroy();
+      lenisRef.current = null;
     };
   }, []);
+
+  // Handle Modal Scroll Lock and Lenis State
+  useEffect(() => {
+    if (selectedProject) {
+      document.body.style.overflow = 'hidden';
+      lenisRef.current?.stop();
+    } else {
+      document.body.style.overflow = '';
+      lenisRef.current?.start();
+    }
+  }, [selectedProject]);
 
   // Toggle Dark Mode
   const toggleDarkMode = () => setIsDarkMode(prev => !prev);

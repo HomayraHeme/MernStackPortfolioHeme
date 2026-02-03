@@ -13,6 +13,7 @@ const ProjectDetailModal = ({ project, onClose }) => {
         <div
             className="fixed inset-0 z-50 bg-gray-900/90 backdrop-blur-sm overflow-y-auto"
             onClick={onClose}
+            data-lenis-prevent
         >
             <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
                 <div
