@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import emailjs from '@emailjs/browser';
 import { Mail, Phone, MessageCircle, ArrowRight } from 'lucide-react';
 import Section from '../ui/Section';
 import Reveal from '../ui/Reveal';
@@ -18,22 +19,22 @@ const ContactSection = () => {
         e.preventDefault();
         setIsSubmitting(true);
         try {
-            const response = await fetch('/api/contact', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
+            await emailjs.send(
+                'service_zav5zzs',
+                'template_lye9q8c',
+                {
+                    from_name: formData.name,
+                    reply_to: formData.email,
+                    subject: formData.subject,
+                    message: formData.message,
+                    to_name: 'Homayra Heme',
                 },
-                body: JSON.stringify(formData),
-            });
-
-            if (response.ok) {
-                setSubmitStatus('success');
-                setFormData({ name: '', email: '', subject: '', message: '' });
-            } else {
-                setSubmitStatus('error');
-            }
+                'NgbkXbJxALcwSTKPg'
+            );
+            setSubmitStatus('success');
+            setFormData({ name: '', email: '', subject: '', message: '' });
         } catch (error) {
-            console.error('Contact form submission failed:', error);
+            console.error('Email send failed:', error);
             setSubmitStatus('error');
         }
         setIsSubmitting(false);
