@@ -740,7 +740,6 @@ const Navbar = ({ activeSection, isDarkMode, toggleDarkMode, scrollToSection, is
     { id: 'about', label: 'About' },
     { id: 'skills', label: 'Skills' },
     { id: 'education', label: 'Education' },
-    { id: 'experience', label: 'Experience' },
     { id: 'projects', label: 'Projects' },
     { id: 'contact', label: 'Contact' },
   ];
@@ -846,7 +845,448 @@ const Navbar = ({ activeSection, isDarkMode, toggleDarkMode, scrollToSection, is
   );
 };
 
-// --- APP COMPONENT ---
+const AboutMeSection = () => (
+  <Section id="about" title="About Me" subtitle="My journey in web development">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <Reveal>
+        <div className="space-y-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 backdrop-blur-sm text-[#744B93] dark:text-[#C889B5] text-sm font-medium mb-4">
+            <Users className="w-4 h-4" />
+            Personal Journey
+          </div>
+          <h3 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+            Crafting Digital Experiences with Passion
+          </h3>
+          <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
+            {PORTFOLIO_DATA.about.intro}
+          </p>
+          <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
+            {PORTFOLIO_DATA.about.journey}
+          </p>
+          <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
+            {PORTFOLIO_DATA.about.hobbies}
+          </p>
+        </div>
+      </Reveal>
+
+      <Reveal delay={200}>
+        <div className="relative group">
+          <div className="absolute -inset-4 bg-gradient-to-r from-[#744B93] to-[#C889B5] rounded-3xl blur-xl opacity-20 group-hover:opacity-30 transition-opacity duration-300"></div>
+          <div className="relative p-8 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/30">
+            <div className="space-y-6">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-xl flex items-center justify-center">
+                  <Zap className="w-6 h-6 text-[#744B93] dark:text-[#C889B5]" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-gray-900 dark:text-gray-100">Quick Learner</h4>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">Adapting to new technologies</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-xl flex items-center justify-center">
+                  <Star className="w-6 h-6 text-[#744B93] dark:text-[#C889B5]" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-gray-900 dark:text-gray-100">Attention to Detail</h4>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">Pixel-perfect implementations</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-xl flex items-center justify-center">
+                  <Users className="w-6 h-6 text-[#744B93] dark:text-[#C889B5]" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-gray-900 dark:text-gray-100">Team Player</h4>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">Collaborative development</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Reveal>
+    </div>
+  </Section>
+);
+
+const SkillsSection = () => (
+  <Section id="skills" title="Technical Expertise" subtitle="Technologies I work with">
+    <div className="relative max-w-6xl mx-auto">
+      <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gradient-to-b from-[#744B93]/20 to-[#C889B5]/20 hidden md:block"></div>
+
+      {PORTFOLIO_DATA.skills.map((skillGroup, index) => (
+        <Reveal key={skillGroup.category} delay={index * 100}>
+          <div className={`flex flex-col md:flex-row items-center gap-8 mb-12 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
+            <div className="md:w-1/2">
+              <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-white/20 dark:border-gray-700/30 transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-14 h-14 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-xl flex items-center justify-center">
+                    <skillGroup.icon className="w-7 h-7 text-[#744B93] dark:text-[#C889B5]" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                    {skillGroup.category}
+                  </h3>
+                </div>
+                <ul className="space-y-4">
+                  {skillGroup.list.map((skill, i) => (
+                    <li key={i} className="flex items-center gap-3 text-gray-700 dark:text-gray-300 hover:text-[#744B93] dark:hover:text-[#C889B5] transition-colors duration-200 group">
+                      <div className="w-8 h-8 flex items-center justify-center bg-gradient-to-r from-[#744B93]/20 to-[#C889B5]/20 rounded-full text-[#744B93] dark:text-[#C889B5] group-hover:scale-110 transition-transform duration-300">
+                        {skill.icon}
+                      </div>
+                      <span className="text-lg font-medium">{skill.name}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div className="hidden md:flex w-12 h-12 bg-gradient-to-r from-[#744B93] to-[#C889B5] rounded-full items-center justify-center relative z-10">
+              <div className="w-8 h-8 bg-white dark:bg-gray-900 rounded-full"></div>
+            </div>
+
+            <div className="md:w-1/2"></div>
+          </div>
+        </Reveal>
+      ))}
+    </div>
+  </Section>
+);
+
+const EducationSection = () => (
+  <Section id="education" title="Education" subtitle="My academic journey">
+    <div className="max-w-6xl mx-auto">
+      {PORTFOLIO_DATA.education.map((edu, index) => (
+        <Reveal key={index} delay={index * 100}>
+          <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-white/20 dark:border-gray-700/30 transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
+            <div className="flex items-center gap-6 mb-6">
+              <div className="w-16 h-16 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-2xl flex items-center justify-center">
+                <GraduationCap className="w-8 h-8 text-[#744B93] dark:text-[#C889B5]" />
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{edu.degree}</h3>
+                <p className="text-xl text-[#744B93] dark:text-[#C889B5] font-medium">{edu.institution}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 mb-4">
+              <div className="inline-block px-4 py-1.5 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-full text-sm font-medium text-[#744B93] dark:text-[#C889B5]">
+                {edu.period}
+              </div>
+            </div>
+            {edu.details && (
+              <p className="text-gray-600 dark:text-gray-400 text-lg leading-relaxed">{edu.details}</p>
+            )}
+          </div>
+        </Reveal>
+      ))}
+    </div>
+  </Section>
+);
+
+const ProjectsSection = ({ setSelectedProject }) => (
+  <Section id="projects" title="Featured Projects" subtitle="My recent work">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      {PORTFOLIO_DATA.projects.map((project, index) => (
+        <Reveal key={project.id} delay={index * 100}>
+          <div className="group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden border border-white/20 dark:border-gray-700/30 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 flex flex-col h-full">
+            <div className="relative h-48 overflow-hidden">
+              <img
+                src={project.image}
+                alt={project.name}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                <button
+                  onClick={() => setSelectedProject(project)}
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-lg text-[#744B93] dark:text-[#C889B5] hover:bg-gradient-to-r hover:from-[#744B93] hover:to-[#C889B5] hover:text-white transition-all duration-300"
+                >
+                  <Zap size={16} />
+                  View Details
+                </button>
+              </div>
+            </div>
+            <div className="p-6 flex flex-col flex-grow">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-3 truncate">{project.name}</h3>
+              <div className="flex flex-wrap gap-2 mb-4">
+                {project.techStack.slice(0, 3).map((tech) => (
+                  <span key={tech} className="px-3 py-1 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-full text-xs font-medium text-[#744B93] dark:text-[#C889B5]">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+              <p className="text-gray-600 dark:text-gray-300 text-sm flex-grow line-clamp-3 mb-6">
+                {project.description}
+              </p>
+              <div className="flex gap-3 mt-auto">
+                <a
+                  href={project.liveLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 hover:from-[#744B93] hover:to-[#C889B5] hover:text-white text-[#744B93] dark:text-[#C889B5] rounded-lg text-sm font-medium transition-all duration-300"
+                >
+                  <Globe size={16} />
+                  Live
+                </a>
+                <a
+                  href={project.githubLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 hover:from-[#744B93] hover:to-[#C889B5] hover:text-white text-[#744B93] dark:text-[#C889B5] rounded-lg text-sm font-medium transition-all duration-300"
+                >
+                  <Github size={16} />
+                  Code
+                </a>
+              </div>
+            </div>
+          </div>
+        </Reveal>
+      ))}
+    </div>
+  </Section>
+);
+
+const ContactSection = () => {
+  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      await emailjs.send(
+        'service_vvep8u5',
+        'template_skr3515',
+        {
+          from_name: formData.name,
+          reply_to: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+          to_name: 'Homayra Heme',
+        },
+        'X8l8C7oU52H46-m87'
+      );
+      setSubmitStatus('success');
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } catch (error) {
+      console.error('Email send failed:', error);
+      setSubmitStatus('error');
+    }
+    setIsSubmitting(false);
+    setTimeout(() => setSubmitStatus(null), 5000);
+  };
+
+  const ContactInfo = ({ icon: Icon, title, value, href }) => (
+    <Reveal>
+      <a
+        href={href}
+        target={href?.startsWith('http') ? '_blank' : undefined}
+        rel={href?.startsWith('http') ? 'noopener noreferrer' : undefined}
+        className="block group"
+      >
+        <div className="flex items-center gap-5 p-6 rounded-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-white/20 dark:border-gray-700/30 shadow-sm hover:shadow-xl hover:border-[#744B93]/30 hover:-translate-y-1 transition-all duration-300">
+          <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-2xl flex items-center justify-center text-[#744B93] group-hover:from-[#744B93] group-hover:to-[#C889B5] group-hover:text-white transition-all duration-300">
+            <Icon size={26} className="transition-transform duration-300 group-hover:scale-110" />
+          </div>
+          <div className="flex-grow">
+            <p className="text-sm font-semibold text-gray-400 dark:text-gray-500 mb-1 uppercase tracking-wide">{title}</p>
+            <p className="text-lg font-bold text-gray-900 dark:text-gray-100 break-all">{value}</p>
+          </div>
+        </div>
+      </a>
+    </Reveal>
+  );
+
+  return (
+    <Section id="contact" title="Get In Touch" subtitle="Let's work together">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="space-y-8">
+          <Reveal>
+            <div className="space-y-6">
+              <ContactInfo icon={Mail} title="Email" value={PORTFOLIO_DATA.email} href={`mailto:${PORTFOLIO_DATA.email}`} />
+              <ContactInfo icon={Phone} title="Phone" value={PORTFOLIO_DATA.phone} href={`tel:${PORTFOLIO_DATA.phone}`} />
+              <ContactInfo icon={MessageCircle} title="WhatsApp" value={PORTFOLIO_DATA.phone} href={`https://wa.me/${PORTFOLIO_DATA.phone.replace(/[^0-9]/g, '')}`} />
+            </div>
+          </Reveal>
+
+          <Reveal delay={100}>
+            <div className="pt-8 border-t border-white/20 dark:border-gray-700/30">
+              <h4 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">Connect on Social</h4>
+              <div className="flex flex-wrap gap-4">
+                {PORTFOLIO_DATA.socials.map((social, index) => (
+                  <Reveal key={social.name} delay={index * 50}>
+                    <a
+                      href={social.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-14 h-14 flex items-center justify-center bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-[#744B93] dark:text-[#C889B5] rounded-2xl shadow-lg border border-[#744B93]/10 dark:border-[#C889B5]/10 hover:bg-gradient-to-r hover:from-[#744B93] hover:to-[#C889B5] hover:text-white hover:-translate-y-1 hover:shadow-xl transition-all duration-300 group"
+                      aria-label={social.name}
+                    >
+                      <social.icon size={26} className="transition-transform duration-300 group-hover:scale-110" />
+                    </a>
+                  </Reveal>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+        </div>
+
+        <Reveal delay={100}>
+          <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/30">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Your Name *
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 rounded-lg border border-[#744B93]/20 dark:border-[#C889B5]/20 bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#744B93] focus:border-transparent transition-all backdrop-blur-sm placeholder-gray-400 dark:placeholder-gray-500"
+                    placeholder="John Doe"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Your Email *
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 rounded-lg border border-[#744B93]/20 dark:border-[#C889B5]/20 bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#744B93] focus:border-transparent transition-all backdrop-blur-sm placeholder-gray-400 dark:placeholder-gray-500"
+                    placeholder="john@example.com"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Subject *
+                </label>
+                <input
+                  type="text"
+                  id="subject"
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 rounded-lg border border-[#744B93]/20 dark:border-[#C889B5]/20 bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#744B93] focus:border-transparent transition-all backdrop-blur-sm placeholder-gray-400 dark:placeholder-gray-500"
+                  placeholder="Project Inquiry"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Message *
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  required
+                  rows="5"
+                  className="w-full px-4 py-3 rounded-lg border border-[#744B93]/20 dark:border-[#C889B5]/20 bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#744B93] focus:border-transparent transition-all backdrop-blur-sm placeholder-gray-400 dark:placeholder-gray-500 resize-none"
+                  placeholder="Tell me about your project..."
+                />
+              </div>
+
+              {submitStatus === 'success' && (
+                <div className="p-4 bg-gradient-to-r from-green-500/10 to-emerald-500/10 backdrop-blur-sm text-green-700 dark:text-green-300 rounded-lg text-center border border-green-500/20">
+                  ✓ Message sent successfully! I'll get back to you soon.
+                </div>
+              )}
+              {submitStatus === 'error' && (
+                <div className="p-4 bg-gradient-to-r from-red-500/10 to-pink-500/10 backdrop-blur-sm text-red-700 dark:text-red-300 rounded-lg text-center border border-red-500/20">
+                  ✗ Failed to send message. Please try again later.
+                </div>
+              )}
+
+              <div className="pt-4">
+                <AnimatedButton
+                  type="submit"
+                  className={`w-full py-4 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      Send Message
+                      <ArrowRight className="w-5 h-5" />
+                    </>
+                  )}
+                </AnimatedButton>
+              </div>
+            </form>
+          </div>
+        </Reveal>
+      </div>
+    </Section>
+  );
+};
+
+const Footer = () => (
+  <footer className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm py-8 px-4 sm:px-8 lg:px-16 border-t border-white/20 dark:border-gray-700/30 relative z-10">
+    <div className="max-w-6xl mx-auto">
+      <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 flex items-center justify-center bg-gradient-to-r from-[#744B93] to-[#C889B5] rounded-xl shadow-lg">
+            <span className="text-white font-bold text-xl tracking-tighter">
+              &lt;/&gt;
+            </span>
+          </div>
+          <div>
+            <h2 className="text-xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#744B93] to-[#C889B5] mb-1">
+              HEME.DEV
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400 text-sm">
+              Crafting exceptional digital experiences
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-6">
+          {PORTFOLIO_DATA.socials.map((social) => (
+            <a
+              key={social.name}
+              href={social.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-600 dark:text-gray-400 hover:text-[#744B93] dark:hover:text-[#C889B5] transition-colors duration-300"
+              aria-label={social.name}
+            >
+              <social.icon size={20} />
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-8 pt-8 border-t border-white/20 dark:border-gray-700/30 text-center">
+        <p className="text-gray-600 dark:text-gray-400 text-sm">
+          &copy; {new Date().getFullYear()} Homayra Binte Harun Heme. All rights reserved.
+        </p>
+        <p className="text-gray-500 dark:text-gray-500 text-xs mt-2">
+          Built with React & Tailwind CSS • Modern Professional Portfolio
+        </p>
+      </div>
+    </div>
+  </footer>
+);
 
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -924,449 +1364,18 @@ const App = () => {
   }, []);
 
   // Rest of the components remain the same...
-  const AboutMeSection = () => (
-    <Section id="about" title="About Me" subtitle="My journey in web development">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        <Reveal>
-          <div className="space-y-6">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 backdrop-blur-sm text-[#744B93] dark:text-[#C889B5] text-sm font-medium mb-4">
-              <Users className="w-4 h-4" />
-              Personal Journey
-            </div>
-            <h3 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-              Crafting Digital Experiences with Passion
-            </h3>
-            <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
-              {PORTFOLIO_DATA.about.intro}
-            </p>
-            <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
-              {PORTFOLIO_DATA.about.journey}
-            </p>
-            <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
-              {PORTFOLIO_DATA.about.hobbies}
-            </p>
-          </div>
-        </Reveal>
-
-        <Reveal delay={200}>
-          <div className="relative group">
-            <div className="absolute -inset-4 bg-gradient-to-r from-[#744B93] to-[#C889B5] rounded-3xl blur-xl opacity-20 group-hover:opacity-30 transition-opacity duration-300"></div>
-            <div className="relative p-8 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/30">
-              <div className="space-y-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-xl flex items-center justify-center">
-                    <Zap className="w-6 h-6 text-[#744B93] dark:text-[#C889B5]" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-gray-900 dark:text-gray-100">Quick Learner</h4>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm">Adapting to new technologies</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-xl flex items-center justify-center">
-                    <Star className="w-6 h-6 text-[#744B93] dark:text-[#C889B5]" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-gray-900 dark:text-gray-100">Attention to Detail</h4>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm">Pixel-perfect implementations</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-xl flex items-center justify-center">
-                    <Users className="w-6 h-6 text-[#744B93] dark:text-[#C889B5]" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-gray-900 dark:text-gray-100">Team Player</h4>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm">Collaborative development</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Reveal>
-      </div>
-    </Section>
-  );
-
-  const SkillsSection = () => (
-    <Section id="skills" title="Technical Expertise" subtitle="Technologies I work with">
-      <div className="relative max-w-4xl mx-auto">
-        <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gradient-to-b from-[#744B93]/20 to-[#C889B5]/20 hidden md:block"></div>
-
-        {PORTFOLIO_DATA.skills.map((skillGroup, index) => (
-          <Reveal key={skillGroup.category} delay={index * 100}>
-            <div className={`flex flex-col md:flex-row items-center gap-8 mb-12 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
-              <div className="md:w-1/2">
-                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-white/20 dark:border-gray-700/30 transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="w-14 h-14 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-xl flex items-center justify-center">
-                      <skillGroup.icon className="w-7 h-7 text-[#744B93] dark:text-[#C889B5]" />
-                    </div>
-                    <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                      {skillGroup.category}
-                    </h3>
-                  </div>
-                  <ul className="space-y-4">
-                    {skillGroup.list.map((skill, i) => (
-                      <li key={i} className="flex items-center gap-3 text-gray-700 dark:text-gray-300 hover:text-[#744B93] dark:hover:text-[#C889B5] transition-colors duration-200 group">
-                        <div className="w-8 h-8 flex items-center justify-center bg-gradient-to-r from-[#744B93]/20 to-[#C889B5]/20 rounded-full text-[#744B93] dark:text-[#C889B5] group-hover:scale-110 transition-transform duration-300">
-                          {skill.icon}
-                        </div>
-                        <span className="text-lg font-medium">{skill.name}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-
-              <div className="hidden md:flex w-12 h-12 bg-gradient-to-r from-[#744B93] to-[#C889B5] rounded-full items-center justify-center relative z-10">
-                <div className="w-8 h-8 bg-white dark:bg-gray-900 rounded-full"></div>
-              </div>
-
-              <div className="md:w-1/2"></div>
-            </div>
-          </Reveal>
-        ))}
-      </div>
-    </Section>
-  );
-
-  const EducationSection = () => (
-    <Section id="education" title="Education" subtitle="My academic journey">
-      <div className="max-w-4xl mx-auto">
-        {PORTFOLIO_DATA.education.map((edu, index) => (
-          <Reveal key={index} delay={index * 100}>
-            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-white/20 dark:border-gray-700/30 transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
-              <div className="flex items-center gap-6 mb-6">
-                <div className="w-16 h-16 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-2xl flex items-center justify-center">
-                  <GraduationCap className="w-8 h-8 text-[#744B93] dark:text-[#C889B5]" />
-                </div>
-                <div>
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{edu.degree}</h3>
-                  <p className="text-xl text-[#744B93] dark:text-[#C889B5] font-medium">{edu.institution}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="inline-block px-4 py-1.5 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-full text-sm font-medium text-[#744B93] dark:text-[#C889B5]">
-                  {edu.period}
-                </div>
-              </div>
-              {edu.details && (
-                <p className="text-gray-600 dark:text-gray-400 text-lg leading-relaxed">{edu.details}</p>
-              )}
-            </div>
-          </Reveal>
-        ))}
-      </div>
-    </Section>
-  );
 
 
-  const ProjectsSection = () => (
-    <Section id="projects" title="Featured Projects" subtitle="My recent work">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        {PORTFOLIO_DATA.projects.map((project, index) => (
-          <Reveal key={project.id} delay={index * 100}>
-            <div className="group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden border border-white/20 dark:border-gray-700/30 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 flex flex-col h-full">
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src={project.image}
-                  alt={project.name}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                  <button
-                    onClick={() => setSelectedProject(project)}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-lg text-[#744B93] dark:text-[#C889B5] hover:bg-gradient-to-r hover:from-[#744B93] hover:to-[#C889B5] hover:text-white transition-all duration-300"
-                  >
-                    <Zap size={16} />
-                    View Details
-                  </button>
-                </div>
-              </div>
-              <div className="p-6 flex flex-col flex-grow">
-                <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-3 truncate">{project.name}</h3>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.techStack.slice(0, 3).map((tech) => (
-                    <span key={tech} className="px-3 py-1 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-full text-xs font-medium text-[#744B93] dark:text-[#C889B5]">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-                <p className="text-gray-600 dark:text-gray-300 text-sm flex-grow line-clamp-3 mb-6">
-                  {project.description}
-                </p>
-                <div className="flex gap-3 mt-auto">
-                  <a
-                    href={project.liveLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 hover:from-[#744B93] hover:to-[#C889B5] hover:text-white text-[#744B93] dark:text-[#C889B5] rounded-lg text-sm font-medium transition-all duration-300"
-                  >
-                    <Globe size={16} />
-                    Live
-                  </a>
-                  <a
-                    href={project.githubLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 hover:from-[#744B93] hover:to-[#C889B5] hover:text-white text-[#744B93] dark:text-[#C889B5] rounded-lg text-sm font-medium transition-all duration-300"
-                  >
-                    <Github size={16} />
-                    Code
-                  </a>
-                </div>
-              </div>
-            </div>
-          </Reveal>
-        ))}
-      </div>
-    </Section>
-  );
 
-  const ContactSection = () => {
-    const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [submitStatus, setSubmitStatus] = useState(null);
 
-    const handleChange = (e) => {
-      setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
 
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      setIsSubmitting(true);
-      try {
-        await emailjs.send(
-          'service_vvep8u5',
-          'template_skr3515',
-          {
-            from_name: formData.name,
-            reply_to: formData.email,
-            subject: formData.subject,
-            message: formData.message,
-            to_name: 'Homayra Heme',
-          },
-          'X8l8C7oU52H46-m87'
-        );
-        setSubmitStatus('success');
-        setFormData({ name: '', email: '', subject: '', message: '' });
-      } catch (error) {
-        console.error('Email send failed:', error);
-        setSubmitStatus('error');
-      }
-      setIsSubmitting(false);
-      setTimeout(() => setSubmitStatus(null), 5000);
-    };
 
-    const ContactInfo = ({ icon: Icon, title, value, href }) => (
-      <Reveal>
-        <a
-          href={href}
-          target={href?.startsWith('http') ? '_blank' : undefined}
-          rel={href?.startsWith('http') ? 'noopener noreferrer' : undefined}
-          className="block group"
-        >
-          <div className="flex items-center gap-5 p-6 rounded-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-white/20 dark:border-gray-700/30 shadow-sm hover:shadow-xl hover:border-[#744B93]/30 hover:-translate-y-1 transition-all duration-300">
-            <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-2xl flex items-center justify-center text-[#744B93] group-hover:from-[#744B93] group-hover:to-[#C889B5] group-hover:text-white transition-all duration-300">
-              <Icon size={26} className="transition-transform duration-300 group-hover:scale-110" />
-            </div>
-            <div className="flex-grow">
-              <p className="text-sm font-semibold text-gray-400 dark:text-gray-500 mb-1 uppercase tracking-wide">{title}</p>
-              <p className="text-lg font-bold text-gray-900 dark:text-gray-100 break-all">{value}</p>
-            </div>
-          </div>
-        </a>
-      </Reveal>
-    );
 
-    return (
-      <Section id="contact" title="Get In Touch" subtitle="Let's work together">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <div className="space-y-8">
-            <Reveal>
-              <div className="space-y-6">
-                <ContactInfo icon={Mail} title="Email" value={PORTFOLIO_DATA.email} href={`mailto:${PORTFOLIO_DATA.email}`} />
-                <ContactInfo icon={Phone} title="Phone" value={PORTFOLIO_DATA.phone} href={`tel:${PORTFOLIO_DATA.phone}`} />
-                <ContactInfo icon={MessageCircle} title="WhatsApp" value={PORTFOLIO_DATA.phone} href={`https://wa.me/${PORTFOLIO_DATA.phone.replace(/[^0-9]/g, '')}`} />
-              </div>
-            </Reveal>
 
-            <Reveal delay={100}>
-              <div className="pt-8 border-t border-white/20 dark:border-gray-700/30">
-                <h4 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">Connect on Social</h4>
-                <div className="flex flex-wrap gap-4">
-                  {PORTFOLIO_DATA.socials.map((social, index) => (
-                    <Reveal key={social.name} delay={index * 50}>
-                      <a
-                        href={social.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-14 h-14 flex items-center justify-center bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-[#744B93] dark:text-[#C889B5] rounded-2xl shadow-lg border border-[#744B93]/10 dark:border-[#C889B5]/10 hover:bg-gradient-to-r hover:from-[#744B93] hover:to-[#C889B5] hover:text-white hover:-translate-y-1 hover:shadow-xl transition-all duration-300 group"
-                        aria-label={social.name}
-                      >
-                        <social.icon size={26} className="transition-transform duration-300 group-hover:scale-110" />
-                      </a>
-                    </Reveal>
-                  ))}
-                </div>
-              </div>
-            </Reveal>
-          </div>
 
-          <Reveal delay={100}>
-            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/30">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Your Name *
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 rounded-lg border border-[#744B93]/20 dark:border-[#C889B5]/20 bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#744B93] focus:border-transparent transition-all backdrop-blur-sm placeholder-gray-400 dark:placeholder-gray-500"
-                      placeholder="John Doe"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Your Email *
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 rounded-lg border border-[#744B93]/20 dark:border-[#C889B5]/20 bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#744B93] focus:border-transparent transition-all backdrop-blur-sm placeholder-gray-400 dark:placeholder-gray-500"
-                      placeholder="john@example.com"
-                    />
-                  </div>
-                </div>
 
-                <div>
-                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Subject *
-                  </label>
-                  <input
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 rounded-lg border border-[#744B93]/20 dark:border-[#C889B5]/20 bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#744B93] focus:border-transparent transition-all backdrop-blur-sm placeholder-gray-400 dark:placeholder-gray-500"
-                    placeholder="Project Inquiry"
-                  />
-                </div>
 
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Message *
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    required
-                    rows="5"
-                    className="w-full px-4 py-3 rounded-lg border border-[#744B93]/20 dark:border-[#C889B5]/20 bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#744B93] focus:border-transparent transition-all backdrop-blur-sm placeholder-gray-400 dark:placeholder-gray-500 resize-none"
-                    placeholder="Tell me about your project..."
-                  />
-                </div>
 
-                {submitStatus === 'success' && (
-                  <div className="p-4 bg-gradient-to-r from-green-500/10 to-emerald-500/10 backdrop-blur-sm text-green-700 dark:text-green-300 rounded-lg text-center border border-green-500/20">
-                    ✓ Message sent successfully! I'll get back to you soon.
-                  </div>
-                )}
-                {submitStatus === 'error' && (
-                  <div className="p-4 bg-gradient-to-r from-red-500/10 to-pink-500/10 backdrop-blur-sm text-red-700 dark:text-red-300 rounded-lg text-center border border-red-500/20">
-                    ✗ Failed to send message. Please try again later.
-                  </div>
-                )}
-
-                <div className="pt-4">
-                  <AnimatedButton
-                    type="submit"
-                    className={`w-full py-4 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
-                        Sending...
-                      </>
-                    ) : (
-                      <>
-                        Send Message
-                        <ArrowRight className="w-5 h-5" />
-                      </>
-                    )}
-                  </AnimatedButton>
-                </div>
-              </form>
-            </div>
-          </Reveal>
-        </div>
-      </Section>
-    );
-  };
-
-  const Footer = () => (
-    <footer className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm py-8 px-4 sm:px-8 lg:px-16 border-t border-white/20 dark:border-gray-700/30 relative z-10">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 flex items-center justify-center bg-gradient-to-r from-[#744B93] to-[#C889B5] rounded-xl shadow-lg">
-              <span className="text-white font-bold text-xl tracking-tighter">
-                &lt;/&gt;
-              </span>
-            </div>
-            <div>
-              <h2 className="text-xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#744B93] to-[#C889B5] mb-1">
-                HEME.DEV
-              </h2>
-              <p className="text-gray-600 dark:text-gray-400 text-sm">
-                Crafting exceptional digital experiences
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-6">
-            {PORTFOLIO_DATA.socials.map((social) => (
-              <a
-                key={social.name}
-                href={social.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-600 dark:text-gray-400 hover:text-[#744B93] dark:hover:text-[#C889B5] transition-colors duration-300"
-                aria-label={social.name}
-              >
-                <social.icon size={20} />
-              </a>
-            ))}
-          </div>
-        </div>
-
-        <div className="mt-8 pt-8 border-t border-white/20 dark:border-gray-700/30 text-center">
-          <p className="text-gray-600 dark:text-gray-400 text-sm">
-            &copy; {new Date().getFullYear()} Homayra Binte Harun Heme. All rights reserved.
-          </p>
-          <p className="text-gray-500 dark:text-gray-500 text-xs mt-2">
-            Built with React & Tailwind CSS • Modern Professional Portfolio
-          </p>
-        </div>
-      </div>
-    </footer>
-  );
 
   return (
     <AnimationContext.Provider value={{ animationsEnabled: true }}>
@@ -1390,7 +1399,7 @@ const App = () => {
             <AboutMeSection />
             <SkillsSection />
             <EducationSection />
-            <ProjectsSection />
+            <ProjectsSection setSelectedProject={setSelectedProject} />
             <ContactSection />
           </main>
 
