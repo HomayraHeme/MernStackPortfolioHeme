@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo, createContext } from 'react';
 import emailjs from '@emailjs/browser';
 import {
-  Menu, X, Sun, Moon, Github, Linkedin, Facebook, Download, Mail, Phone, MessageCircle, Code, GraduationCap, Briefcase, Zap, Star, LayoutList, ArrowRight, ExternalLink, ChevronRight, Sparkles, Award, Users, Globe, Clock
+  Menu, X, Sun, Moon, Github, Linkedin, Facebook, Download, Mail, Phone, MessageCircle, Code, GraduationCap, Briefcase, Zap, Star, LayoutList, ArrowRight, ExternalLink, ChevronRight, Sparkles, Award, Users, Globe, Clock, Server
 } from 'lucide-react';
 import {
   FaReact,
@@ -20,7 +20,12 @@ import {
   SiMongodb,
   SiFirebase,
   SiVercel,
+  SiNetlify,
+  SiPostman,
+
 } from 'react-icons/si';
+import { useInView } from 'react-intersection-observer';
+import { BiLogoVisualStudio } from 'react-icons/bi';
 
 // Create context for animation control
 const AnimationContext = createContext({ animationsEnabled: true });
@@ -30,7 +35,7 @@ const PORTFOLIO_DATA = {
   designation: "MERN Stack Developer",
   name: "Homayra Binte Harun Heme",
   photoUrl: "https://i.ibb.co.com/8nmz2nBq/rounded-formal.png",
-  resumeLink: "https://drive.google.com/file/d/1g-a55sF8gCmuI8shHD3ABWBqcaWtKgJM/view?usp=sharing",
+  resumeLink: "https://drive.google.com/file/d/1MssJQLLtG0_XPjJrwgc_PiLRnhXc_gtk/view?usp=drive_link",
   email: "heme5674@gmail.com",
   phone: "+8801878654211",
   socials: [
@@ -44,9 +49,41 @@ const PORTFOLIO_DATA = {
     hobbies: "Outside of coding, my hobbies are painting and gardening. These creative pursuits perfectly complement my professional work, as they cultivate the same qualities I bring to development: patience and extreme attention to detail. I apply these core values to every task I undertake, whether it's perfecting a painting, nurturing a plant's growth, or fine-tuning a web application's code.",
   },
   skills: [
-    { category: "Frontend", icon: LayoutList, list: ["React", "Next.js", "JavaScript (ES6+)", "HTML", "CSS", "Tailwind CSS"] },
-    { category: "Backend", icon: Code, list: ["Node.js", "Express.js", "REST APIs"] },
-    { category: "Database & Tools", icon: Zap, list: ["MongoDB", "Git/GitHub", "Figma", "Firebase", "VS Code", "Vercel", "Nelify", "Surge"] },
+    {
+      category: "Frontend",
+      icon: LayoutList,
+      list: [
+        { name: "React", icon: <FaReact /> },
+        { name: "Next.js", icon: <SiNextdotjs /> },
+        { name: "JavaScript (ES6+)", icon: <FaJs /> },
+        { name: "HTML", icon: <FaHtml5 /> },
+        { name: "CSS", icon: <FaCss3Alt /> },
+        { name: "Tailwind CSS", icon: <SiTailwindcss /> }
+      ]
+    },
+    {
+      category: "Backend",
+      icon: Code,
+      list: [
+        { name: "Node.js", icon: <FaNodeJs /> },
+        { name: "Express.js", icon: <SiExpress /> },
+        { name: "REST APIs", icon: <Server /> }
+      ]
+    },
+    {
+      category: "Database & Tools",
+      icon: Zap,
+      list: [
+        { name: "MongoDB", icon: <SiMongodb /> },
+        { name: "Git/GitHub", icon: <FaGitAlt /> },
+        { name: "Figma", icon: <FaFigma /> },
+        { name: "Firebase", icon: <SiFirebase /> },
+        { name: "VS Code", icon: <BiLogoVisualStudio /> },
+        { name: "Vercel", icon: <SiVercel /> },
+        { name: "Netlify", icon: <SiNetlify /> },
+        { name: "Surge", icon: <Globe /> }
+      ]
+    },
   ],
   education: [
     {
@@ -54,26 +91,9 @@ const PORTFOLIO_DATA = {
       degree: "B.Sc. in Computer Science & Engineering",
       period: "2022-present",
     },
-    {
-      institution: "Programming Hero",
-      degree: "Complete Web Development with Programming Hero",
-      period: "2025-present",
-    },
-    {
-      institution: "Milestone College",
-      degree: "Higher Secondary Certificate (HSC)",
-      period: "2020-2021",
-      details: "Concentrated on Science subjects."
-    },
+
   ],
-  experience: [
-    {
-      title: "Fresher/Student",
-      company: "Currently Seeking Opportunities",
-      period: "N/A",
-      description: "Focusing on building production-ready projects and continuously learning new technologies to start a professional journey.",
-    },
-  ],
+
   projects: [
     {
       id: 1,
@@ -327,45 +347,24 @@ const BackgroundVideo = () => {
   );
 };
 
-// Custom Hook for InView detection
-const useInView = (options = {}) => {
-  const [isInView, setIsInView] = useState(false);
-  const ref = useRef(null);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true);
-        }
-      },
-      {
-        threshold: options.threshold || 0.1,
-        rootMargin: options.rootMargin || '0px 0px -50px 0px'
-      }
-    );
-
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
-    return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
-      }
-    };
-  }, []);
-
-  return [ref, isInView];
-};
 
 const Reveal = ({ children, threshold = 0.1, className = "", delay = 0 }) => {
-  const [ref, isInView] = useInView({ threshold });
+  const { ref, inView } = useInView({
+    threshold,
+    triggerOnce: true,
+    // rootMargin টা সরিয়ে বা কমিয়ে দেখতে পারেন
+  });
+
   return (
     <div
       ref={ref}
-      className={`transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} ${className}`}
-      style={{ transitionDelay: `${delay}ms` }}
+      className={`transition-all duration-700 ease-out will-change-transform ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+        } ${className}`}
+      style={{
+        transitionDelay: `${delay}ms`,
+        backfaceVisibility: 'hidden' // এটি ফ্লিকারিং বা ব্লিংক কমাতে সাহায্য করে
+      }}
     >
       {children}
     </div>
@@ -652,8 +651,8 @@ const HeroSection = ({ scrollToSection }) => {
       <div className="w-full max-w-6xl relative z-10">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
           <div className="lg:w-1/2 space-y-8">
-            <Reveal>
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 backdrop-blur-sm text-[#744B93] dark:text-[#C889B5] text-sm font-medium mb-4">
+            <Reveal className='pt-5'>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 backdrop-blur-sm text-[#744B93] dark:text-[#C889B5] text-sm font-medium ">
                 <Sparkles className="w-4 h-4" />
                 MERN Stack Developer
               </div>
@@ -771,7 +770,7 @@ const Navbar = ({ activeSection, isDarkMode, toggleDarkMode, scrollToSection, is
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50">
-      <header className="w-full backdrop-blur-xl bg-white/95 dark:bg-gray-900/95 shadow-xl border-b border-white/20 dark:border-gray-700/30">
+      <header className="w-full backdrop-blur-xl bg-white/95 dark:bg-gray-900/95 shadow-xl border-b border-white/20 dark:border-gray-700/30 lg:px-7">
         <div className="px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <button
@@ -991,58 +990,32 @@ const App = () => {
 
   const SkillsSection = () => (
     <Section id="skills" title="Technical Expertise" subtitle="Technologies I work with">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {PORTFOLIO_DATA.skills.map((skillGroup, index) => (
-          <Reveal key={skillGroup.category} delay={index * 100}>
-            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-white/20 dark:border-gray-700/30 transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-14 h-14 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-xl flex items-center justify-center">
-                  <skillGroup.icon className="w-7 h-7 text-[#744B93] dark:text-[#C889B5]" />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                  {skillGroup.category}
-                </h3>
-              </div>
-              <ul className="space-y-4">
-                {skillGroup.list.map((skill) => (
-                  <li key={skill} className="flex items-center gap-3 text-gray-700 dark:text-gray-300 hover:text-[#744B93] dark:hover:text-[#C889B5] transition-colors duration-200 group">
-                    <div className="w-2 h-2 bg-gradient-to-r from-[#744B93] to-[#C889B5] rounded-full group-hover:scale-150 transition-transform duration-300"></div>
-                    <span className="text-lg">{skill}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Reveal>
-        ))}
-      </div>
-    </Section>
-  );
-
-  const EducationSection = () => (
-    <Section id="education" title="Education" subtitle="My academic journey">
       <div className="relative max-w-4xl mx-auto">
         <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gradient-to-b from-[#744B93]/20 to-[#C889B5]/20 hidden md:block"></div>
 
-        {PORTFOLIO_DATA.education.map((edu, index) => (
-          <Reveal key={index} delay={index * 100}>
+        {PORTFOLIO_DATA.skills.map((skillGroup, index) => (
+          <Reveal key={skillGroup.category} delay={index * 100}>
             <div className={`flex flex-col md:flex-row items-center gap-8 mb-12 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
               <div className="md:w-1/2">
-                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-white/20 dark:border-gray-700/30">
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="w-12 h-12 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-xl flex items-center justify-center">
-                      <GraduationCap className="w-6 h-6 text-[#744B93] dark:text-[#C889B5]" />
+                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-white/20 dark:border-gray-700/30 transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-14 h-14 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-xl flex items-center justify-center">
+                      <skillGroup.icon className="w-7 h-7 text-[#744B93] dark:text-[#C889B5]" />
                     </div>
-                    <div>
-                      <div className="inline-block px-3 py-1 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-full text-sm font-medium text-[#744B93] dark:text-[#C889B5]">
-                        {edu.period}
-                      </div>
-                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                      {skillGroup.category}
+                    </h3>
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">{edu.degree}</h3>
-                  <p className="text-lg font-medium text-[#744B93] dark:text-[#C889B5] mb-3">{edu.institution}</p>
-                  {edu.details && (
-                    <p className="text-gray-600 dark:text-gray-400">{edu.details}</p>
-                  )}
+                  <ul className="space-y-4">
+                    {skillGroup.list.map((skill, i) => (
+                      <li key={i} className="flex items-center gap-3 text-gray-700 dark:text-gray-300 hover:text-[#744B93] dark:hover:text-[#C889B5] transition-colors duration-200 group">
+                        <div className="w-8 h-8 flex items-center justify-center bg-gradient-to-r from-[#744B93]/20 to-[#C889B5]/20 rounded-full text-[#744B93] dark:text-[#C889B5] group-hover:scale-110 transition-transform duration-300">
+                          {skill.icon}
+                        </div>
+                        <span className="text-lg font-medium">{skill.name}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
 
@@ -1058,27 +1031,29 @@ const App = () => {
     </Section>
   );
 
-  const ExperienceSection = () => (
-    <Section id="experience" title="Experience" subtitle="My professional journey">
+  const EducationSection = () => (
+    <Section id="education" title="Education" subtitle="My academic journey">
       <div className="max-w-4xl mx-auto">
-        {PORTFOLIO_DATA.experience.map((exp, index) => (
+        {PORTFOLIO_DATA.education.map((edu, index) => (
           <Reveal key={index} delay={index * 100}>
-            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-white/20 dark:border-gray-700/30 mb-8 transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-2xl flex items-center justify-center">
-                    <Briefcase className="w-7 h-7 text-[#744B93] dark:text-[#C889B5]" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{exp.title}</h3>
-                    <p className="text-lg text-[#744B93] dark:text-[#C889B5]">{exp.company}</p>
-                  </div>
+            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-white/20 dark:border-gray-700/30 transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
+              <div className="flex items-center gap-6 mb-6">
+                <div className="w-16 h-16 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-2xl flex items-center justify-center">
+                  <GraduationCap className="w-8 h-8 text-[#744B93] dark:text-[#C889B5]" />
                 </div>
-                <div className="inline-block px-4 py-2 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-full text-sm font-medium text-[#744B93] dark:text-[#C889B5]">
-                  {exp.period}
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{edu.degree}</h3>
+                  <p className="text-xl text-[#744B93] dark:text-[#C889B5] font-medium">{edu.institution}</p>
                 </div>
               </div>
-              <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">{exp.description}</p>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="inline-block px-4 py-1.5 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-full text-sm font-medium text-[#744B93] dark:text-[#C889B5]">
+                  {edu.period}
+                </div>
+              </div>
+              {edu.details && (
+                <p className="text-gray-600 dark:text-gray-400 text-lg leading-relaxed">{edu.details}</p>
+              )}
             </div>
           </Reveal>
         ))}
@@ -1086,9 +1061,10 @@ const App = () => {
     </Section>
   );
 
+
   const ProjectsSection = () => (
     <Section id="projects" title="Featured Projects" subtitle="My recent work">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {PORTFOLIO_DATA.projects.map((project, index) => (
           <Reveal key={project.id} delay={index * 100}>
             <div className="group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden border border-white/20 dark:border-gray-700/30 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 flex flex-col h-full">
@@ -1414,7 +1390,6 @@ const App = () => {
             <AboutMeSection />
             <SkillsSection />
             <EducationSection />
-            <ExperienceSection />
             <ProjectsSection />
             <ContactSection />
           </main>
