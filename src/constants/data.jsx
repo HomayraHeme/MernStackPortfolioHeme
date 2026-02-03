@@ -24,7 +24,7 @@ import { BiLogoVisualStudio } from 'react-icons/bi';
 export const PORTFOLIO_DATA = {
     designation: "MERN Stack Developer",
     name: "Homayra Binte Harun Heme",
-    photoUrl: "https://i.ibb.co.com/8nmz2nBq/rounded-formal.png",
+    photoUrl: "https://i.ibb.co.com/cctxyfjs/banner-formal-removebg-preview.png",
     resumeLink: "https://drive.google.com/file/d/1MssJQLLtG0_XPjJrwgc_PiLRnhXc_gtk/view?usp=drive_link",
     email: "heme5674@gmail.com",
     phone: "+8801878654211",

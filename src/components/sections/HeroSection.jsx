@@ -73,14 +73,14 @@ const HeroSection = ({ scrollToSection }) => {
                     <div className="lg:w-1/3">
                         <Reveal delay={300} direction="left" duration={1000}>
                             <div className="relative group">
-                                <div className="absolute -inset-4 bg-gradient-to-r from-[#744B93] via-[#C889B5] to-[#744B93] rounded-3xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300 animate-gradient-xy"></div>
-                                <div className="relative p-2 bg-gradient-to-br from-white/20 to-white/5 dark:from-gray-800/20 dark:to-gray-800/5 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-gray-700/30">
+                                <div className="absolute -inset-4 bg-gradient-to-r from-[#744B93] via-[#C889B5] to-[#744B93] rounded-full blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300 animate-gradient-xy"></div>
+                                <div className="relative p-2 bg-gradient-to-br from-white/20 to-white/5 dark:from-gray-800/20 dark:to-gray-800/5 backdrop-blur-xl rounded-full border border-white/20 dark:border-gray-700/30">
                                     <img
                                         src={PORTFOLIO_DATA.photoUrl}
                                         alt="Professional Profile"
-                                        className="w-full h-auto rounded-2xl object-cover shadow-2xl"
+                                        className="w-full h-auto rounded-full object-cover shadow-2xl"
                                     />
-                                    <div className="absolute -bottom-6 -right-6 w-20 h-20 bg-gradient-to-r from-[#744B93] to-[#C889B5] rounded-2xl flex items-center justify-center shadow-2xl">
+                                    <div className="absolute -bottom-[-20px] -right-[-5px] w-20 h-20 bg-gradient-to-r from-[#744B93] to-[#C889B5] rounded-2xl flex items-center justify-center shadow-2xl">
                                         <Code className="w-10 h-10 text-white" />
                                     </div>
                                 </div>
