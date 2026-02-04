@@ -12,6 +12,7 @@ import SkillsSection from './components/sections/SkillsSection';
 import EducationSection from './components/sections/EducationSection';
 import { ProjectsSection, ProjectDetailModal } from './components/sections/ProjectsSection';
 import ContactSection from './components/sections/ContactSection';
+import Preloader from './components/ui/Preloader';
 
 // Create context for animation control
 export const AnimationContext = createContext({ animationsEnabled: true });
@@ -22,7 +23,16 @@ const App = () => {
   const [selectedProject, setSelectedProject] = useState(null);
   const [activeSection, setActiveSection] = useState('home');
   const [isScrolling, setIsScrolling] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const lenisRef = useRef(null);
+
+  // Loading State Effect
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2500);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Initialize Lenis for smooth scrolling
   useEffect(() => {
@@ -133,6 +143,7 @@ const App = () => {
 
   return (
     <AnimationContext.Provider value={{ animationsEnabled: true }}>
+      <Preloader isLoading={isLoading} isDarkMode={isDarkMode} />
       <div className={`min-h-screen transition-colors duration-500 overflow-x-hidden relative ${isDarkMode ? 'dark bg-gray-900 text-gray-100' : 'bg-white text-gray-900'}`}>
         <BackgroundEffect />
 
