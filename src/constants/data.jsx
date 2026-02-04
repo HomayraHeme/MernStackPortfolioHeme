@@ -1,5 +1,5 @@
 import {
-    Github, Linkedin, Facebook, LayoutList, Code, Zap, Server, Globe
+    Github, Linkedin, Facebook, LayoutList, Code, Zap, Server, Globe, Database, Wrench
 } from 'lucide-react';
 import {
     FaReact,
@@ -18,8 +18,10 @@ import {
     SiFirebase,
     SiVercel,
     SiNetlify,
+    SiFramer,
 } from 'react-icons/si';
 import { BiLogoVisualStudio } from 'react-icons/bi';
+import { TbApi } from 'react-icons/tb';
 
 export const PORTFOLIO_DATA = {
     designation: "MERN Stack Developer",
@@ -57,23 +59,31 @@ export const PORTFOLIO_DATA = {
             list: [
                 { name: "Node.js", icon: <FaNodeJs /> },
                 { name: "Express.js", icon: <SiExpress /> },
-                { name: "REST APIs", icon: <Server /> }
+                { name: "REST APIs", icon: <TbApi /> },
+                { name: "Axios", icon: <Zap className="w-4 h-4" /> }
             ]
         },
         {
-            category: "Database & Tools",
-            icon: Zap,
+            category: "Database & Deployment",
+            icon: Database,
             list: [
                 { name: "MongoDB", icon: <SiMongodb /> },
-                { name: "Git/GitHub", icon: <FaGitAlt /> },
-                { name: "Figma", icon: <FaFigma /> },
                 { name: "Firebase", icon: <SiFirebase /> },
-                { name: "VS Code", icon: <BiLogoVisualStudio /> },
                 { name: "Vercel", icon: <SiVercel /> },
                 { name: "Netlify", icon: <SiNetlify /> },
                 { name: "Surge", icon: <Globe /> }
             ]
         },
+        {
+            category: "Tools & Libraries",
+            icon: Wrench,
+            list: [
+                { name: "Git/GitHub", icon: <FaGitAlt /> },
+                { name: "Figma", icon: <FaFigma /> },
+                { name: "Framer Motion", icon: <SiFramer /> },
+                { name: "VS Code", icon: <BiLogoVisualStudio /> },
+            ]
+        }
     ],
     education: [
         {
