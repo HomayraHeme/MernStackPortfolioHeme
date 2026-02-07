@@ -10,7 +10,8 @@ import HeroSection from './components/sections/HeroSection';
 import AboutMeSection from './components/sections/AboutMeSection';
 import SkillsSection from './components/sections/SkillsSection';
 import EducationSection from './components/sections/EducationSection';
-import { ProjectsSection, ProjectDetailModal } from './components/sections/ProjectsSection';
+import { ProjectsSection } from './components/sections/ProjectsSection';
+import ProjectDetailModal from './components/sections/ProjectDetailModal';
 import ContactSection from './components/sections/ContactSection';
 import Preloader from './components/ui/Preloader';
 

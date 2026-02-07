@@ -38,6 +38,7 @@ const HeroSection = ({ scrollToSection }) => {
                             <div className="flex flex-col sm:flex-row items-center gap-6 pt-4">
                                 <AnimatedButton
                                     href={PORTFOLIO_DATA.resumeLink}
+                                    download="Homayra_Heme_Resume.pdf"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
@@ -53,7 +54,7 @@ const HeroSection = ({ scrollToSection }) => {
                         </Reveal>
 
                         <Reveal delay={400}>
-                            <div className="flex items-center gap-6 pt-8">
+                            <div className="flex items-center justify-center md:justify-start gap-6 pt-8">
                                 {PORTFOLIO_DATA.socials.map((social) => (
                                     <a
                                         key={social.name}

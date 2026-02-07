@@ -5,7 +5,7 @@ const Section = ({ id, title, subtitle, children, className = "" }) => {
     return (
         <section
             id={id}
-            className={`py-16 md:py-24 px-4 sm:px-8 lg:px-16 flex items-center justify-center scroll-mt-20 ${className}`}
+            className={`py-16 md:py-24 px-4 sm:px-8 lg:px-16 flex flex-col items-center scroll-mt-20 ${className}`}
         >
             <div className="w-full max-w-6xl relative z-10">
                 <Reveal direction="down">

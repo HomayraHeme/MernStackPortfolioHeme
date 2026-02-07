@@ -27,7 +27,7 @@ export const PORTFOLIO_DATA = {
     designation: "MERN Stack Developer",
     name: "Homayra Binte Harun Heme",
     photoUrl: "https://i.ibb.co.com/cctxyfjs/banner-formal-removebg-preview.png",
-    resumeLink: "https://drive.google.com/file/d/1MssJQLLtG0_XPjJrwgc_PiLRnhXc_gtk/view?usp=drive_link",
+    resumeLink: "https://drive.google.com/uc?export=download&id=1MssJQLLtG0_XPjJrwgc_PiLRnhXc_gtk",
     email: "heme5674@gmail.com",
     phone: "+8801878654211",
     socials: [

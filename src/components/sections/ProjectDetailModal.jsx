@@ -1,11 +1,7 @@
- import React from 'react';
+import React from 'react';
 import { Zap, Globe, Github, Code, Star, LayoutList, X } from 'lucide-react';
-import Section from '../ui/Section';
-import Reveal from '../ui/Reveal';
 import { AnimatedButton, AnimatedBorderButton } from '../ui/AnimatedButton';
-import { PORTFOLIO_DATA } from '../../constants/data';
 
-// Project Detail Modal
 const ProjectDetailModal = ({ project, onClose }) => {
     if (!project) return null;
 
@@ -115,66 +111,4 @@ const ProjectDetailModal = ({ project, onClose }) => {
     );
 };
 
-const ProjectsSection = ({ setSelectedProject }) => (
-    <Section id="projects" title="Featured Projects" subtitle="My recent work">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {PORTFOLIO_DATA.projects.map((project, index) => (
-                <Reveal key={project.id} delay={index * 100}>
-                    <div className="group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden border border-white/20 dark:border-gray-700/30 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 flex flex-col h-full">
-                        <div className="relative h-48 overflow-hidden">
-                            <img
-                                src={project.image}
-                                alt={project.name}
-                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                                <button
-                                    onClick={() => setSelectedProject(project)}
-                                    className="inline-flex items-center gap-2 px-4 py-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-lg text-[#744B93] dark:text-[#C889B5] hover:bg-gradient-to-r hover:from-[#744B93] hover:to-[#C889B5] hover:text-white transition-all duration-300"
-                                >
-                                    <Zap size={16} />
-                                    View Details
-                                </button>
-                            </div>
-                        </div>
-                        <div className="p-6 flex flex-col flex-grow">
-                            <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-3 truncate">{project.name}</h3>
-                            <div className="flex flex-wrap gap-2 mb-4">
-                                {project.techStack.slice(0, 3).map((tech) => (
-                                    <span key={tech} className="px-3 py-1 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 rounded-full text-xs font-medium text-[#744B93] dark:text-[#C889B5]">
-                                        {tech}
-                                    </span>
-                                ))}
-                            </div>
-                            <p className="text-gray-600 dark:text-gray-300 text-sm flex-grow line-clamp-3 mb-6">
-                                {project.description}
-                            </p>
-                            <div className="flex gap-3 mt-auto">
-                                <a
-                                    href={project.liveLink}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 hover:from-[#744B93] hover:to-[#C889B5] hover:text-white text-[#744B93] dark:text-[#C889B5] rounded-lg text-sm font-medium transition-all duration-300"
-                                >
-                                    <Globe size={16} />
-                                    Live
-                                </a>
-                                <a
-                                    href={project.githubLink}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-[#744B93]/10 to-[#C889B5]/10 hover:from-[#744B93] hover:to-[#C889B5] hover:text-white text-[#744B93] dark:text-[#C889B5] rounded-lg text-sm font-medium transition-all duration-300"
-                                >
-                                    <Github size={16} />
-                                    Code
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </Reveal>
-            ))}
-        </div>
-    </Section>
-);
-
-export { ProjectsSection, ProjectDetailModal };
+export default ProjectDetailModal;

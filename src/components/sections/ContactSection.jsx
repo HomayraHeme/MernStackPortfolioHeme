@@ -74,9 +74,9 @@ const ContactSection = () => {
 
                     <div className="pt-8 border-t border-white/20 dark:border-gray-700/30">
                         <Reveal delay={400} direction="up">
-                            <h4 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">Connect on Social</h4>
+                            <h4 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 text-center lg:text-left">Connect on Social</h4>
                         </Reveal>
-                        <div className="flex flex-wrap gap-4">
+                        <div className="flex flex-wrap justify-center lg:justify-start gap-4">
                             {PORTFOLIO_DATA.socials.map((social, index) => (
                                 <Reveal key={social.name} delay={500 + index * 50} direction="up">
                                     <a
